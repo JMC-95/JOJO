@@ -11,15 +11,6 @@ MapTool::~MapTool()
 
 HRESULT MapTool::init()
 {
-	//맵툴용 이미지
-	IMAGEMANAGER->addImage("map", "images/MapTool/Map.bmp", 960, 960, true, RGB(255, 0, 255));				//실제 맵의 이미지
-	IMAGEMANAGER->addImage("subMap", "images/MapTool/SubMap.bmp", 240, 960, true, RGB(255, 0, 255));		//맵툴 이미지
-	IMAGEMANAGER->addImage("select", "images/MapTool/Select.bmp", 30, 30, true, RGB(255, 0, 255));			//맵툴 선택 이미지
-	IMAGEMANAGER->addImage("tileCheck", "images/UI/InGame/TileCheck.bmp", 48, 48, true, RGB(247, 0, 255));	//타일 체크 이미지
-
-	//맵툴 타일 이미지
-	IMAGEMANAGER->addFrameImage("tileMap", "images/MapTool/TileMap.bmp", 144, 480, SAMPLETILEX, SAMPLETILEY, true, RGB(255, 0, 255));
-
 	MapToolSetup();
 
 	_currentTile.x = 0;
@@ -172,6 +163,7 @@ void MapTool::MapButton()
 	if (PtInRect(&_btnData, m_ptMouse))
 	{
 		_ctrSelect = CTRL_DATA;
+		isOfnCheck = true;
 
 		OPENFILENAME ofn;
 
@@ -190,7 +182,7 @@ void MapTool::MapButton()
 		ofn.lpstrFileTitle = NULL;
 		ofn.nMaxFileTitle = NULL;
 		ofn.lpstrInitialDir = NULL;
-		ofn.lpstrFilter = ("Data");					//이름(파일형식)
+		ofn.lpstrFilter = ("saveMap4.map");					//이름(파일형식)
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
 		if (GetOpenFileName(&ofn) == FALSE)return;
@@ -214,7 +206,7 @@ void MapTool::MapButton()
 	}
 	if (PtInRect(&_btnExit, m_ptMouse))
 	{
-		PostQuitMessage(0);
+		SCENEMANAGER->changeScene("GameScene");
 	}
 }
 
@@ -267,14 +259,7 @@ void MapTool::SetMap()
 
 void MapTool::Save()
 {
-	file = CreateFile
-	(fileName[0],				//생성할 파일또는 열 장치나 파일이름
-		GENERIC_WRITE,			//파일이나 장치를 만들거나 열때 사용할 권한
-		0,						//파일 공유 모드입력
-		NULL,					//파일또는 장치를 열때 보안 및 특성
-		CREATE_ALWAYS,			//파일이나 장치를 열때 취할 행동
-		FILE_ATTRIBUTE_NORMAL,	//파일이나 장치를 열때 갖게 될 특성
-		NULL);					//만들어질 파일이 갖게 될 특성 확장 특성에 대한 정보
+	file = CreateFile(fileName[3], GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
 	CloseHandle(file);
@@ -282,14 +267,7 @@ void MapTool::Save()
 
 void MapTool::Load()
 {
-	file = CreateFile
-	(fileName[0],				//생성할 파일또는 열 장치나 파일이름
-		GENERIC_READ,			//파일이나 장치를 만들거나 열때 사용할 권한
-		0,						//파일 공유 모드입력
-		NULL,					//파일또는 장치를 열때 보안 및 특성
-		OPEN_EXISTING,			//파일이나 장치를 열때 취할 행동
-		FILE_ATTRIBUTE_NORMAL,	//파일이나 장치를 열때 갖게 될 특성
-		NULL);					//만들어질 파일이 갖게 될 특성 확장 특성에 대한 정보
+	file = CreateFile(fileName[3], GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	CloseHandle(file);

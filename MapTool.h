@@ -17,10 +17,6 @@ enum CTRL
 class MapTool : public gameNode
 {
 private:
-	int _ctrSelect;				//버튼 선택
-	const char* fileName[5] = { "saveMap1.map","saveMap2.map","saveMap3.map","saveMap4.map","saveMap5.map" };
-
-private:
 	RECT _btnTerrainDraw;		//지형
 	RECT _btnObjectDraw;		//오브젝트
 	RECT _btnEraser;			//지우개
@@ -36,6 +32,12 @@ private:
 	tagTile _tiles[TILEX * TILEY];
 	tagSampleTile _sampleTiles[SAMPLETILEX * SAMPLETILEY];
 	tagCurrentTile _currentTile;
+
+private:
+	int _ctrSelect;				//버튼 선택
+
+	//세이브 파일
+	const char* fileName[5] = { "saveMap1.map","saveMap2.map","saveMap3.map","saveMap4.map","saveMap5.map" };
 
 public:
 	MapTool();

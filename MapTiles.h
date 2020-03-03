@@ -11,6 +11,10 @@
 #define SAMPLETILEX 3				//오른쪽 화면의 타일 갯수 X
 #define SAMPLETILEY 10				//오른쪽 화면의 타일 갯수 Y
 
+//비트 연산을 하기 위한 매크로
+#define ATTR_UNMOVABLE 0x00000001
+#define ATTR_POSITION 0x00000002
+
 //지형 (EX. 밟을 때 사운드를 나게 하거나 이동할 수 없는 지역 등)
 enum TERRAIN
 {

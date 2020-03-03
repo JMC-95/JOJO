@@ -55,6 +55,9 @@
     <Filter Include="mainGame\Scene">
       <UniqueIdentifier>{30f0321c-a551-4e36-8c04-416461a41560}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mainGame\Test">
+      <UniqueIdentifier>{e28eae87-e56e-4775-add1-c759b0a018ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -132,6 +135,12 @@
     <ClInclude Include="MapTiles.h">
       <Filter>mainGame\MapTool</Filter>
     </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>mainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="testMap.h">
+      <Filter>mainGame\Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -190,6 +199,12 @@
     </ClCompile>
     <ClCompile Include="MapTool.cpp">
       <Filter>mainGame\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>mainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="testMap.cpp">
+      <Filter>mainGame\Test</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
