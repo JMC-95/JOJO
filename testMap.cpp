@@ -27,22 +27,27 @@ void testMap::update()
 void testMap::render()
 {
 	IMAGEMANAGER->render("map", getMemDC(), 0, 0);
+	IMAGEMANAGER->render("subWin", getMemDC(), 960, 0);
 
 	if (KEYMANAGER->isToggleKey(VK_F2))
 	{
-		//지형
-		for (int i = 0; i < TILEX*TILEY; i++)
+		//지형과 오브젝트를 맵에서 보여준다.
+		for (int i = 0; i < TILEX * TILEY; i++)
 		{
-			IMAGEMANAGER->frameRender("tileMap", getMemDC(),
-				_tiles[i].rc.left, _tiles[i].rc.top,
-				_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-		}
-		//오브젝트
-		for (int i = 0; i < TILEX* TILEY; i++)
-		{
+			IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+
 			if (_tiles[i].obj == OBJ_NONE)continue;
-			IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left,
-				_tiles[i].rc.top, _tiles[i].objFrameX, _tiles[i].objFrameY);
+
+			IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].objFrameX, _tiles[i].objFrameY);
+		}
+	}
+
+	//마우스와 맵의 타일이 충돌하면 그 타일의 속성을 보여준다.
+	for (int i = 0; i < TILEX * TILEY; i++)
+	{
+		if (PtInRect(&_tiles[i].rc, m_ptMouse))
+		{
+			IMAGEMANAGER->render("tileCheck", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
 		}
 	}
 }
@@ -51,11 +56,11 @@ void testMap::Load()
 {
 	if (isOfnCheck)
 	{
-		file = CreateFile(fileName[3], GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		file = CreateFile(fileName[2], GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	}
 	else
 	{
-		file = CreateFile("save/saveMap4.map", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		file = CreateFile("save/saveMap3.map", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	}
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);

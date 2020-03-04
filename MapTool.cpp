@@ -133,7 +133,7 @@ void MapTool::MapToolSetup()
 	}
 
 	//처음 깔려있는 타일
-	for (int i = 0; i < TILEX*TILEY; i++)
+	for (int i = 0; i < TILEX * TILEY; i++)
 	{
 		_tiles[i].terrainFrameX = 3;
 		_tiles[i].terrainFrameY = 0;
@@ -163,14 +163,10 @@ void MapTool::MapButton()
 	if (PtInRect(&_btnData, m_ptMouse))
 	{
 		_ctrSelect = CTRL_DATA;
-		isOfnCheck = true;
 
 		OPENFILENAME ofn;
 
 		char filePathSize[1024] = "";
-		char temp[1024];
-		char* context = NULL;
-		char* token = strtok_s(temp, "\\", &context);
 
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 
@@ -182,26 +178,22 @@ void MapTool::MapButton()
 		ofn.lpstrFileTitle = NULL;
 		ofn.nMaxFileTitle = NULL;
 		ofn.lpstrInitialDir = NULL;
-		ofn.lpstrFilter = ("saveMap4.map");					//이름(파일형식)
+		ofn.lpstrFilter = ("SaveData");				//이름(파일형식)
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
 		if (GetOpenFileName(&ofn) == FALSE)return;
-
-		strncpy_s(temp, strlen(ofn.lpstrFile) + 1, ofn.lpstrFile, strlen(ofn.lpstrFile));
-
-		while (strlen(context))
-		{
-			token = strtok_s(NULL, "\\", &context);
-		}
 	}
 	if (PtInRect(&_btnSave, m_ptMouse))
 	{
 		_ctrSelect = CTRL_SAVE;
+
 		Save();
 	}
 	if (PtInRect(&_btnLoad, m_ptMouse))
 	{
 		_ctrSelect = CTRL_LOAD;
+		isOfnCheck = true;
+
 		Load();
 	}
 	if (PtInRect(&_btnExit, m_ptMouse))
@@ -224,7 +216,7 @@ void MapTool::SetMap()
 	}
 
 	//왼쪽 타일
-	for (int i = 0; i < TILEX* TILEY; i++)
+	for (int i = 0; i < TILEX * TILEY; i++)
 	{
 		if (PtInRect(&_tiles[i].rc, m_ptMouse))
 		{
@@ -259,7 +251,7 @@ void MapTool::SetMap()
 
 void MapTool::Save()
 {
-	file = CreateFile(fileName[3], GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	file = CreateFile(fileName[2], GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
 	CloseHandle(file);
@@ -267,7 +259,7 @@ void MapTool::Save()
 
 void MapTool::Load()
 {
-	file = CreateFile(fileName[3], GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	file = CreateFile(fileName[2], GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	CloseHandle(file);

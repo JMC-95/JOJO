@@ -16,7 +16,7 @@ HRESULT mainGame::init()
 	gameNode::init(true);
 
 	//게임에서 쓰일 이미지
-	Image();
+	Images();
 
 	//씬 추가
 	SCENEMANAGER->addScene("MapTool", new MapTool);
@@ -55,14 +55,17 @@ void mainGame::render(/*HDC hdc*/)
 	this->getBackBuffer()->render(getHDC(), 0, 0);
 }
 
-void mainGame::Image()
+void mainGame::Images()
 {
+	//맵툴 타일 이미지
+	IMAGEMANAGER->addFrameImage("tileMap", "images/MapTool/TileMap.bmp", 144, 480, SAMPLETILEX, SAMPLETILEY, true, RGB(255, 0, 255));
+
 	//맵툴용 이미지
 	IMAGEMANAGER->addImage("map", "images/MapTool/Map.bmp", 960, 960, true, RGB(255, 0, 255));				//실제 맵의 이미지
 	IMAGEMANAGER->addImage("subMap", "images/MapTool/SubMap.bmp", 240, 960, true, RGB(255, 0, 255));		//맵툴 이미지
 	IMAGEMANAGER->addImage("select", "images/MapTool/Select.bmp", 30, 30, true, RGB(255, 0, 255));			//맵툴 선택 이미지
-	IMAGEMANAGER->addImage("tileCheck", "images/UI/InGame/TileCheck.bmp", 48, 48, true, RGB(247, 0, 255));	//타일 체크 이미지
 
-	//맵툴 타일 이미지
-	IMAGEMANAGER->addFrameImage("tileMap", "images/MapTool/TileMap.bmp", 144, 480, SAMPLETILEX, SAMPLETILEY, true, RGB(255, 0, 255));
+	//인게임 이미지
+	IMAGEMANAGER->addImage("subWin", "images/UI/InGame/SubWindow.bmp", 240, 960, true, RGB(255, 0, 255));	//서브 윈도우 이미지
+	IMAGEMANAGER->addImage("tileCheck", "images/UI/InGame/TileCheck.bmp", 48, 48, true, RGB(247, 0, 255));	//타일 체크 이미지
 }

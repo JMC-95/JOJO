@@ -565,7 +565,7 @@ namespace FMOD
         FMOD_RESULT F_API getPosition            (FMOD_VECTOR *position);
         FMOD_RESULT F_API setScale               (const FMOD_VECTOR *scale);
         FMOD_RESULT F_API getScale               (FMOD_VECTOR *scale);
-        FMOD_RESULT F_API Save                   (void *data, int *datasize);
+        FMOD_RESULT F_API save                   (void *data, int *datasize);
 
         // Userdata set/get.
         FMOD_RESULT F_API setUserData            (void *userdata);
