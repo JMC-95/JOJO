@@ -168,6 +168,4 @@ public:
 	//¸Æ½ºÇÁ·¹ÀÓ x,y
 	inline int getMaxFrameX() { return _imageInfo->maxFrameX; }
 	inline int getMaxFrameY() { return _imageInfo->maxFrameY; }
-
-
 };

@@ -32,20 +32,8 @@ void MapTool::render()
 	IMAGEMANAGER->render("map", getMemDC(), 0, 0);
 	IMAGEMANAGER->render("subMap", getMemDC(), 960, 0);
 
-	//맵툴 버튼 RECT
-	if (KEYMANAGER->isToggleKey(VK_F1))
-	{
-		Rectangle(getMemDC(), _btnTerrainDraw.left, _btnTerrainDraw.top, _btnTerrainDraw.right, _btnTerrainDraw.bottom);
-		Rectangle(getMemDC(), _btnObjectDraw.left, _btnObjectDraw.top, _btnObjectDraw.right, _btnObjectDraw.bottom);
-		Rectangle(getMemDC(), _btnEraser.left, _btnEraser.top, _btnEraser.right, _btnEraser.bottom);
-		Rectangle(getMemDC(), _btnData.left, _btnData.top, _btnData.right, _btnData.bottom);
-		Rectangle(getMemDC(), _btnSave.left, _btnSave.top, _btnSave.right, _btnSave.bottom);
-		Rectangle(getMemDC(), _btnLoad.left, _btnLoad.top, _btnLoad.right, _btnLoad.bottom);
-		Rectangle(getMemDC(), _btnExit.left, _btnExit.top, _btnExit.right, _btnExit.bottom);
-	}
-
 	//지형과 오브젝트를 맵에서 보여준다.
-	if (KEYMANAGER->isToggleKey(VK_F2))
+	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
@@ -182,18 +170,17 @@ void MapTool::MapButton()
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
 		if (GetOpenFileName(&ofn) == FALSE)return;
+
+		isOfnCheck = true;
 	}
 	if (PtInRect(&_btnSave, m_ptMouse))
 	{
 		_ctrSelect = CTRL_SAVE;
-
 		Save();
 	}
 	if (PtInRect(&_btnLoad, m_ptMouse))
 	{
 		_ctrSelect = CTRL_LOAD;
-		isOfnCheck = true;
-
 		Load();
 	}
 	if (PtInRect(&_btnExit, m_ptMouse))

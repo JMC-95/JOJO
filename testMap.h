@@ -10,14 +10,10 @@ private:
 	DWORD _attribute[TILEX * TILEY];
 
 	tagTile _tiles[TILEX * TILEY];
-	tagSampleTile _sampleTiles[SAMPLETILEX * SAMPLETILEY];
-	tagCurrentTile _currentTile;
 
 private:
-	int _pos[2];
-
 	//세이브 파일
-	const char* fileName[5] = { "saveMap1.map","saveMap2.map","saveMap3.map","saveMap4.map","saveMap5.map" };
+	const char* fileName[5] = { "SaveMap_1.map","SaveMap_2.map","SaveMap_3.map","SaveMap_4.map","SaveMap_5.map" };
 
 public:
 	testMap();
@@ -33,7 +29,4 @@ public:
 	DWORD* getAttribute() { return _attribute; }
 
 	tagTile* getMap() { return _tiles; }
-
-	int getPosFirst() { return _pos[0]; }
-	int getPosSecond() { return _pos[1]; }
 };

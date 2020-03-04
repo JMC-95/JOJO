@@ -29,7 +29,7 @@ void testMap::render()
 	IMAGEMANAGER->render("map", getMemDC(), 0, 0);
 	IMAGEMANAGER->render("subWin", getMemDC(), 960, 0);
 
-	if (KEYMANAGER->isToggleKey(VK_F2))
+	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
 		//지형과 오브젝트를 맵에서 보여준다.
 		for (int i = 0; i < TILEX * TILEY; i++)
@@ -60,7 +60,7 @@ void testMap::Load()
 	}
 	else
 	{
-		file = CreateFile("save/saveMap3.map", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		file = CreateFile("save/SaveMap_3.map", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	}
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);

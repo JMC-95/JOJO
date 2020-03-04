@@ -37,7 +37,7 @@ private:
 	int _ctrSelect;				//버튼 선택
 
 	//세이브 파일
-	const char* fileName[5] = { "saveMap1.map","saveMap2.map","saveMap3.map","saveMap4.map","saveMap5.map" };
+	const char* fileName[5] = { "SaveMap_1.map","SaveMap_2.map","SaveMap_3.map","SaveMap_4.map","SaveMap_5.map" };
 
 public:
 	MapTool();

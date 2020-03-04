@@ -58,6 +58,12 @@
     <Filter Include="mainGame\Test">
       <UniqueIdentifier>{e28eae87-e56e-4775-add1-c759b0a018ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mainGame\Player">
+      <UniqueIdentifier>{2dd932b1-c6fa-4e84-b7fc-d51abea79a2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mainGame\Enemy">
+      <UniqueIdentifier>{f8660c58-499f-48d8-a740-bdfff2fbcdd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -141,6 +147,12 @@
     <ClInclude Include="testMap.h">
       <Filter>mainGame\Test</Filter>
     </ClInclude>
+    <ClInclude Include="MainMap.h">
+      <Filter>mainGame\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="tank.h">
+      <Filter>mainGame\Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -204,6 +216,12 @@
       <Filter>mainGame\Scene</Filter>
     </ClCompile>
     <ClCompile Include="testMap.cpp">
+      <Filter>mainGame\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMap.cpp">
+      <Filter>mainGame\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="tank.cpp">
       <Filter>mainGame\Test</Filter>
     </ClCompile>
   </ItemGroup>
