@@ -19,6 +19,7 @@
 enum TERRAIN
 {
 	TR_BARRACKS,		//병영
+	TR_PLAIN,			//평지
 	TR_BADLANDS,		//황무지
 	TR_CASTLERAND,		//성내
 	TR_CASTLEGATE,		//성문
@@ -28,9 +29,9 @@ enum TERRAIN
 //오브젝트 (EX. 지형 위쪽에 배치. 움직이거나 부서지거나 하는 녀석 등 변화를 줄수 있는 물체)
 enum OBJECT
 {
-	OBJ_MOUNTAIN,		//산
-	OBJ_ROCKMOUNTAIN,	//바위산
 	OBJ_CASTLEWALLS,	//성벽
+	OBJ_ROCKMOUNTAIN,	//바위산
+	OBJ_MOUNTAIN,		//산
 	OBJ_NONE
 };
 

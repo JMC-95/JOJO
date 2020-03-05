@@ -71,4 +71,5 @@ void mainGame::Images()
 
 	IMAGEMANAGER->addFrameImage("tank", "images/tank.bmp", 90, 120, 3, 4, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addFrameImage("player", "images/Player/아군기병.bmp", 48, 672, 1, 14, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("range", "images/range.bmp", 144, 144, true, RGB(255, 0, 255));
 }

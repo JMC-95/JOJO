@@ -254,8 +254,18 @@ void MapTool::Load()
 
 TERRAIN MapTool::terrainSelect(int frameX, int frameY)
 {
+	//병영
+	if (frameX == 0 && frameY == 3)
+	{
+		return TR_BARRACKS;
+	}
+	//평지
+	else if (frameX == 0 && frameY == 5)
+	{
+		return TR_PLAIN;
+	}
 	//황무지
-	if (frameX == 1 && frameY == 5)
+	else if (frameX == 1 && frameY == 5)
 	{
 		return TR_BADLANDS;
 	}
@@ -269,22 +279,12 @@ TERRAIN MapTool::terrainSelect(int frameX, int frameY)
 	{
 		return TR_CASTLEGATE;
 	}
-	//병영
-	else if (frameX == 0 && frameY == 3)
-	{
-		return TR_BARRACKS;
-	}
 }
 
 OBJECT MapTool::objSelect(int frameX, int frameY)
 {
-	//산지
-	if (frameX == 2 && frameY == 5)
-	{
-		return OBJ_MOUNTAIN;
-	}
 	//성벽
-	else if (frameX == 0 && frameY == 8)
+	if (frameX == 0 && frameY == 8)
 	{
 		return OBJ_CASTLEWALLS;
 	}
@@ -292,6 +292,11 @@ OBJECT MapTool::objSelect(int frameX, int frameY)
 	else if (frameX == 1 && frameY == 7)
 	{
 		return OBJ_ROCKMOUNTAIN;
+	}
+	//산지
+	else if (frameX == 2 && frameY == 5)
+	{
+		return OBJ_MOUNTAIN;
 	}
 }
 

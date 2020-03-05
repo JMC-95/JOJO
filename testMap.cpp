@@ -22,6 +22,10 @@ void testMap::release()
 
 void testMap::update()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
+	{
+		SCENEMANAGER->changeScene("MapTool");
+	}
 }
 
 void testMap::render()
@@ -66,8 +70,9 @@ void testMap::Load()
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	CloseHandle(file);
 
-	//속성정의를 하자.
+	//속성 정의를 하자.
 	memset(_attribute, 0, sizeof(DWORD) * TILEX * TILEY);
+
 	for (int i = 0; i < TILEX * TILEY; i++)
 	{
 		if (_tiles[i].obj == OBJ_MOUNTAIN)
