@@ -70,6 +70,15 @@ void testMap::Load()
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	CloseHandle(file);
 
+	//캐릭터 위치에 해당하는 타일 이미지를 걸러낸다.
+	for (int i = 0; i < TILEX * TILEY; i++)
+	{
+		if (_tiles[i].obj == OBJ_CHARACTER)
+		{
+			_tiles[i].obj = OBJ_NONE;
+		}
+	}
+
 	//속성 정의를 하자.
 	memset(_attribute, 0, sizeof(DWORD) * TILEX * TILEY);
 

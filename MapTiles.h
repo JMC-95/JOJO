@@ -32,6 +32,7 @@ enum OBJECT
 	OBJ_CASTLEWALLS,	//성벽
 	OBJ_ROCKMOUNTAIN,	//바위산
 	OBJ_MOUNTAIN,		//산
+	OBJ_CHARACTER,		//캐릭터
 	OBJ_NONE
 };
 

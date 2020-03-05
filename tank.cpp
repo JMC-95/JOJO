@@ -58,7 +58,10 @@ void tank::render()
 {
 	if (isTurn)
 	{
-		IMAGEMANAGER->render("range", getMemDC(), _rc.left - 48, _rc.top - 48);
+		if (KEYMANAGER->isToggleKey(VK_LBUTTON))
+		{
+			IMAGEMANAGER->render("range", getMemDC(), _rc.left - 48, _rc.top - 48);
+		}
 	}
 
 	_image->aniRender(getMemDC(), _rc.left, _rc.top, _ani);
@@ -78,6 +81,8 @@ void tank::setTankPosition(RECT rc)
 
 void tank::mouseClick()
 {
+	//tankMove();
+
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		if (PtInRect(&_rc, m_ptMouse))
@@ -87,12 +92,19 @@ void tank::mouseClick()
 
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
-			if (PtInRect(&_testMap->getMap()[i].rc, m_ptMouse) && isTurn)
+			if (_testMap->getMap()[i].terrain != TR_PLAIN)
 			{
-				PostQuitMessage(0);
+				if (PtInRect(&_testMap->getMap()[i].rc, m_ptMouse))
+				{
+					isTurn = false;
+				}
 			}
 		}
 	}
+
+	//캐릭터는 처음부터 위치가 고정되어 있기 때문에 캐릭터의 위치를 미리 오브젝트로 지정해주고,
+	//오브젝트가 아닌 테라인 일 때 움직일 수 있게 한다.
+	//맵툴에 미리 깔아둔 오브젝트를 어떻게 움직일 수 있을까..?
 }
 
 void tank::tankMove()
