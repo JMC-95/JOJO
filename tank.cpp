@@ -12,7 +12,7 @@ tank::~tank()
 HRESULT tank::init(const char * imageName)
 {
 	//탱크 방향설정
-	_direction = TANKDIRECTION_DOWN;
+	_direction = TANKDIRECTION_LEFT;
 
 	_image = IMAGEMANAGER->findImage(imageName);
 	ANIMATIONMANAGER->addAnimation("playerDown", "player", 0, 1, 4, false, true);
@@ -56,12 +56,9 @@ void tank::update()
 
 void tank::render()
 {
-	if (isTurn)
+	if (KEYMANAGER->isToggleKey(VK_LBUTTON) && isTurn)
 	{
-		if (KEYMANAGER->isToggleKey(VK_LBUTTON))
-		{
-			IMAGEMANAGER->render("range", getMemDC(), _rc.left - 48, _rc.top - 48);
-		}
+		IMAGEMANAGER->render("range", getMemDC(), _rc.left - 48, _rc.top - 48);
 	}
 
 	_image->aniRender(getMemDC(), _rc.left, _rc.top, _ani);
@@ -81,8 +78,6 @@ void tank::setTankPosition(RECT rc)
 
 void tank::mouseClick()
 {
-	//tankMove();
-
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		if (PtInRect(&_rc, m_ptMouse))
@@ -97,6 +92,7 @@ void tank::mouseClick()
 				if (PtInRect(&_testMap->getMap()[i].rc, m_ptMouse))
 				{
 					isTurn = false;
+					isMove = true;
 				}
 			}
 		}
@@ -105,6 +101,11 @@ void tank::mouseClick()
 	//캐릭터는 처음부터 위치가 고정되어 있기 때문에 캐릭터의 위치를 미리 오브젝트로 지정해주고,
 	//오브젝트가 아닌 테라인 일 때 움직일 수 있게 한다.
 	//맵툴에 미리 깔아둔 오브젝트를 어떻게 움직일 수 있을까..?
+
+	if (isMove)
+	{
+		tankMove();
+	}
 }
 
 void tank::tankMove()
