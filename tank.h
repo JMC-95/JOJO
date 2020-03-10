@@ -59,7 +59,7 @@ public:
 	tank();
 	~tank();
 
-	HRESULT init();
+	HRESULT init(const char* imageName);
 	void release();
 	void update();
 	void render();

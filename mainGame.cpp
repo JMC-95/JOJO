@@ -23,7 +23,7 @@ HRESULT mainGame::init()
 	SCENEMANAGER->addScene("GameScene", new GameScene);
 
 	//현재 씬
-	SCENEMANAGER->changeScene("GameScene");
+	SCENEMANAGER->changeScene("MapTool");
 
 	return S_OK;
 }
@@ -70,5 +70,6 @@ void mainGame::Images()
 	IMAGEMANAGER->addImage("tileCheck", "images/UI/InGame/TileCheck.bmp", 48, 48, true, RGB(247, 0, 255));	//타일 체크 이미지
 
 	IMAGEMANAGER->addFrameImage("tank", "images/tank.bmp", 90, 120, 3, 4, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("player", "images/Player/아군기병.bmp", 48, 672, 1, 14, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addImage("range", "images/range.bmp", 144, 144, true, RGB(255, 0, 255));
 }

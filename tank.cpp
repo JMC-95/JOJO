@@ -9,12 +9,12 @@ tank::~tank()
 {
 }
 
-HRESULT tank::init()
+HRESULT tank::init(const char* imageName)
 {
 	//탱크 방향설정
 	_direction = TANKDIRECTION_LEFT;
 
-	_image = IMAGEMANAGER->addFrameImage("player", "images/Player/아군기병.bmp", 48, 672, 1, 14, true, RGB(247, 0, 255));
+	_image = IMAGEMANAGER->findImage(imageName);
 	ANIMATIONMANAGER->addAnimation("playerLeft", "player", 4, 5, 5, false, true);
 	_ani = ANIMATIONMANAGER->findAnimation("playerLeft");
 	ANIMATIONMANAGER->start("playerLeft");
