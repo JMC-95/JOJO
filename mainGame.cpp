@@ -2,6 +2,7 @@
 #include "mainGame.h"
 #include "MapTool.h"
 #include "GameScene.h"
+#include "aStar.h"
 
 mainGame::mainGame()
 {
@@ -21,6 +22,7 @@ HRESULT mainGame::init()
 	//¾À Ãß°¡
 	SCENEMANAGER->addScene("MapTool", new MapTool);
 	SCENEMANAGER->addScene("GameScene", new GameScene);
+	SCENEMANAGER->addScene("aStar", new aStar);
 
 	//ÇöÀç ¾À
 	SCENEMANAGER->changeScene("MapTool");

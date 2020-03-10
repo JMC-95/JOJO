@@ -24,7 +24,7 @@ void testMap::update()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
 	{
-		SCENEMANAGER->changeScene("MapTool");
+		SCENEMANAGER->changeScene("aStar");
 	}
 }
 

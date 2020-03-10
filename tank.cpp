@@ -15,11 +15,12 @@ HRESULT tank::init(const char * imageName)
 	_direction = TANKDIRECTION_LEFT;
 
 	_image = IMAGEMANAGER->findImage(imageName);
-	ANIMATIONMANAGER->addAnimation("playerDown", "player", 0, 1, 4, false, true);
-	_ani = ANIMATIONMANAGER->findAnimation("playerDown");
+	ANIMATIONMANAGER->addAnimation("playerLeft", "player", 4, 5, 5, false, true);
+	_ani = ANIMATIONMANAGER->findAnimation("playerLeft");
+	ANIMATIONMANAGER->start("playerLeft");
 
 	//속도
-	speed = 100.0f;
+	speed = 6;
 
 	return S_OK;
 }
@@ -31,32 +32,12 @@ void tank::release()
 void tank::update()
 {
 	mouseClick();
-
-	if (KEYMANAGER->isStayKeyDown(VK_LEFT) && _rc.left > 0)
-	{
-		_direction = TANKDIRECTION_LEFT;
-		tankMove();
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT) && _rc.right < WINSIZEY)
-	{
-		_direction = TANKDIRECTION_RIGHT;
-		tankMove();
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_UP) && _rc.top > 0)
-	{
-		_direction = TANKDIRECTION_UP;
-		tankMove();
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN) && _rc.bottom < WINSIZEY)
-	{
-		_direction = TANKDIRECTION_DOWN;
-		tankMove();
-	}
+	animation();
 }
 
 void tank::render()
 {
-	if (KEYMANAGER->isToggleKey(VK_LBUTTON) && isTurn)
+	if (isTurn)
 	{
 		IMAGEMANAGER->render("range", getMemDC(), _rc.left - 48, _rc.top - 48);
 	}
@@ -87,20 +68,33 @@ void tank::mouseClick()
 
 		for (int i = 0; i < TILEX * TILEY; i++)
 		{
-			if (_testMap->getMap()[i].terrain != TR_PLAIN)
+			if (!PtInRect(&_rc, m_ptMouse) && PtInRect(&_testMap->getMap()[i].rc, m_ptMouse) && isTurn)
 			{
-				if (PtInRect(&_testMap->getMap()[i].rc, m_ptMouse))
+				mapX = _testMap->getMap()[i].rc.left + (_testMap->getMap()[i].rc.right - _testMap->getMap()[i].rc.left) / 2;
+				mapY = _testMap->getMap()[i].rc.top + (_testMap->getMap()[i].rc.bottom - _testMap->getMap()[i].rc.top) / 2;
+
+				if (x > mapX)
 				{
-					isTurn = false;
-					isMove = true;
+					_direction = TANKDIRECTION_LEFT;
 				}
+				if (x < mapX)
+				{
+					_direction = TANKDIRECTION_RIGHT;
+				}
+				if (y > mapY)
+				{
+					_direction = TANKDIRECTION_UP;
+				}
+				if (y < mapY)
+				{
+					_direction = TANKDIRECTION_DOWN;
+				}
+
+				isTurn = false;
+				isMove = true;
 			}
 		}
 	}
-
-	//캐릭터는 처음부터 위치가 고정되어 있기 때문에 캐릭터의 위치를 미리 오브젝트로 지정해주고,
-	//오브젝트가 아닌 테라인 일 때 움직일 수 있게 한다.
-	//맵툴에 미리 깔아둔 오브젝트를 어떻게 움직일 수 있을까..?
 
 	if (isMove)
 	{
@@ -115,44 +109,52 @@ void tank::tankMove()
 
 	rcCollision = _rc;	//가상의 렉트
 
-	//타임 매니저를 이용한 방법
-	float elpasedTime = TIMEMANAGER->getElapsedTime();
-	float moveSpeed = elpasedTime * speed;
-
 	//일단 무조건 이동
 	switch (_direction)
 	{
 	case TANKDIRECTION_LEFT:
-		ANIMATIONMANAGER->addAnimation("playerLeft", "player", 4, 5, 4, false, true);
-		_ani = ANIMATIONMANAGER->findAnimation("playerLeft");
-		ANIMATIONMANAGER->resume("playerLeft");
-
-		x -= moveSpeed;
-		rcCollision = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+		if (_rc.left > 0)
+		{
+			x -= speed;
+			rcCollision = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+		}
+		if (x == mapX)
+		{
+			isMove = false;
+		}
 		break;
 	case TANKDIRECTION_RIGHT:
-		ANIMATIONMANAGER->addAnimation("playerRight", "player", 6, 7, 4, false, true);
-		_ani = ANIMATIONMANAGER->findAnimation("playerRight");
-		ANIMATIONMANAGER->resume("playerRight");
-
-		x += moveSpeed;
-		rcCollision = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+		if (_rc.right < WINSIZEY)
+		{
+			x += speed;
+			rcCollision = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+		}
+		if (x == mapX)
+		{
+			isMove = false;
+		}
 		break;
 	case TANKDIRECTION_UP:
-		ANIMATIONMANAGER->addAnimation("playerUp", "player", 2, 3, 4, false, true);
-		_ani = ANIMATIONMANAGER->findAnimation("playerUp");
-		ANIMATIONMANAGER->resume("playerUp");
-
-		y -= moveSpeed;
-		rcCollision = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+		if (_rc.top > 0)
+		{
+			y -= speed;
+			rcCollision = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+		}
+		if (y == mapY)
+		{
+			isMove = false;
+		}
 		break;
 	case TANKDIRECTION_DOWN:
-		ANIMATIONMANAGER->addAnimation("playerDown", "player", 0, 1, 4, false, true);
-		_ani = ANIMATIONMANAGER->findAnimation("playerDown");
-		ANIMATIONMANAGER->resume("playerDown");
-
-		y += moveSpeed;
-		rcCollision = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+		if (_rc.bottom < WINSIZEY)
+		{
+			y += speed;
+			rcCollision = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+		}
+		if (y == mapY)
+		{
+			isMove = false;
+		}
 		break;
 	}//end of switch(_direction)
 
@@ -160,30 +162,23 @@ void tank::tankMove()
 	tileX = rcCollision.left / TILESIZE;
 	tileY = rcCollision.top / TILESIZE;
 
-	//땅크가 타일 어디에 있는지 확인이 가능하므로
-	//땅크 방향에 따라서 그 앞의 타일 번호를 계산한다.
-	//인덱스 번호가 2개인 이유는 렉트의 레프트, 탑 위치로 땅크의 위치를 구하고
-	//렉트의 레프트, 탑이 타일번호에 걸쳐져 있을수도, 딱 맞게 있을수도 있기 때문에
-	//걸쳐져 있을경우 걸친 그 밑의 타일의 값(ex : 오른쪽일 경우 땅크 위치 밑에 있는 값 앞에 있는 타일)을 가져온다.
-	//그래서 정확하게 걸치지 않았을때 통과 할수 있도록..
-
 	switch (_direction)
 	{
 	case TANKDIRECTION_LEFT:
 		tileIndex[0] = tileX + tileY * TILEX;
-		tileIndex[1] = tileX + (tileY + 1) * TILEX;
+		tileIndex[1] = tileX + (tileY + 1) * TILEY;
 		break;
 	case TANKDIRECTION_RIGHT:
 		tileIndex[0] = (tileX + tileY * TILEX) + 1;
-		tileIndex[1] = (tileX + (tileY + 1) * TILEX) + 1;
+		tileIndex[1] = (tileX + (tileY + 1) * TILEY) + 1;
 		break;
 	case TANKDIRECTION_UP:
 		tileIndex[0] = tileX + tileY * TILEX;
-		tileIndex[1] = tileX + 1 + tileY * TILEX;
+		tileIndex[1] = tileX + 1 + tileY * TILEY;
 		break;
 	case TANKDIRECTION_DOWN:
 		tileIndex[0] = (tileX + tileY * TILEX) + TILEX;
-		tileIndex[1] = (tileX + 1 + tileY * TILEX) + TILEX;
+		tileIndex[1] = (tileX + 1 + tileY * TILEY) + TILEY;
 		break;
 	}//end of switch(_direction)
 
@@ -220,7 +215,6 @@ void tank::tankMove()
 				y = _rc.top + (_rc.bottom - _rc.top) / 2;
 				break;
 			}
-
 			return;
 		}
 	}//end of for
@@ -228,4 +222,31 @@ void tank::tankMove()
 	//움직이자
 	rcCollision = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
 	_rc = rcCollision;
+}
+
+void tank::animation()
+{
+	switch (_direction)
+	{
+	case TANKDIRECTION_LEFT:
+		ANIMATIONMANAGER->addAnimation("playerLeft", "player", 4, 5, 5, false, true);
+		_ani = ANIMATIONMANAGER->findAnimation("playerLeft");
+		ANIMATIONMANAGER->resume("playerLeft");
+		break;
+	case TANKDIRECTION_RIGHT:
+		ANIMATIONMANAGER->addAnimation("playerRight", "player", 6, 7, 5, false, true);
+		_ani = ANIMATIONMANAGER->findAnimation("playerRight");
+		ANIMATIONMANAGER->resume("playerRight");
+		break;
+	case TANKDIRECTION_UP:
+		ANIMATIONMANAGER->addAnimation("playerUp", "player", 2, 3, 5, false, true);
+		_ani = ANIMATIONMANAGER->findAnimation("playerUp");
+		ANIMATIONMANAGER->resume("playerUp");
+		break;
+	case TANKDIRECTION_DOWN:
+		ANIMATIONMANAGER->addAnimation("playerDown", "player", 0, 1, 5, false, true);
+		_ani = ANIMATIONMANAGER->findAnimation("playerDown");
+		ANIMATIONMANAGER->resume("playerDown");
+		break;
+	}
 }

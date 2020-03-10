@@ -1,15 +1,15 @@
 #pragma once
 #include"singletonBase.h"
 #include"timer.h"
+
 class timeManager :  public singletonBase<timeManager>
 {
 private:
+	timer* _timer;
 
-	timer * _timer;
 public:
 	timeManager();
 	~timeManager();
-
 
 	HRESULT init();
 	void release();
@@ -18,8 +18,4 @@ public:
 
 	float getElapsedTime()const { return _timer->getElapsedTime(); }
 	float getWorldTime()const { return _timer->getWorldTime(); }
-
-
-
 };
-

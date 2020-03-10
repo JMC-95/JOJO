@@ -15,6 +15,7 @@ HRESULT timeManager::init()
 {
 	_timer = new timer;
 	_timer->init();
+
 	return S_OK;
 }
 

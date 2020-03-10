@@ -18,11 +18,11 @@ private:
 	animation* _ani;
 	image* _image;
 	image* img;
-
 	RECT _rc;
 	
 private:
 	int tileX, tileY;	//캐릭터가 밟고 있는 타일의 번호
+	int mapX, mapY;
 
 	float x, y;			//캐릭터의 x축과 y축
 	float speed;		//캐릭터의 스피드
@@ -41,6 +41,7 @@ public:
 
 	void mouseClick();
 	void tankMove();
+	void animation();
 	void setTankPosition(RECT rc);
 
 	void setTestMapMemoryAdress(testMap* tm) { _testMap = tm; }

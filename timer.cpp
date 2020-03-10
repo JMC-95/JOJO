@@ -9,7 +9,6 @@ timer::timer()
 {
 }
 
-
 timer::~timer()
 {
 }
@@ -28,7 +27,6 @@ HRESULT timer::init()
 
 		//초당 시간 계산 범위
 		_timeScale = 1.0f / _periodFrequency;
-
 	}
 	else
 	{
@@ -58,13 +56,12 @@ void timer::tick(float lockFPS)
 	{//지원하지 않으면 time함수를 이용.(1/1000)
 		_curTime = timeGetTime();
 	}
-	//마지막 시간과ㅏ 현재시간의 경과량
-	_timeElapsed = (_curTime - _lastTime) * _timeScale;
 
+	//마지막 시간과 현재시간의 경과량
+	_timeElapsed = (_curTime - _lastTime) * _timeScale;
 
 	if (lockFPS > 0.0f)
 	{
-
 		//고정 프레임의 시간을 만족할때까지 돌려라
 		while (_timeElapsed <(1.0f / lockFPS))
 		{
@@ -75,27 +72,22 @@ void timer::tick(float lockFPS)
 		}
 	}
 
-
 	_lastTime = _curTime;				//마지막 시간을 기록
 	_FPSFrameCount++;					//자동으로 프레임 카운트 증가
 	_FPStimeElapsed += _timeElapsed;	//초당 프레임 시간 경과량 증가
 	_worldTime += _timeElapsed;			//전체 시간 경과량 증가
 
-										//프레임 초기화를 1초마다 진행
+	//프레임 초기화를 1초마다 진행
 	if (_FPStimeElapsed > 1.0f)
 	{
 		_frameRate = _FPSFrameCount;
 		_FPSFrameCount = 0;
 		_FPStimeElapsed = 0.0f;
 	}
-
-
-
 }
 
 unsigned long timer::getFrameRate(char * str) const
 {
-
 	if (str != NULL)
 	{
 		wsprintf(str, "FPS : %d", _frameRate);
