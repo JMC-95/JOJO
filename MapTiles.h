@@ -51,9 +51,6 @@ struct tagTile
 	//A* 알고리즘
 	int f, g, h;
 	int node;
-	int showState;
-
-	bool block;
 };
 
 //이미지 타일 구조체

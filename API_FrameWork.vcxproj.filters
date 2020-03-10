@@ -153,9 +153,6 @@
     <ClInclude Include="tank.h">
       <Filter>mainGame\Test</Filter>
     </ClInclude>
-    <ClInclude Include="aStar.h">
-      <Filter>mainGame\Test</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -225,9 +222,6 @@
       <Filter>mainGame\MapTool</Filter>
     </ClCompile>
     <ClCompile Include="tank.cpp">
-      <Filter>mainGame\Test</Filter>
-    </ClCompile>
-    <ClCompile Include="aStar.cpp">
       <Filter>mainGame\Test</Filter>
     </ClCompile>
   </ItemGroup>

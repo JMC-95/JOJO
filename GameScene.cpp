@@ -19,7 +19,7 @@ HRESULT GameScene::init()
 
 	//ÅÊÅ©
 	_tank = new tank;
-	_tank->init("player");
+	_tank->init();
 	_tank->setTestMapMemoryAdress(_test);
 	_tank->setTankPosition(_test->getMap()[199].rc);
 

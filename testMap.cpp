@@ -22,10 +22,6 @@ void testMap::release()
 
 void testMap::update()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_TAB))
-	{
-		SCENEMANAGER->changeScene("aStar");
-	}
 }
 
 void testMap::render()

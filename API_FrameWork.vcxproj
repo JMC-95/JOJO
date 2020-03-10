@@ -151,7 +151,6 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="animationManager.h" />
     <ClInclude Include="API_FrameWork.h" />
-    <ClInclude Include="aStar.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
@@ -182,7 +181,6 @@
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="animationManager.cpp" />
-    <ClCompile Include="aStar.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="gameNode.cpp" />
