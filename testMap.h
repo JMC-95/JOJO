@@ -7,9 +7,9 @@ class testMap : public gameNode
 private:
 	HANDLE file;
 	DWORD read;
-	DWORD _attribute[TILEX * TILEY];
+	DWORD attribute[TILE_X * TILE_Y];
 
-	tagTile _tiles[TILEX * TILEY];
+	tagTile tiles[TILE_X * TILE_Y];
 
 private:
 	//세이브 파일
@@ -24,9 +24,9 @@ public:
 	void update();
 	void render();
 
-	void Load();
+	void load();
 
-	DWORD* getAttribute() { return _attribute; }
+	DWORD* getAttribute() { return attribute; }
 
-	tagTile* getMap() { return _tiles; }
+	tagTile* getMap() { return tiles; }
 };

@@ -11,10 +11,10 @@ MapTool::~MapTool()
 
 HRESULT MapTool::init()
 {
-	MapToolSetup();
+	mapToolSetup();
 
-	_currentTile.x = 0;
-	_currentTile.y = 0;
+	currentTile.x = 0;
+	currentTile.y = 0;
 
 	return S_OK;
 }
@@ -35,27 +35,27 @@ void MapTool::render()
 	//지형과 오브젝트를 맵에서 보여준다.
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
-		for (int i = 0; i < TILEX * TILEY; i++)
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+			IMAGEMANAGER->frameRender("tileMap", getMemDC(), tiles[i].rc.left, tiles[i].rc.top, tiles[i].terrainFrameX, tiles[i].terrainFrameY);
 
-			if (_tiles[i].obj == OBJ_NONE)continue;
+			if (tiles[i].obj == OBJ_NONE)continue;
 
-			IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].objFrameX, _tiles[i].objFrameY);
+			IMAGEMANAGER->frameRender("tileMap", getMemDC(), tiles[i].rc.left, tiles[i].rc.top, tiles[i].objFrameX, tiles[i].objFrameY);
 		}
 	}
 
 	//마우스와 맵의 타일이 충돌하면 그 타일의 속성을 보여준다.
-	for (int i = 0; i < TILEX * TILEY; i++)
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		if (PtInRect(&_tiles[i].rc, m_ptMouse))
+		if (PtInRect(&tiles[i].rc, m_ptMouse))
 		{
-			IMAGEMANAGER->render("tileCheck", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
+			IMAGEMANAGER->render("tileCheck", getMemDC(), tiles[i].rc.left, tiles[i].rc.top);
 		}
 	}
 
 	//선택한 버튼을 알려준다.
-	switch (_ctrSelect)
+	switch (ctrSelect)
 	{
 	case CTRL_TERRAIN:
 		IMAGEMANAGER->render("select", getMemDC(), 1052, 532);
@@ -78,79 +78,79 @@ void MapTool::render()
 	}
 }
 
-void MapTool::MapToolSetup()
+void MapTool::mapToolSetup()
 {
 	//버튼 RECT
-	_btnTerrainDraw = RectMake(982, 503, 90, 45);
-	_btnObjectDraw = RectMake(1100, 503, 90, 45);
-	_btnEraser = RectMake(982, 613, 90, 45);
-	_btnData = RectMake(1100, 613, 90, 45);
-	_btnSave = RectMake(1010, 735, 135, 35);
-	_btnLoad = RectMake(1010, 795, 135, 35);
-	_btnExit = RectMake(1010, 850, 135, 35);
+	btnTerrainDraw = RectMake(982, 503, 90, 45);
+	btnObjectDraw = RectMake(1100, 503, 90, 45);
+	btnEraser = RectMake(982, 613, 90, 45);
+	btnData = RectMake(1100, 613, 90, 45);
+	btnSave = RectMake(1010, 735, 135, 35);
+	btnLoad = RectMake(1010, 795, 135, 35);
+	btnExit = RectMake(1010, 850, 135, 35);
 
-	_ctrSelect = CTRL_TERRAIN;
+	ctrSelect = CTRL_TERRAIN;
 
 	//오른쪽 샘플 맵 셋팅
-	for (int i = 0; i < SAMPLETILEY; i++)
+	for (int i = 0; i < SAMPLE_TILE_Y; i++)
 	{
-		for (int j = 0; j < SAMPLETILEX; j++)
+		for (int j = 0; j < SAMPLE_TILE_X; j++)
 		{
-			_sampleTiles[i * SAMPLETILEX + j].terrainFrameX = j;
-			_sampleTiles[i * SAMPLETILEX + j].terrainFrameY = i;
+			sampleTiles[i * SAMPLE_TILE_X + j].sTileFrameX = j;
+			sampleTiles[i * SAMPLE_TILE_X + j].sTileFrameY = i;
 
 			//좌표값 설정
-			SetRect(&_sampleTiles[i * SAMPLETILEX + j].rcTile,
-				(WINSIZEX - IMAGEMANAGER->findImage("tileMap")->getWidth()) + j * TILESIZE,
-				i * TILESIZE, (WINSIZEX - IMAGEMANAGER->findImage("tileMap")->getWidth()) + j * TILESIZE + TILESIZE,
-				i * TILESIZE + TILESIZE);
+			SetRect(&sampleTiles[i * SAMPLE_TILE_X + j].rcTile,
+				(WINSIZEX - IMAGEMANAGER->findImage("tileMap")->getWidth()) + j * TILE_WIDTH,
+				i * TILE_HEIGHT, (WINSIZEX - IMAGEMANAGER->findImage("tileMap")->getWidth()) + j * TILE_WIDTH + TILE_WIDTH,
+				i * TILE_HEIGHT + TILE_HEIGHT);
 		}
 	}
 
 	//왼쪽 맵 셋팅
-	for (int i = 0; i < TILEY; i++)
+	for (int i = 0; i < TILE_Y; i++)
 	{
-		for (int j = 0; j < TILEX; j++)
+		for (int j = 0; j < TILE_X; j++)
 		{
-			SetRect(&_tiles[i * TILEX + j].rc,
-				j * TILESIZE,
-				i * TILESIZE,
-				j * TILESIZE + TILESIZE,
-				i * TILESIZE + TILESIZE);
+			SetRect(&tiles[i * TILE_X + j].rc,
+				j * TILE_WIDTH,
+				i * TILE_HEIGHT,
+				j * TILE_WIDTH + TILE_WIDTH,
+				i * TILE_HEIGHT + TILE_HEIGHT);
 		}
 	}
 
 	//처음 깔려있는 타일
-	for (int i = 0; i < TILEX * TILEY; i++)
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		_tiles[i].terrainFrameX = 3;
-		_tiles[i].terrainFrameY = 0;
+		tiles[i].terrainFrameX = 3;
+		tiles[i].terrainFrameY = 0;
 
-		_tiles[i].objFrameX = 3;
-		_tiles[i].objFrameY = 0;
+		tiles[i].objFrameX = 3;
+		tiles[i].objFrameY = 0;
 
-		_tiles[i].terrain = terrainSelect(_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-		_tiles[i].obj = OBJ_NONE;
+		tiles[i].terrain = terrainSelect(tiles[i].terrainFrameX, tiles[i].terrainFrameY);
+		tiles[i].obj = OBJ_NONE;
 	}
 }
 
-void MapTool::MapButton()
+void MapTool::mapToolButton()
 {
-	if (PtInRect(&_btnTerrainDraw, m_ptMouse))
+	if (PtInRect(&btnTerrainDraw, m_ptMouse))
 	{
-		_ctrSelect = CTRL_TERRAIN;
+		ctrSelect = CTRL_TERRAIN;
 	}
-	if (PtInRect(&_btnObjectDraw, m_ptMouse))
+	if (PtInRect(&btnObjectDraw, m_ptMouse))
 	{
-		_ctrSelect = CTRL_OBJECT;
+		ctrSelect = CTRL_OBJECT;
 	}
-	if (PtInRect(&_btnEraser, m_ptMouse))
+	if (PtInRect(&btnEraser, m_ptMouse))
 	{
-		_ctrSelect = CTRL_ERASER;
+		ctrSelect = CTRL_ERASER;
 	}
-	if (PtInRect(&_btnData, m_ptMouse))
+	if (PtInRect(&btnData, m_ptMouse))
 	{
-		_ctrSelect = CTRL_DATA;
+		ctrSelect = CTRL_DATA;
 
 		OPENFILENAME ofn;
 
@@ -173,59 +173,59 @@ void MapTool::MapButton()
 
 		isOfnCheck = true;
 	}
-	if (PtInRect(&_btnSave, m_ptMouse))
+	if (PtInRect(&btnSave, m_ptMouse))
 	{
-		_ctrSelect = CTRL_SAVE;
-		Save();
+		ctrSelect = CTRL_SAVE;
+		save();
 	}
-	if (PtInRect(&_btnLoad, m_ptMouse))
+	if (PtInRect(&btnLoad, m_ptMouse))
 	{
-		_ctrSelect = CTRL_LOAD;
-		Load();
+		ctrSelect = CTRL_LOAD;
+		load();
 	}
-	if (PtInRect(&_btnExit, m_ptMouse))
+	if (PtInRect(&btnExit, m_ptMouse))
 	{
 		SCENEMANAGER->changeScene("GameScene");
 	}
 }
 
-void MapTool::SetMap()
+void MapTool::setMap()
 {
 	//오른쪽 샘플
-	for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; i++)
+	for (int i = 0; i < SAMPLE_TILE_X * SAMPLE_TILE_Y; i++)
 	{
-		if (PtInRect(&_sampleTiles[i].rcTile, m_ptMouse))
+		if (PtInRect(&sampleTiles[i].rcTile, m_ptMouse))
 		{
-			_currentTile.x = _sampleTiles[i].terrainFrameX;
-			_currentTile.y = _sampleTiles[i].terrainFrameY;
+			currentTile.x = sampleTiles[i].sTileFrameX;
+			currentTile.y = sampleTiles[i].sTileFrameY;
 			break;
 		}
 	}
 
 	//왼쪽 타일
-	for (int i = 0; i < TILEX * TILEY; i++)
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		if (PtInRect(&_tiles[i].rc, m_ptMouse))
+		if (PtInRect(&tiles[i].rc, m_ptMouse))
 		{
-			if (_ctrSelect == CTRL_TERRAIN)
+			if (ctrSelect == CTRL_TERRAIN)
 			{
-				_tiles[i].terrainFrameX = _currentTile.x;
-				_tiles[i].terrainFrameY = _currentTile.y;
+				tiles[i].terrainFrameX = currentTile.x;
+				tiles[i].terrainFrameY = currentTile.y;
 
-				_tiles[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+				tiles[i].terrain = terrainSelect(currentTile.x, currentTile.y);
 			}
-			else if (_ctrSelect == CTRL_OBJECT)
+			else if (ctrSelect == CTRL_OBJECT)
 			{
-				_tiles[i].objFrameX = _currentTile.x;
-				_tiles[i].objFrameY = _currentTile.y;
+				tiles[i].objFrameX = currentTile.x;
+				tiles[i].objFrameY = currentTile.y;
 
-				_tiles[i].obj = objSelect(_currentTile.x, _currentTile.y);
+				tiles[i].obj = objSelect(currentTile.x, currentTile.y);
 			}
-			else if (_ctrSelect == CTRL_ERASER)
+			else if (ctrSelect == CTRL_ERASER)
 			{
-				_tiles[i].objFrameX = 0;
-				_tiles[i].objFrameY = 0;
-				_tiles[i].obj = OBJ_NONE;
+				tiles[i].objFrameX = 0;
+				tiles[i].objFrameY = 0;
+				tiles[i].obj = OBJ_NONE;
 			}
 
 			InvalidateRect(m_hWnd, NULL, false);
@@ -233,22 +233,22 @@ void MapTool::SetMap()
 		}
 	}
 
-	MapButton();
+	mapToolButton();
 }
 
-void MapTool::Save()
+void MapTool::save()
 {
 	file = CreateFile(fileName[2], GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+	WriteFile(file, tiles, sizeof(tagTile) * TILE_X * TILE_Y, &write, NULL);
 	CloseHandle(file);
 }
 
-void MapTool::Load()
+void MapTool::load()
 {
 	file = CreateFile(fileName[2], GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+	ReadFile(file, tiles, sizeof(tagTile) * TILE_X * TILE_Y, &read, NULL);
 	CloseHandle(file);
 }
 
@@ -305,12 +305,12 @@ LRESULT MapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 	switch (iMessage)
 	{
 	case WM_LBUTTONDOWN:
-		this->SetMap();
+		this->setMap();
 		break;
 	case WM_MOUSEMOVE:
 		m_ptMouse.x = LOWORD(lParam);
 		m_ptMouse.y = HIWORD(lParam);
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))this->SetMap();
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))this->setMap();
 		break;
 	case WM_KEYDOWN:
 		switch (wParam)

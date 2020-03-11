@@ -11,7 +11,7 @@ testMap::~testMap()
 
 HRESULT testMap::init()
 {
-	Load();
+	load();
 
 	return S_OK;
 }
@@ -32,27 +32,27 @@ void testMap::render()
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
 		//지형과 오브젝트를 맵에서 보여준다.
-		for (int i = 0; i < TILEX * TILEY; i++)
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+			IMAGEMANAGER->frameRender("tileMap", getMemDC(), tiles[i].rc.left, tiles[i].rc.top, tiles[i].terrainFrameX, tiles[i].terrainFrameY);
 
-			if (_tiles[i].obj == OBJ_NONE)continue;
+			if (tiles[i].obj == OBJ_NONE)continue;
 
-			IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].objFrameX, _tiles[i].objFrameY);
+			IMAGEMANAGER->frameRender("tileMap", getMemDC(), tiles[i].rc.left, tiles[i].rc.top, tiles[i].objFrameX, tiles[i].objFrameY);
 		}
 	}
 
 	//마우스와 맵의 타일이 충돌하면 그 타일의 속성을 보여준다.
-	for (int i = 0; i < TILEX * TILEY; i++)
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		if (PtInRect(&_tiles[i].rc, m_ptMouse))
+		if (PtInRect(&tiles[i].rc, m_ptMouse))
 		{
-			IMAGEMANAGER->render("tileCheck", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top);
+			IMAGEMANAGER->render("tileCheck", getMemDC(), tiles[i].rc.left, tiles[i].rc.top);
 		}
 	}
 }
 
-void testMap::Load()
+void testMap::load()
 {
 	if (isOfnCheck)
 	{
@@ -63,34 +63,25 @@ void testMap::Load()
 		file = CreateFile("save/SaveMap_3.map", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	}
 
-	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+	ReadFile(file, tiles, sizeof(tagTile) * TILE_X * TILE_Y, &read, NULL);
 	CloseHandle(file);
 
-	//캐릭터 위치에 해당하는 타일 이미지를 걸러낸다.
-	for (int i = 0; i < TILEX * TILEY; i++)
-	{
-		if (_tiles[i].obj == OBJ_CHARACTER)
-		{
-			_tiles[i].obj = OBJ_NONE;
-		}
-	}
-
 	//속성 정의를 하자.
-	memset(_attribute, 0, sizeof(DWORD) * TILEX * TILEY);
+	memset(attribute, 0, sizeof(DWORD) * TILE_X * TILE_Y);
 
-	for (int i = 0; i < TILEX * TILEY; i++)
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		if (_tiles[i].obj == OBJ_MOUNTAIN)
+		if (tiles[i].obj == OBJ_MOUNTAIN)
 		{
-			_attribute[i] |= ATTR_UNMOVABLE;
+			attribute[i] |= ATTR_UNMOVABLE;
 		}
-		if (_tiles[i].obj == OBJ_ROCKMOUNTAIN)
+		if (tiles[i].obj == OBJ_ROCKMOUNTAIN)
 		{
-			_attribute[i] |= ATTR_UNMOVABLE;
+			attribute[i] |= ATTR_UNMOVABLE;
 		}
-		if (_tiles[i].obj == OBJ_CASTLEWALLS)
+		if (tiles[i].obj == OBJ_CASTLEWALLS)
 		{
-			_attribute[i] |= ATTR_UNMOVABLE;
+			attribute[i] |= ATTR_UNMOVABLE;
 		}
 	}
 }
