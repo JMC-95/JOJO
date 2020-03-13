@@ -22,7 +22,6 @@ enum TERRAIN
 	TR_PLAIN,			//평지
 	TR_BADLANDS,		//황무지
 	TR_CASTLERAND,		//성내
-	TR_CASTLEGATE,		//성문
 	TR_END
 };
 
@@ -32,6 +31,7 @@ enum OBJECT
 	OBJ_CASTLEWALLS,	//성벽
 	OBJ_ROCKMOUNTAIN,	//바위산
 	OBJ_MOUNTAIN,		//산
+	OBJ_CASTLEGATE,		//성문
 	OBJ_NONE
 };
 
@@ -49,6 +49,7 @@ struct tagTile
 	int F, G, H;		//Astar에서 사용되는 변수
 	int node;			//Astar에서 사용되는 노드
 
+	bool flood;			//floodFill에서 사용되는 변수
 };
 
 //이미지 타일 구조체

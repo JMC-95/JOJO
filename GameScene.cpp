@@ -16,9 +16,9 @@ HRESULT GameScene::init()
 
 	//ÅÊÅ©
 	_tank = new tank;
-	_tank->init("player");
+	_tank->init("pMoveRange","player");
 	_tank->setTestMapMemoryAdress(mainMap);
-	_tank->setTankPosition(mainMap->getMap()[199].rc);
+	_tank->setTankPosition(mainMap->getMap()[193].rc);
 
 	return S_OK;
 }
@@ -31,8 +31,8 @@ void GameScene::release()
 
 void GameScene::update()
 {
-	_tank->update();
 	mainMap->update();
+	_tank->update();
 
 	ANIMATIONMANAGER->update();
 }

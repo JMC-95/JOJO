@@ -9,30 +9,25 @@ tank::~tank()
 {
 }
 
-HRESULT tank::init(const char* imageName)
+HRESULT tank::init(const char* rngImageName, const char* imageName)
 {
 	//탱크 방향설정
-	_direction = TANKDIRECTION_LEFT;
+	direction = TANKDIRECTION_LEFT;
 
-	_image = IMAGEMANAGER->findImage(imageName);
+	rngImg = IMAGEMANAGER->findImage(rngImageName);
+	img = IMAGEMANAGER->findImage(imageName);
 	ANIMATIONMANAGER->addAnimation("playerLeft", "player", 4, 5, 5, false, true);
-	_ani = ANIMATIONMANAGER->findAnimation("playerLeft");
+	ani = ANIMATIONMANAGER->findAnimation("playerLeft");
 	ANIMATIONMANAGER->start("playerLeft");
 
 	//속도
 	speed = 6;
-	moveCount = 6;
+	movingCount = 6;
 
 	// A*
 	startTile = endTile = -1;
 
-	currentSelect = SELECT_START;
-
 	isTurn = true;
-	isMove = false;
-	isFind = false;
-	noPath = false;
-	startAstar = false;
 
 	return S_OK;
 }
@@ -45,9 +40,9 @@ void tank::update()
 {
 	if (isTurn)
 	{
-		mouseClick();
+		mouseMove();
 
-		if (!isFind && !noPath && startAstar)
+		if (startAstar && !isFind && !noPath)
 		{
 			while (!isFind)
 			{
@@ -71,50 +66,69 @@ void tank::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 	{
 		isTurn = true;
-		moveCount = 6;
 	}
 }
 
 void tank::render()
 {
-	_image->aniRender(getMemDC(), _rc.left, _rc.top, _ani);
+	if (isRange)
+	{
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood)
+			{
+				//IMAGEMANAGER->render("pMoveRange", getMemDC(), mainMap->getMap()[i].rc.left, mainMap->getMap()[i].rc.top);
+				rngImg->alphaRender(getMemDC(), mainMap->getMap()[i].rc.left, mainMap->getMap()[i].rc.top, 150);
+			}
+		}
+	}
+
+	img->aniRender(getMemDC(), _rc.left, _rc.top, ani);
 
 	char strBlock[128];
-	sprintf_s(strBlock, "moveCount : %d", moveCount);
+	sprintf_s(strBlock, "moveCount : %d", movingCount);
 	SetTextColor(getMemDC(), RGB(255, 255, 0));
 	TextOut(getMemDC(), 400, 10, strBlock, strlen(strBlock));
 }
 
-void tank::mouseClick()
+void tank::mouseMove()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			if (PtInRect(&_rc, m_ptMouse) && PtInRect(&_mainMap->getMap()[i].rc, m_ptMouse))
+			if (PtInRect(&_rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
-				currentSelect = SELECT_START;
+				//선택한 타일 (시작)
 				startTile = i;
 
+				isSelect = true;
 				isRange = true;
 				isFind = false;
 				noPath = false;
 				startAstar = false;
+
+				floodFill(startTile, movingCount);
 			}
 
-			if (!PtInRect(&_rc, m_ptMouse) && PtInRect(&_mainMap->getMap()[i].rc, m_ptMouse) && isRange)
+			if (!PtInRect(&_rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
 			{
-				mapX = _mainMap->getMap()[i].rc.left + (_mainMap->getMap()[i].rc.right - _mainMap->getMap()[i].rc.left) / 2;
-				mapY = _mainMap->getMap()[i].rc.top + (_mainMap->getMap()[i].rc.bottom - _mainMap->getMap()[i].rc.top) / 2;
+				//선택한 맵의 x좌표와 y좌표
+				mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
+				mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
 
-				currentSelect = SELECT_END;
-				endTile = i;
+				isSelect = false;
 
-				isRange = false;
-
-				if (_mainMap->getMap()[i].obj == OBJ_MOUNTAIN ||
-					_mainMap->getMap()[i].obj == OBJ_ROCKMOUNTAIN ||
-					_mainMap->getMap()[i].obj == OBJ_CASTLEWALLS) continue;
+				if (mainMap->getMap()[i].flood)
+				{
+					//선택한 타일 (끝)
+					endTile = i;
+				}
+				else
+				{
+					isRange = false;
+					continue;
+				}
 
 				//이순간 Astar가 시작된다.
 				//Astar에 필요한 모든 것을 초기화 시켜주자.
@@ -129,8 +143,21 @@ void tank::mouseClick()
 					//시작 지점을 openList에 넣자
 					openList.push_back(currentTile);
 				}
+
+				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				{
+					if (mainMap->getMap()[i].flood)
+					{
+						mainMap->getMap()[i].flood = false;
+					}
+				}
 			}
 		}
+	}
+
+	if (isSelect)
+	{
+
 	}
 }
 
@@ -162,9 +189,10 @@ void tank::aStar()
 			bool isOpen;
 
 			//대각선 타일의 이동 문제로 (주변에 오브젝트가 있으면 못감) 임시로 오브젝트 상태 저장
-			if (_mainMap->getMap()[y * TILE_X + x].obj == OBJ_MOUNTAIN ||
-				_mainMap->getMap()[y * TILE_X + x].obj == OBJ_ROCKMOUNTAIN ||
-				_mainMap->getMap()[y * TILE_X + x].obj == OBJ_CASTLEWALLS) tempBlock[i] = true;
+			if (mainMap->getMap()[y * TILE_X + x].obj == OBJ_MOUNTAIN ||
+				mainMap->getMap()[y * TILE_X + x].obj == OBJ_ROCKMOUNTAIN ||
+				mainMap->getMap()[y * TILE_X + x].obj == OBJ_CASTLEWALLS ||
+				mainMap->getMap()[y * TILE_X + x].obj == OBJ_CASTLEGATE) tempBlock[i] = true;
 			else
 			{
 				//check closeList
@@ -183,12 +211,12 @@ void tank::aStar()
 
 				if (i < 4)
 				{
-					_mainMap->getMap()[y * TILE_X + x].G = 10;
+					mainMap->getMap()[y * TILE_X + x].G = 10;
 				}
 
 				//abs절대값
-				_mainMap->getMap()[y * TILE_X + x].H = (abs(endX - x) + abs(endY - y)) * 10;
-				_mainMap->getMap()[y * TILE_X + x].F = _mainMap->getMap()[y * TILE_X + x].G + _mainMap->getMap()[y * TILE_X + x].H;
+				mainMap->getMap()[y * TILE_X + x].H = (abs(endX - x) + abs(endY - y)) * 10;
+				mainMap->getMap()[y * TILE_X + x].F = mainMap->getMap()[y * TILE_X + x].G + mainMap->getMap()[y * TILE_X + x].H;
 
 				//openList에 있으면 G 비용 비교 후 처리
 				isOpen = false;
@@ -199,12 +227,12 @@ void tank::aStar()
 					{
 						isOpen = true;
 
-						if (_mainMap->getMap()[openList[i]].G > _mainMap->getMap()[y * TILE_X + x].G)
+						if (mainMap->getMap()[openList[i]].G > mainMap->getMap()[y * TILE_X + x].G)
 						{
-							_mainMap->getMap()[openList[i]].H = _mainMap->getMap()[y * TILE_X + x].H;
-							_mainMap->getMap()[openList[i]].G = _mainMap->getMap()[y * TILE_X + x].G;
-							_mainMap->getMap()[openList[i]].F = _mainMap->getMap()[y * TILE_X + x].F;
-							_mainMap->getMap()[openList[i]].node = currentTile;
+							mainMap->getMap()[openList[i]].H = mainMap->getMap()[y * TILE_X + x].H;
+							mainMap->getMap()[openList[i]].G = mainMap->getMap()[y * TILE_X + x].G;
+							mainMap->getMap()[openList[i]].F = mainMap->getMap()[y * TILE_X + x].F;
+							mainMap->getMap()[openList[i]].node = currentTile;
 						}
 					}
 				}
@@ -213,14 +241,14 @@ void tank::aStar()
 				if (!isOpen)
 				{
 					openList.push_back(y * TILE_X + x);
-					_mainMap->getMap()[y * TILE_X + x].node = currentTile;
+					mainMap->getMap()[y * TILE_X + x].node = currentTile;
 				}
 
 				//find
 				if (y * TILE_X + x == endTile)
 				{
 					isFind = true;
-					optimalPath.push(_mainMap->getMap()[endTile]);
+					optimalPath.push(mainMap->getMap()[endTile]);
 				}
 			}
 		}
@@ -247,16 +275,16 @@ void tank::aStar()
 
 	if (openList.size() != 0)
 	{
-		//find minimum f cost in openList
-		int min = _mainMap->getMap()[*openList.begin()].H;
+		// 오픈리스트에서 최소 f 비용 찾기
+		int min = mainMap->getMap()[*openList.begin()].H;
 
 		currentTile = *openList.begin();
 
 		for (iter = openList.begin(); iter != openList.end(); ++iter)
 		{
-			if (min > _mainMap->getMap()[(*iter)].H)
+			if (min > mainMap->getMap()[(*iter)].H)
 			{
-				min = _mainMap->getMap()[(*iter)].H;
+				min = mainMap->getMap()[(*iter)].H;
 				currentTile = *iter;
 			}
 		}
@@ -265,21 +293,15 @@ void tank::aStar()
 	//길 찾기 성공시 각 타일에 길찾기 상태 저장
 	int tempTile = endTile;
 
-	while (_mainMap->getMap()[tempTile].node != startTile && isFind)
+	while (mainMap->getMap()[tempTile].node != startTile && isFind)
 	{
-		tempTile = _mainMap->getMap()[tempTile].node;
-
-		optimalPath.push(_mainMap->getMap()[tempTile]);
+		tempTile = mainMap->getMap()[tempTile].node;
+		optimalPath.push(mainMap->getMap()[tempTile]);
 	}
 }
 
 void tank::tankMove()
 {
-	RECT rcCollision;
-	int tileIndex[2];
-
-	rcCollision = _rc;
-
 	sX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	sY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
@@ -287,19 +309,19 @@ void tank::tankMove()
 	{
 		if (playerX > sX)
 		{
-			_direction = TANKDIRECTION_LEFT;
+			direction = TANKDIRECTION_LEFT;
 		}
 		else if (playerX < sX)
 		{
-			_direction = TANKDIRECTION_RIGHT;
+			direction = TANKDIRECTION_RIGHT;
 		}
 		else if (playerY > sY)
 		{
-			_direction = TANKDIRECTION_UP;
+			direction = TANKDIRECTION_UP;
 		}
 		else if (playerY < sY)
 		{
-			_direction = TANKDIRECTION_DOWN;
+			direction = TANKDIRECTION_DOWN;
 		}
 
 		isMove = true;
@@ -308,23 +330,23 @@ void tank::tankMove()
 	if (_rc.left > 0 || _rc.right < WINSIZEY ||
 		_rc.top > 0 || _rc.bottom < WINSIZEY)
 	{
-		switch (_direction)
+		switch (direction)
 		{
 		case TANKDIRECTION_LEFT:
 			playerX -= speed;
-			rcCollision = RectMakeCenter(playerX, playerY, _image->getFrameWidth(), _image->getFrameHeight());
+			_rc = RectMakeCenter(playerX, playerY, img->getFrameWidth(), img->getFrameHeight());
 			break;
 		case TANKDIRECTION_RIGHT:
 			playerX += speed;
-			rcCollision = RectMakeCenter(playerX, playerY, _image->getFrameWidth(), _image->getFrameHeight());
+			_rc = RectMakeCenter(playerX, playerY, img->getFrameWidth(), img->getFrameHeight());
 			break;
 		case TANKDIRECTION_UP:
 			playerY -= speed;
-			rcCollision = RectMakeCenter(playerX, playerY, _image->getFrameWidth(), _image->getFrameHeight());
+			_rc = RectMakeCenter(playerX, playerY, img->getFrameWidth(), img->getFrameHeight());
 			break;
 		case TANKDIRECTION_DOWN:
 			playerY += speed;
-			rcCollision = RectMakeCenter(playerX, playerY, _image->getFrameWidth(), _image->getFrameHeight());
+			_rc = RectMakeCenter(playerX, playerY, img->getFrameWidth(), img->getFrameHeight());
 			break;
 		}
 
@@ -332,93 +354,32 @@ void tank::tankMove()
 		{
 			isMove = false;
 			optimalPath.pop();
-			//moveCount -= 1;
 		}
 	}
-
-	tileX = rcCollision.left / TILE_WIDTH;
-	tileY = rcCollision.top / TILE_HEIGHT;
-
-	switch (_direction)
-	{
-	case TANKDIRECTION_LEFT:
-		tileIndex[0] = tileX + tileY * TILE_X;
-		tileIndex[1] = tileX + (tileY + 1) * TILE_Y;
-		break;
-	case TANKDIRECTION_RIGHT:
-		tileIndex[0] = (tileX + tileY * TILE_X) + 1;
-		tileIndex[1] = (tileX + (tileY + 1) * TILE_Y) + 1;
-		break;
-	case TANKDIRECTION_UP:
-		tileIndex[0] = tileX + tileY * TILE_X;
-		tileIndex[1] = tileX + 1 + tileY * TILE_Y;
-		break;
-	case TANKDIRECTION_DOWN:
-		tileIndex[0] = (tileX + tileY * TILE_X) + TILE_X;
-		tileIndex[1] = (tileX + 1 + tileY * TILE_Y) + TILE_Y;
-		break;
-	}//end of switch(_direction)
-
-	for (int i = 0; i < 2; i++)
-	{
-		RECT temp;
-
-		if (((_mainMap->getAttribute()[tileIndex[i]] & ATTR_UNMOVABLE) == ATTR_UNMOVABLE) &&
-			IntersectRect(&temp, &_mainMap->getMap()[tileIndex[i]].rc, &rcCollision))
-		{
-			switch (_direction)
-			{
-			case TANKDIRECTION_LEFT:
-				_rc.left = _mainMap->getMap()[tileIndex[i]].rc.right;
-				_rc.right = _rc.left + _image->getFrameWidth();
-				playerX = _rc.left + (_rc.right - _rc.left) / 2;
-				break;
-			case TANKDIRECTION_RIGHT:
-				_rc.right = _mainMap->getMap()[tileIndex[i]].rc.left;
-				_rc.left = _rc.right - _image->getFrameWidth();
-				playerX = _rc.left + (_rc.right - _rc.left) / 2;
-				break;
-			case TANKDIRECTION_UP:
-				_rc.top = _mainMap->getMap()[tileIndex[i]].rc.bottom;
-				_rc.bottom = _rc.top + _image->getFrameHeight();
-				playerY = _rc.top + (_rc.bottom - _rc.top) / 2;
-				break;
-			case TANKDIRECTION_DOWN:
-				_rc.bottom = _mainMap->getMap()[tileIndex[i]].rc.top;
-				_rc.top = _rc.bottom - _image->getFrameHeight();
-				playerY = _rc.top + (_rc.bottom - _rc.top) / 2;
-				break;
-			}
-			return;
-		}
-	}//end of for
-
-	rcCollision = RectMakeCenter(playerX, playerY, _image->getFrameWidth(), _image->getFrameHeight());
-	_rc = rcCollision;
 }
 
 void tank::animation()
 {
-	switch (_direction)
+	switch (direction)
 	{
 	case TANKDIRECTION_LEFT:
 		ANIMATIONMANAGER->addAnimation("playerLeft", "player", 4, 5, 5, false, true);
-		_ani = ANIMATIONMANAGER->findAnimation("playerLeft");
+		ani = ANIMATIONMANAGER->findAnimation("playerLeft");
 		ANIMATIONMANAGER->resume("playerLeft");
 		break;
 	case TANKDIRECTION_RIGHT:
 		ANIMATIONMANAGER->addAnimation("playerRight", "player", 6, 7, 5, false, true);
-		_ani = ANIMATIONMANAGER->findAnimation("playerRight");
+		ani = ANIMATIONMANAGER->findAnimation("playerRight");
 		ANIMATIONMANAGER->resume("playerRight");
 		break;
 	case TANKDIRECTION_UP:
 		ANIMATIONMANAGER->addAnimation("playerUp", "player", 2, 3, 5, false, true);
-		_ani = ANIMATIONMANAGER->findAnimation("playerUp");
+		ani = ANIMATIONMANAGER->findAnimation("playerUp");
 		ANIMATIONMANAGER->resume("playerUp");
 		break;
 	case TANKDIRECTION_DOWN:
 		ANIMATIONMANAGER->addAnimation("playerDown", "player", 0, 1, 5, false, true);
-		_ani = ANIMATIONMANAGER->findAnimation("playerDown");
+		ani = ANIMATIONMANAGER->findAnimation("playerDown");
 		ANIMATIONMANAGER->resume("playerDown");
 		break;
 	}
@@ -426,8 +387,37 @@ void tank::animation()
 	if (!isTurn)
 	{
 		ANIMATIONMANAGER->addAnimation("playerDie", "player", 12, 13, 5, false, true);
-		_ani = ANIMATIONMANAGER->findAnimation("playerDie");
+		ani = ANIMATIONMANAGER->findAnimation("playerDie");
 		ANIMATIONMANAGER->resume("playerDie");
+	}
+}
+
+void tank::floodFill(int tile, int moveCount)
+{
+	if (mainMap->getMap()[tile].obj != OBJ_CASTLEWALLS &&
+		mainMap->getMap()[tile].obj != OBJ_ROCKMOUNTAIN &&
+		mainMap->getMap()[tile].obj != OBJ_MOUNTAIN &&
+		mainMap->getMap()[tile].obj != OBJ_CASTLEGATE)
+	{
+		if (moveCount >= 0 && tile % TILE_X)
+		{
+			if (mainMap->getMap()[tile].terrain == TR_PLAIN)
+			{
+				floodFill(tile - 1, moveCount - 1);
+				floodFill(tile + 1, moveCount - 1);
+				floodFill(tile - 20, moveCount - 1);
+				floodFill(tile + 20, moveCount - 1);
+			}
+			else
+			{
+				floodFill(tile - 1, moveCount - 2);
+				floodFill(tile + 1, moveCount - 2);
+				floodFill(tile - 20, moveCount - 2);
+				floodFill(tile + 20, moveCount - 2);
+			}
+
+			mainMap->getMap()[tile].flood = true;
+		}
 	}
 }
 

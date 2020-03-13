@@ -65,23 +65,4 @@ void MainMap::load()
 
 	ReadFile(file, tiles, sizeof(tagTile) * TILE_X * TILE_Y, &read, NULL);
 	CloseHandle(file);
-
-	//속성 정의를 하자.
-	memset(attribute, 0, sizeof(DWORD) * TILE_X * TILE_Y);
-
-	for (int i = 0; i < TILE_X * TILE_Y; i++)
-	{
-		if (tiles[i].obj == OBJ_MOUNTAIN)
-		{
-			attribute[i] |= ATTR_UNMOVABLE;
-		}
-		if (tiles[i].obj == OBJ_ROCKMOUNTAIN)
-		{
-			attribute[i] |= ATTR_UNMOVABLE;
-		}
-		if (tiles[i].obj == OBJ_CASTLEWALLS)
-		{
-			attribute[i] |= ATTR_UNMOVABLE;
-		}
-	}
 }

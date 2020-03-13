@@ -274,11 +274,6 @@ TERRAIN MapTool::terrainSelect(int frameX, int frameY)
 	{
 		return TR_CASTLERAND;
 	}
-	//성문
-	else if (frameX == 2 && frameY == 9)
-	{
-		return TR_CASTLEGATE;
-	}
 }
 
 OBJECT MapTool::objSelect(int frameX, int frameY)
@@ -297,6 +292,11 @@ OBJECT MapTool::objSelect(int frameX, int frameY)
 	else if (frameX == 2 && frameY == 5)
 	{
 		return OBJ_MOUNTAIN;
+	}
+	//성문
+	else if (frameX == 2 && frameY == 9)
+	{
+		return OBJ_CASTLEGATE;
 	}
 }
 
