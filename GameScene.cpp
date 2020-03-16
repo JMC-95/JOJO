@@ -14,11 +14,11 @@ HRESULT GameScene::init()
 	mainMap = new MainMap;
 	mainMap->init();
 
-	//ÅÊÅ©
-	_tank = new tank;
-	_tank->init("pMoveRange", "attackRange", "atkRange", "player");
-	_tank->setTestMapMemoryAdress(mainMap);
-	_tank->setTankPosition(mainMap->getMap()[193].rc);
+	PLAYERMANAGER->init();
+	PLAYERMANAGER->getHahudon()->setMapMemoryAdress(mainMap);
+	PLAYERMANAGER->getHahudon()->setPosition(mainMap->getMap()[176].rc);
+	PLAYERMANAGER->getJojo()->setMapMemoryAdress(mainMap);
+	PLAYERMANAGER->getJojo()->setPosition(mainMap->getMap()[197].rc);
 
 	return S_OK;
 }
@@ -26,19 +26,17 @@ HRESULT GameScene::init()
 void GameScene::release()
 {
 	SAFE_DELETE(mainMap);
-	SAFE_DELETE(_tank);
 }
 
 void GameScene::update()
 {
 	mainMap->update();
-	_tank->update();
-
+	PLAYERMANAGER->update();
 	ANIMATIONMANAGER->update();
 }
 
 void GameScene::render()
 {
-	mainMap->render();
-	_tank->render();
+	mainMap->render(getMemDC());
+	PLAYERMANAGER->render(getMemDC());
 }

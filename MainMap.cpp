@@ -24,21 +24,21 @@ void MainMap::update()
 {
 }
 
-void MainMap::render()
+void MainMap::render(HDC hdc)
 {
-	IMAGEMANAGER->render("map", getMemDC(), 0, 0);
-	IMAGEMANAGER->render("subWin", getMemDC(), 960, 0);
+	IMAGEMANAGER->render("map", hdc, 0, 0);
+	IMAGEMANAGER->render("subWin", hdc, 960, 0);
 
 	if (KEYMANAGER->isToggleKey(VK_F1))
 	{
 		//지형과 오브젝트를 맵에서 보여준다.
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			IMAGEMANAGER->frameRender("tileMap", getMemDC(), tiles[i].rc.left, tiles[i].rc.top, tiles[i].terrainFrameX, tiles[i].terrainFrameY);
+			IMAGEMANAGER->frameRender("tileMap", hdc, tiles[i].rc.left, tiles[i].rc.top, tiles[i].terrainFrameX, tiles[i].terrainFrameY);
 
 			if (tiles[i].obj == OBJ_NONE)continue;
 
-			IMAGEMANAGER->frameRender("tileMap", getMemDC(), tiles[i].rc.left, tiles[i].rc.top, tiles[i].objFrameX, tiles[i].objFrameY);
+			IMAGEMANAGER->frameRender("tileMap", hdc, tiles[i].rc.left, tiles[i].rc.top, tiles[i].objFrameX, tiles[i].objFrameY);
 		}
 	}
 
@@ -47,7 +47,7 @@ void MainMap::render()
 	{
 		if (PtInRect(&tiles[i].rc, m_ptMouse))
 		{
-			IMAGEMANAGER->render("tileCheck", getMemDC(), tiles[i].rc.left, tiles[i].rc.top);
+			IMAGEMANAGER->render("tileCheck", hdc, tiles[i].rc.left, tiles[i].rc.top);
 		}
 	}
 }

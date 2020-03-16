@@ -64,6 +64,9 @@
     <Filter Include="mainGame\Enemy">
       <UniqueIdentifier>{f8660c58-499f-48d8-a740-bdfff2fbcdd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manager\addManager">
+      <UniqueIdentifier>{add97e61-d628-4f5f-9e44-91557ba6b9c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -153,6 +156,33 @@
     <ClInclude Include="tank.h">
       <Filter>mainGame\Test</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerManager.h">
+      <Filter>Manager\addManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Jojo.h">
+      <Filter>mainGame\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Join.h">
+      <Filter>mainGame\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Johong.h">
+      <Filter>mainGame\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Hahudon.h">
+      <Filter>mainGame\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Hahuyeon.h">
+      <Filter>mainGame\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Ijeon.h">
+      <Filter>mainGame\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Agjin.h">
+      <Filter>mainGame\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBase.h">
+      <Filter>mainGame\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -223,6 +253,33 @@
     </ClCompile>
     <ClCompile Include="tank.cpp">
       <Filter>mainGame\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerManager.cpp">
+      <Filter>Manager\addManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Jojo.cpp">
+      <Filter>mainGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Join.cpp">
+      <Filter>mainGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Johong.cpp">
+      <Filter>mainGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Hahudon.cpp">
+      <Filter>mainGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Hahuyeon.cpp">
+      <Filter>mainGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Ijeon.cpp">
+      <Filter>mainGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Agjin.cpp">
+      <Filter>mainGame\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBase.cpp">
+      <Filter>mainGame\Player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

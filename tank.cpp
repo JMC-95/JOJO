@@ -19,7 +19,7 @@ HRESULT tank::init(const char* rngImageName, const char* atkRngImageName, const 
 	atkRngImg = IMAGEMANAGER->findImage(atkRngImageName);
 	atkImg = IMAGEMANAGER->findImage(atkImageName);
 	img = IMAGEMANAGER->findImage(imageName);
-	ANIMATIONMANAGER->addAnimation("playerLeft", "player", 4, 5, 5, false, true);
+	ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 5, false, true);
 	ani = ANIMATIONMANAGER->findAnimation("playerLeft");
 	ANIMATIONMANAGER->start("playerLeft");
 
@@ -366,22 +366,22 @@ void tank::animation()
 	switch (direction)
 	{
 	case TANKDIRECTION_LEFT:
-		ANIMATIONMANAGER->addAnimation("playerLeft", "player", 4, 5, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 5, false, true);
 		ani = ANIMATIONMANAGER->findAnimation("playerLeft");
 		ANIMATIONMANAGER->resume("playerLeft");
 		break;
 	case TANKDIRECTION_RIGHT:
-		ANIMATIONMANAGER->addAnimation("playerRight", "player", 6, 7, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerRight", "조조", 6, 7, 5, false, true);
 		ani = ANIMATIONMANAGER->findAnimation("playerRight");
 		ANIMATIONMANAGER->resume("playerRight");
 		break;
 	case TANKDIRECTION_UP:
-		ANIMATIONMANAGER->addAnimation("playerUp", "player", 2, 3, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerUp", "조조", 2, 3, 5, false, true);
 		ani = ANIMATIONMANAGER->findAnimation("playerUp");
 		ANIMATIONMANAGER->resume("playerUp");
 		break;
 	case TANKDIRECTION_DOWN:
-		ANIMATIONMANAGER->addAnimation("playerDown", "player", 0, 1, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerDown", "조조", 0, 1, 5, false, true);
 		ani = ANIMATIONMANAGER->findAnimation("playerDown");
 		ANIMATIONMANAGER->resume("playerDown");
 		break;
@@ -389,7 +389,7 @@ void tank::animation()
 
 	if (!isTurn)
 	{
-		ANIMATIONMANAGER->addAnimation("playerDie", "player", 12, 13, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerDie", "조조", 12, 13, 5, false, true);
 		ani = ANIMATIONMANAGER->findAnimation("playerDie");
 		ANIMATIONMANAGER->resume("playerDie");
 	}

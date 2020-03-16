@@ -104,7 +104,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Agjin.h" />
     <ClInclude Include="animation.h" />
     <ClInclude Include="animationManager.h" />
     <ClInclude Include="API_FrameWork.h" />
@@ -156,13 +157,21 @@
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Hahudon.h" />
+    <ClInclude Include="Hahuyeon.h" />
+    <ClInclude Include="Ijeon.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
+    <ClInclude Include="Johong.h" />
+    <ClInclude Include="Join.h" />
+    <ClInclude Include="Jojo.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="mainGame.h" />
     <ClInclude Include="MainMap.h" />
     <ClInclude Include="MapTiles.h" />
     <ClInclude Include="MapTool.h" />
+    <ClInclude Include="PlayerBase.h" />
+    <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="progressBar.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
@@ -179,18 +188,27 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Agjin.cpp" />
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="animationManager.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Hahudon.cpp" />
+    <ClCompile Include="Hahuyeon.cpp" />
+    <ClCompile Include="Ijeon.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
+    <ClCompile Include="Johong.cpp" />
+    <ClCompile Include="Join.cpp" />
+    <ClCompile Include="Jojo.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="mainGame.cpp" />
     <ClCompile Include="MainMap.cpp" />
     <ClCompile Include="MapTool.cpp" />
+    <ClCompile Include="PlayerBase.cpp" />
+    <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="soundManager.cpp" />

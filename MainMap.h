@@ -1,8 +1,7 @@
 #pragma once
-#include "gameNode.h"
 #include "MapTiles.h"
 
-class MainMap : public gameNode
+class MainMap
 {
 private:
 	//¸Ê ·Îµå¿ë
@@ -23,7 +22,7 @@ public:
 	HRESULT init();
 	void release();
 	void update();
-	void render();
+	void render(HDC hdc);
 
 	void load();
 
