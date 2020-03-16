@@ -16,7 +16,7 @@ HRESULT GameScene::init()
 
 	//ÅÊÅ©
 	_tank = new tank;
-	_tank->init("pMoveRange","player");
+	_tank->init("pMoveRange", "attackRange", "atkRange", "player");
 	_tank->setTestMapMemoryAdress(mainMap);
 	_tank->setTankPosition(mainMap->getMap()[193].rc);
 

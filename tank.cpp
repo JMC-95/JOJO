@@ -9,23 +9,23 @@ tank::~tank()
 {
 }
 
-HRESULT tank::init(const char* rngImageName, const char* imageName)
+HRESULT tank::init(const char* rngImageName, const char* atkRngImageName, const char* atkImageName, const char* imageName)
 {
 	//탱크 방향설정
 	direction = TANKDIRECTION_LEFT;
 
+	//이미지 및 애니메이션
 	rngImg = IMAGEMANAGER->findImage(rngImageName);
+	atkRngImg = IMAGEMANAGER->findImage(atkRngImageName);
+	atkImg = IMAGEMANAGER->findImage(atkImageName);
 	img = IMAGEMANAGER->findImage(imageName);
 	ANIMATIONMANAGER->addAnimation("playerLeft", "player", 4, 5, 5, false, true);
 	ani = ANIMATIONMANAGER->findAnimation("playerLeft");
 	ANIMATIONMANAGER->start("playerLeft");
 
-	//속도
-	speed = 6;
-	movingCount = 6;
-
-	// A*
-	startTile = endTile = -1;
+	speed = 6;					//속도
+	movingCount = 6;			//이동범위
+	startTile = endTile = -1;	//A*
 
 	isTurn = true;
 
@@ -66,6 +66,7 @@ void tank::update()
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 	{
 		isTurn = true;
+		isAtk = true;
 	}
 }
 
@@ -77,18 +78,25 @@ void tank::render()
 		{
 			if (mainMap->getMap()[i].flood)
 			{
-				//IMAGEMANAGER->render("pMoveRange", getMemDC(), mainMap->getMap()[i].rc.left, mainMap->getMap()[i].rc.top);
-				rngImg->alphaRender(getMemDC(), mainMap->getMap()[i].rc.left, mainMap->getMap()[i].rc.top, 150);
+				rngImg->render(getMemDC(), mainMap->getMap()[i].rc.left, mainMap->getMap()[i].rc.top);
+
+				atkRngImg->render(getMemDC(), _rc.left - 48, _rc.top);
+				atkRngImg->render(getMemDC(), _rc.left + 48, _rc.top);
+				atkRngImg->render(getMemDC(), _rc.left, _rc.top - 48);
+				atkRngImg->render(getMemDC(), _rc.left, _rc.top + 48);
 			}
 		}
 	}
 
-	img->aniRender(getMemDC(), _rc.left, _rc.top, ani);
+	if (isAtk)
+	{
+		atkImg->render(getMemDC(), _rc.left - 48, _rc.top);
+		atkImg->render(getMemDC(), _rc.left + 48, _rc.top);
+		atkImg->render(getMemDC(), _rc.left, _rc.top - 48);
+		atkImg->render(getMemDC(), _rc.left, _rc.top + 48);
+	}
 
-	char strBlock[128];
-	sprintf_s(strBlock, "moveCount : %d", movingCount);
-	SetTextColor(getMemDC(), RGB(255, 255, 0));
-	TextOut(getMemDC(), 400, 10, strBlock, strlen(strBlock));
+	img->aniRender(getMemDC(), _rc.left, _rc.top, ani);
 }
 
 void tank::mouseMove()
@@ -153,11 +161,6 @@ void tank::mouseMove()
 				}
 			}
 		}
-	}
-
-	if (isSelect)
-	{
-
 	}
 }
 

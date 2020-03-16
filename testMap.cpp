@@ -42,14 +42,14 @@ void testMap::render()
 		}
 	}
 
-	//마우스와 맵의 타일이 충돌하면 그 타일의 속성을 보여준다.
-	for (int i = 0; i < TILE_X * TILE_Y; i++)
-	{
-		if (PtInRect(&tiles[i].rc, m_ptMouse))
-		{
-			IMAGEMANAGER->render("tileCheck", getMemDC(), tiles[i].rc.left, tiles[i].rc.top);
-		}
-	}
+	////마우스와 맵의 타일이 충돌하면 그 타일의 속성을 보여준다.
+	//for (int i = 0; i < TILE_X * TILE_Y; i++)
+	//{
+	//	if (PtInRect(&tiles[i].rc, m_ptMouse))
+	//	{
+	//		IMAGEMANAGER->render("tileCheck", getMemDC(), tiles[i].rc.left, tiles[i].rc.top);
+	//	}
+	//}
 }
 
 void testMap::load()

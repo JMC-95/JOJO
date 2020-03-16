@@ -35,7 +35,8 @@ private:
 	MainMap* mainMap;		//맵을 불러옴
 	animation* ani;			//애니메이션
 	image* rngImg;			//이동범위 이미지
-	image* atkImg;			//공격범위 이미지
+	image* atkRngImg;		//이동시의 공격범위 이미지
+	image* atkImg;			//실제 공격범위 이미지
 	image* img;				//캐릭터 이미지
 
 	RECT _rc;				//캐릭터 렉트
@@ -57,12 +58,13 @@ private:
 	bool isSelect;			//캐릭터를 선택했는지 확인하는 변수
 	bool isRange;			//캐릭터의 범위를 표시해주는 변수
 	bool isMove;			//캐릭터의 이동을 체크해주는 변수
+	bool isAtk;				//캐릭터의 공격을 체크해주는 변수
 
 public:
 	tank();
 	~tank();
 
-	HRESULT init(const char* rngImageName, const char* imageName);
+	HRESULT init(const char* rngImageName, const char* atkRngImageName, const char* atkImageName, const char* imageName);
 	void release();
 	void update();
 	void render();
