@@ -12,13 +12,13 @@ GameScene::~GameScene()
 HRESULT GameScene::init()
 {
 	mainMap = new MainMap;
-	mainMap->init();
+	mainMap->init("¸¼À½");
 
 	PLAYERMANAGER->init();
-	PLAYERMANAGER->getHahudon()->setMapMemoryAdress(mainMap);
-	PLAYERMANAGER->getHahudon()->setPosition(mainMap->getMap()[176].rc);
 	PLAYERMANAGER->getJojo()->setMapMemoryAdress(mainMap);
 	PLAYERMANAGER->getJojo()->setPosition(mainMap->getMap()[197].rc);
+	PLAYERMANAGER->getHahudon()->setMapMemoryAdress(mainMap);
+	PLAYERMANAGER->getHahudon()->setPosition(mainMap->getMap()[176].rc);
 
 	return S_OK;
 }

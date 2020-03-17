@@ -20,7 +20,7 @@ HRESULT Hahudon::init(const char * moveImg, const char * mAtkImg, const char * a
 	hahudon.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
 	hahudon.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	hahudon.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
-	ANIMATIONMANAGER->addAnimation("playerLeft", "하후돈", 4, 5, 5, false, true);
+	ANIMATIONMANAGER->addAnimation("playerLeft", "하후돈", 4, 5, 2, false, true);
 	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
 	//스테이터스
 	hahudon.speed = 6;			//속도
@@ -45,32 +45,13 @@ void Hahudon::update()
 	if (isTurn)
 	{
 		mouseMove();
-
-		if (startAstar && !isFind && !noPath)
-		{
-			while (!isFind)
-			{
-				aStar();
-			}
-		}
-
-		if (!optimalPath.empty())
-		{
-			playerMove();
-
-			if (playerX == mapX && playerY == mapY)
-			{
-				isTurn = false;
-			}
-		}
 	}
 
 	playerAnimation();
 
-	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+	if (KEYMANAGER->isOnceKeyDown('2'))
 	{
 		isTurn = true;
-		isAtk = true;
 	}
 }
 
@@ -78,36 +59,13 @@ void Hahudon::render(HDC hdc)
 {
 	for (int k = 0; k < vHahudon.size(); k++)
 	{
-		if (isRange)
-		{
-			for (int i = 0; i < TILE_X * TILE_Y; i++)
-			{
-				if (mainMap->getMap()[i].flood)
-				{
-					vHahudon[k].moveRngImg->render(hdc, mainMap->getMap()[i].rc.left, mainMap->getMap()[i].rc.top);
-
-					vHahudon[k].mAtkRngImg->render(hdc, vHahudon[k].rc.left - 48, vHahudon[k].rc.top);
-					vHahudon[k].mAtkRngImg->render(hdc, vHahudon[k].rc.left + 48, vHahudon[k].rc.top);
-					vHahudon[k].mAtkRngImg->render(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top - 48);
-					vHahudon[k].mAtkRngImg->render(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top + 48);
-				}
-			}
-		}
-
-		if (isAtk)
-		{
-			vHahudon[k].atkRngImg->render(hdc, vHahudon[k].rc.left - 48, vHahudon[k].rc.top);
-			vHahudon[k].atkRngImg->render(hdc, vHahudon[k].rc.left + 48, vHahudon[k].rc.top);
-			vHahudon[k].atkRngImg->render(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top - 48);
-			vHahudon[k].atkRngImg->render(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top + 48);
-		}
-
 		vHahudon[k].img->aniRender(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top, playerAni);
 	}
 }
 
 void Hahudon::mouseMove()
 {
+	KEYMANAGER->reset();
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
@@ -120,7 +78,6 @@ void Hahudon::mouseMove()
 					startTile = i;
 
 					isSelect = true;
-					isRange = true;
 					isFind = false;
 					noPath = false;
 					startAstar = false;
@@ -140,25 +97,20 @@ void Hahudon::mouseMove()
 					{
 						//선택한 타일 (끝)
 						endTile = i;
-					}
-					else
-					{
-						isRange = false;
-						continue;
-					}
 
-					//이순간 Astar가 시작된다.
-					//Astar에 필요한 모든 것을 초기화 시켜주자.
-					openList.clear();
-					closeList.clear();
+						//이순간 Astar가 시작된다.
+						//Astar에 필요한 모든 것을 초기화 시켜주자.
+						openList.clear();
+						closeList.clear();
 
-					if (startTile != -1 && endTile != -1)
-					{
-						startAstar = true;
-						currentTile = startTile;
+						if (startTile != -1 && endTile != -1)
+						{
+							startAstar = true;
+							currentTile = startTile;
 
-						//시작 지점을 openList에 넣자
-						openList.push_back(currentTile);
+							//시작 지점을 openList에 넣자
+							openList.push_back(currentTile);
+						}
 					}
 
 					for (int i = 0; i < TILE_X * TILE_Y; i++)
@@ -170,6 +122,26 @@ void Hahudon::mouseMove()
 					}
 				}
 			}
+		}
+	}
+
+	//목표 타일을 클릭하면 A* 시작
+	if (startAstar && !isFind && !noPath)
+	{
+		while (!isFind)
+		{
+			aStar();
+		}
+	}
+
+	//목표 타일을 클릭하면 캐릭터 이동
+	if (!optimalPath.empty())
+	{
+		playerMove();
+
+		if (playerX == mapX && playerY == mapY)
+		{
+			//isTurn = false;
 		}
 	}
 }
@@ -240,22 +212,22 @@ void Hahudon::playerAnimation()
 	switch (pDirection)
 	{
 	case PLAYER_LEFT:
-		ANIMATIONMANAGER->addAnimation("playerLeft", "하후돈", 4, 5, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerLeft", "하후돈", 4, 5, 2, false, true);
 		playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
 		ANIMATIONMANAGER->resume("playerLeft");
 		break;
 	case PLAYER_RIGHT:
-		ANIMATIONMANAGER->addAnimation("playerRight", "하후돈", 6, 7, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerRight", "하후돈", 6, 7, 2, false, true);
 		playerAni = ANIMATIONMANAGER->findAnimation("playerRight");
 		ANIMATIONMANAGER->resume("playerRight");
 		break;
 	case PLAYER_UP:
-		ANIMATIONMANAGER->addAnimation("playerUp", "하후돈", 2, 3, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerUp", "하후돈", 2, 3, 2, false, true);
 		playerAni = ANIMATIONMANAGER->findAnimation("playerUp");
 		ANIMATIONMANAGER->resume("playerUp");
 		break;
 	case PLAYER_DOWN:
-		ANIMATIONMANAGER->addAnimation("playerDown", "하후돈", 0, 1, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerDown", "하후돈", 0, 1, 2, false, true);
 		playerAni = ANIMATIONMANAGER->findAnimation("playerDown");
 		ANIMATIONMANAGER->resume("playerDown");
 		break;
@@ -263,7 +235,7 @@ void Hahudon::playerAnimation()
 
 	if (!isTurn)
 	{
-		ANIMATIONMANAGER->addAnimation("playerDie", "하후돈", 12, 13, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerDie", "하후돈", 12, 13, 2, false, true);
 		playerAni = ANIMATIONMANAGER->findAnimation("playerDie");
 		ANIMATIONMANAGER->resume("playerDie");
 	}

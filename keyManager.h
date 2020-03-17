@@ -6,7 +6,6 @@ using namespace std;
 class keyManager :  public singletonBase<keyManager>
 {
 private:
-
 	bitset<KEYMAX> _keyUp;
 	bitset<KEYMAX> _keyDown;
 	
@@ -17,6 +16,7 @@ public:
 	HRESULT init();
 
 	void release();
+	void reset();
 
 	//한번만 눌렀냐
 	bool isOnceKeyDown(int key);

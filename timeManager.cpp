@@ -50,8 +50,8 @@ void timeManager::render(HDC hdc)
 
 	if (_timer != nullptr)
 	{
-		if (KEYMANAGER->isToggleKey(VK_F3))
-		{
+		//if (KEYMANAGER->isToggleKey(VK_F3))
+		//{
 			//FPS
 			sprintf_s(str, "FPS :  %d", _timer->getFrameRate());
 			TextOut(hdc, 0, 0, str, strlen(str));
@@ -62,7 +62,7 @@ void timeManager::render(HDC hdc)
 			//한프레임당 경과시간
 			sprintf_s(str, "ElapsedTime :  %f", _timer->getElapsedTime());
 			TextOut(hdc, 0, 40, str, strlen(str));
-		}
+		//}
 	}
 
 #else

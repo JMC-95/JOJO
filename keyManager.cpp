@@ -27,6 +27,15 @@ void keyManager::release()
 {
 }
 
+void keyManager::reset()
+{
+	for (int i = 0; i < KEYMAX; i++)
+	{
+		_keyUp.set(i, false);
+		_keyDown.set(i, false);
+	}
+}
+
 bool keyManager::isOnceKeyDown(int key)
 {
 	//GetAsyncKeyState현재 키의 상태를 알아오는 녀석

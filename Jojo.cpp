@@ -20,7 +20,7 @@ HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	jojo.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
 	jojo.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	jojo.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
-	ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 5, false, true);
+	ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 2, false, true);
 	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
 	//스테이터스
 	jojo.speed = 6;			//속도
@@ -45,32 +45,13 @@ void Jojo::update()
 	if (isTurn)
 	{
 		mouseMove();
-
-		if (startAstar && !isFind && !noPath)
-		{
-			while (!isFind)
-			{
-				aStar();
-			}
-		}
-
-		if (!optimalPath.empty())
-		{
-			playerMove();
-
-			if (playerX == mapX && playerY == mapY)
-			{
-				isTurn = false;
-			}
-		}
 	}
 
 	playerAnimation();
 
-	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
 		isTurn = true;
-		isAtk = true;
 	}
 }
 
@@ -78,36 +59,13 @@ void Jojo::render(HDC hdc)
 {
 	for (int k = 0; k < vJojo.size(); k++)
 	{
-		if (isRange)
-		{
-			for (int i = 0; i < TILE_X * TILE_Y; i++)
-			{
-				if (mainMap->getMap()[i].flood)
-				{
-					vJojo[k].moveRngImg->render(hdc, mainMap->getMap()[i].rc.left, mainMap->getMap()[i].rc.top);
-
-					vJojo[k].mAtkRngImg->render(hdc, vJojo[k].rc.left - 48, vJojo[k].rc.top);
-					vJojo[k].mAtkRngImg->render(hdc, vJojo[k].rc.left + 48, vJojo[k].rc.top);
-					vJojo[k].mAtkRngImg->render(hdc, vJojo[k].rc.left, vJojo[k].rc.top - 48);
-					vJojo[k].mAtkRngImg->render(hdc, vJojo[k].rc.left, vJojo[k].rc.top + 48);
-				}
-			}
-		}
-
-		if (isAtk)
-		{
-			vJojo[k].atkRngImg->render(hdc, vJojo[k].rc.left - 48, vJojo[k].rc.top);
-			vJojo[k].atkRngImg->render(hdc, vJojo[k].rc.left + 48, vJojo[k].rc.top);
-			vJojo[k].atkRngImg->render(hdc, vJojo[k].rc.left, vJojo[k].rc.top - 48);
-			vJojo[k].atkRngImg->render(hdc, vJojo[k].rc.left, vJojo[k].rc.top + 48);
-		}
-
 		vJojo[k].img->aniRender(hdc, vJojo[k].rc.left, vJojo[k].rc.top, playerAni);
 	}
 }
 
 void Jojo::mouseMove()
 {
+	KEYMANAGER->reset();
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
@@ -120,7 +78,6 @@ void Jojo::mouseMove()
 					startTile = i;
 
 					isSelect = true;
-					isRange = true;
 					isFind = false;
 					noPath = false;
 					startAstar = false;
@@ -140,25 +97,20 @@ void Jojo::mouseMove()
 					{
 						//선택한 타일 (끝)
 						endTile = i;
-					}
-					else
-					{
-						isRange = false;
-						continue;
-					}
 
-					//이순간 Astar가 시작된다.
-					//Astar에 필요한 모든 것을 초기화 시켜주자.
-					openList.clear();
-					closeList.clear();
+						//이순간 Astar가 시작된다.
+						//Astar에 필요한 모든 것을 초기화 시켜주자.
+						openList.clear();
+						closeList.clear();
 
-					if (startTile != -1 && endTile != -1)
-					{
-						startAstar = true;
-						currentTile = startTile;
+						if (startTile != -1 && endTile != -1)
+						{
+							startAstar = true;
+							currentTile = startTile;
 
-						//시작 지점을 openList에 넣자
-						openList.push_back(currentTile);
+							//시작 지점을 openList에 넣자
+							openList.push_back(currentTile);
+						}
 					}
 
 					for (int i = 0; i < TILE_X * TILE_Y; i++)
@@ -170,6 +122,26 @@ void Jojo::mouseMove()
 					}
 				}
 			}
+		}
+	}
+
+	//목표 타일을 클릭하면 A* 시작
+	if (startAstar && !isFind && !noPath)
+	{
+		while (!isFind)
+		{
+			aStar();
+		}
+	}
+
+	//목표 타일을 클릭하면 캐릭터 이동
+	if (!optimalPath.empty())
+	{
+		playerMove();
+
+		if (playerX == mapX && playerY == mapY)
+		{
+			//isTurn = false;
 		}
 	}
 }
@@ -240,22 +212,22 @@ void Jojo::playerAnimation()
 	switch (pDirection)
 	{
 	case PLAYER_LEFT:
-		ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 2, false, true);
 		playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
 		ANIMATIONMANAGER->resume("playerLeft");
 		break;
 	case PLAYER_RIGHT:
-		ANIMATIONMANAGER->addAnimation("playerRight", "조조", 6, 7, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerRight", "조조", 6, 7, 2, false, true);
 		playerAni = ANIMATIONMANAGER->findAnimation("playerRight");
 		ANIMATIONMANAGER->resume("playerRight");
 		break;
 	case PLAYER_UP:
-		ANIMATIONMANAGER->addAnimation("playerUp", "조조", 2, 3, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerUp", "조조", 2, 3, 2, false, true);
 		playerAni = ANIMATIONMANAGER->findAnimation("playerUp");
 		ANIMATIONMANAGER->resume("playerUp");
 		break;
 	case PLAYER_DOWN:
-		ANIMATIONMANAGER->addAnimation("playerDown", "조조", 0, 1, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerDown", "조조", 0, 1, 2, false, true);
 		playerAni = ANIMATIONMANAGER->findAnimation("playerDown");
 		ANIMATIONMANAGER->resume("playerDown");
 		break;
@@ -263,7 +235,7 @@ void Jojo::playerAnimation()
 
 	if (!isTurn)
 	{
-		ANIMATIONMANAGER->addAnimation("playerDie", "조조", 12, 13, 5, false, true);
+		ANIMATIONMANAGER->addAnimation("playerDie", "조조", 12, 13, 2, false, true);
 		playerAni = ANIMATIONMANAGER->findAnimation("playerDie");
 		ANIMATIONMANAGER->resume("playerDie");
 	}

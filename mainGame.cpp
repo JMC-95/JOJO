@@ -65,13 +65,31 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("subMap", "images/MapTool/SubMap.bmp", 240, 960, true, RGB(255, 0, 255));			//맵툴 이미지
 	IMAGEMANAGER->addImage("select", "images/MapTool/Select.bmp", 30, 30, true, RGB(255, 0, 255));				//맵툴 선택 이미지
 
+	//맵 속성 이미지
+	IMAGEMANAGER->addImage("배경", "images/UI/Attribute/배경.bmp", 144, 96, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("바위산", "images/UI/Attribute/바위산.bmp", 144, 96, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("병영", "images/UI/Attribute/병영.bmp", 144, 96, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("산지", "images/UI/Attribute/산지.bmp", 144, 96, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("성내", "images/UI/Attribute/성내.bmp", 144, 96, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("성문", "images/UI/Attribute/성문.bmp", 144, 96, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("성벽", "images/UI/Attribute/성벽.bmp", 144, 96, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("평지", "images/UI/Attribute/평지.bmp", 144, 96, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("황무지", "images/UI/Attribute/황무지.bmp", 144, 96, true, RGB(247, 0, 255));
+
 	//인게임 이미지
-	IMAGEMANAGER->addImage("subWin", "images/UI/InGame/SubWindow.bmp", 240, 960, true, RGB(255, 0, 255));		//서브 윈도우 이미지
+	IMAGEMANAGER->addImage("subWin", "images/UI/InGame/SubWindow.bmp", 240, 960, true, RGB(247, 0, 255));		//서브 윈도우 이미지
 	IMAGEMANAGER->addImage("tileCheck", "images/UI/InGame/TileCheck.bmp", 48, 48, true, RGB(247, 0, 255));		//타일 체크 이미지
 	IMAGEMANAGER->addImage("pMoveRange", "images/UI/InGame/pMovingRange.bmp", 48, 48, true, RGB(247, 0, 255));	//플레이어 이동범위
 	IMAGEMANAGER->addImage("eMoveRange", "images/UI/InGame/eMovingRange.bmp", 48, 48, true, RGB(247, 0, 255));	//플레이어 외 이동범위 (아군, 적)
 	IMAGEMANAGER->addImage("attackRange", "images/UI/InGame/AttackRange.bmp", 48, 48, true, RGB(247, 0, 255));	//이동시의 공격범위
 	IMAGEMANAGER->addImage("atkRange", "images/UI/InGame/AtkRange.bmp", 48, 48, true, RGB(247, 0, 255));		//실제 공격범위
+
+	//날씨 이미지
+	IMAGEMANAGER->addFrameImage("맑음", "images/UI/Weather/Sunny.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addFrameImage("흐림", "images/UI/Weather/Blur.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addFrameImage("비", "images/UI/Weather/Rain.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addFrameImage("폭우", "images/UI/Weather/HeavyRain.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addFrameImage("눈", "images/UI/Weather/Snow.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));
 
 	//플레이어 이미지
 	IMAGEMANAGER->addFrameImage("조조", "images/Player/조조.bmp", 48, 672, 1, 14, true, RGB(247, 0, 255));
