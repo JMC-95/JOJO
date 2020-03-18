@@ -23,8 +23,8 @@ HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 2, false, true);
 	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
 	//스테이터스
-	jojo.speed = 6;			//속도
-	jojo.movingCount = 6;	//이동범위
+	jojo.speed = 6;				//속도
+	jojo.movingCount = 6;		//이동범위
 	vJojo.push_back(jojo);
 
 	pDirection = PLAYER_LEFT;
@@ -33,6 +33,7 @@ HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	startTile = endTile = -1;	//A*
 
 	isTurn = true;
+	isSelect = false;
 
 	return S_OK;
 }
@@ -49,12 +50,6 @@ void Jojo::update()
 	}
 
 	playerAnimation();
-
-	if (KEYMANAGER->isOnceKeyDown('1'))
-	{
-		isTurn = true;
-		isCancel = false;
-	}
 }
 
 void Jojo::render(HDC hdc)
@@ -81,7 +76,10 @@ void Jojo::mouseMove()
 {
 	for (int k = 0; k < vJojo.size(); k++)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (!PLAYERMANAGER->getAgjin()->getIsSelect() && !PLAYERMANAGER->getHahudon()->getIsSelect() &&
+			!PLAYERMANAGER->getHahuyeon()->getIsSelect() && !PLAYERMANAGER->getIjeon()->getIsSelect() &&
+			!PLAYERMANAGER->getJohong()->getIsSelect() && !PLAYERMANAGER->getJoin()->getIsSelect() &&
+			KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
 			for (int i = 0; i < TILE_X * TILE_Y; i++)
 			{
@@ -118,8 +116,6 @@ void Jojo::mouseMove()
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
 					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
-
-					isSelect = false;
 
 					if (mainMap->getMap()[i].flood)
 					{
@@ -229,6 +225,7 @@ void Jojo::mouseMove()
 					menuList.clear();
 
 					isTurn = false;
+					isSelect = false;
 					isClick = false;
 				}
 				if (PtInRect(&rcMenu[4], m_ptMouse))	//취소

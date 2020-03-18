@@ -19,6 +19,16 @@ HRESULT GameScene::init()
 	PLAYERMANAGER->getJojo()->setPosition(mainMap->getMap()[197].rc);
 	PLAYERMANAGER->getHahudon()->setMapMemoryAdress(mainMap);
 	PLAYERMANAGER->getHahudon()->setPosition(mainMap->getMap()[176].rc);
+	PLAYERMANAGER->getHahuyeon()->setMapMemoryAdress(mainMap);
+	PLAYERMANAGER->getHahuyeon()->setPosition(mainMap->getMap()[196].rc);
+	PLAYERMANAGER->getIjeon()->setMapMemoryAdress(mainMap);
+	PLAYERMANAGER->getIjeon()->setPosition(mainMap->getMap()[177].rc);
+	PLAYERMANAGER->getJohong()->setMapMemoryAdress(mainMap);
+	PLAYERMANAGER->getJohong()->setPosition(mainMap->getMap()[237].rc);
+	PLAYERMANAGER->getJoin()->setMapMemoryAdress(mainMap);
+	PLAYERMANAGER->getJoin()->setPosition(mainMap->getMap()[236].rc);
+	PLAYERMANAGER->getAgjin()->setMapMemoryAdress(mainMap);
+	PLAYERMANAGER->getAgjin()->setPosition(mainMap->getMap()[216].rc);
 
 	return S_OK;
 }

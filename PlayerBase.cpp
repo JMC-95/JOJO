@@ -167,8 +167,6 @@ void PlayerBase::aStar()
 
 void PlayerBase::floodFill(int tile, int moveCount)
 {
-	RECT temp;
-
 	if (mainMap->getMap()[tile].obj != OBJ_CASTLEWALLS &&
 		mainMap->getMap()[tile].obj != OBJ_ROCKMOUNTAIN &&
 		mainMap->getMap()[tile].obj != OBJ_MOUNTAIN &&

@@ -3,6 +3,9 @@
 
 class Agjin : public PlayerBase
 {
+private:
+	vector<PlayerInfo> vAgjin;
+
 public:
 	Agjin();
 	~Agjin();
@@ -18,4 +21,7 @@ public:
 	void playerAnimation();
 
 	void setPosition(RECT rc);
+
+	//벡터를 반환하는 함수
+	vector<PlayerInfo> getPlayerVector() { return vAgjin; }
 };

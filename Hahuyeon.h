@@ -3,6 +3,8 @@
 
 class Hahuyeon : public PlayerBase
 {
+private:
+	vector<PlayerInfo> vHahuyeon;
 public:
 	Hahuyeon();
 	~Hahuyeon();
@@ -18,4 +20,7 @@ public:
 	void playerAnimation();
 
 	void setPosition(RECT rc);
+
+	//벡터를 반환하는 함수
+	vector<PlayerInfo> getPlayerVector() { return vHahuyeon; }
 };
