@@ -1,9 +1,9 @@
 #pragma once
 #include"singletonBase.h"
 #include"image.h"
+
 class imageManager : public singletonBase<imageManager>
 {
-
 private:
 	//맵으로 만든 이미지 목록
 	typedef map<string, image*> mapImageList;
@@ -15,7 +15,6 @@ private:
 public:
 	imageManager();
 	~imageManager();
-
 
 	HRESULT init();
 	void release();
@@ -35,12 +34,9 @@ public:
 	//이미지 전체삭제
 	bool deleteAll();
 
-
 	void render(string strKey, HDC hdc);
 	void render(string strKey, HDC hdc, int destX, int destY);
 	void render(string strKey, HDC hdc, int destX, int destY, int sourX, int sourY, int sourWidth, int sourHeight);
-
 	void frameRender(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
-
+	void alphaRender(string strKey, HDC hdc, int destX, int destY, BYTE alpha);
 };
-

@@ -48,33 +48,39 @@ void Hahudon::update()
 	}
 
 	playerAnimation();
-
-	if (KEYMANAGER->isOnceKeyDown('2'))
-	{
-		isTurn = true;
-	}
 }
 
 void Hahudon::render(HDC hdc)
 {
 	for (int k = 0; k < vHahudon.size(); k++)
 	{
-		vHahudon[k].img->aniRender(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top, playerAni);
+		if (isTurn)
+		{
+			vHahudon[k].img->aniRender(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top, playerAni);
+		}
+		else
+		{
+			vHahudon[k].img->frameAlphaRender(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top, 0, frameNumY, 100);
+		}
+
+		if (isClick)
+		{
+			IMAGEMANAGER->frameRender("메뉴", hdc, vHahudon[k].rc.left - 100, vHahudon[k].rc.top - 35, 0, 0);
+		}
 	}
 }
 
 void Hahudon::mouseMove()
 {
-	KEYMANAGER->reset();
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	for (int k = 0; k < vHahudon.size(); k++)
 	{
-		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
-			for (int k = 0; k < vHahudon.size(); k++)
+			for (int i = 0; i < TILE_X * TILE_Y; i++)
 			{
 				if (PtInRect(&vHahudon[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 				{
-					//선택한 타일 (시작)
+					//선택한 타일 (캐릭터)
 					startTile = i;
 
 					isSelect = true;
@@ -95,7 +101,7 @@ void Hahudon::mouseMove()
 
 					if (mainMap->getMap()[i].flood)
 					{
-						//선택한 타일 (끝)
+						//선택한 타일 (목표)
 						endTile = i;
 
 						//이순간 Astar가 시작된다.
@@ -141,7 +147,7 @@ void Hahudon::mouseMove()
 
 		if (playerX == mapX && playerY == mapY)
 		{
-			//isTurn = false;
+			isClick = true;
 		}
 	}
 }
@@ -209,35 +215,49 @@ void Hahudon::playerMove()
 
 void Hahudon::playerAnimation()
 {
-	switch (pDirection)
+	if (isTurn)
 	{
-	case PLAYER_LEFT:
-		ANIMATIONMANAGER->addAnimation("playerLeft", "하후돈", 4, 5, 2, false, true);
-		playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
-		ANIMATIONMANAGER->resume("playerLeft");
-		break;
-	case PLAYER_RIGHT:
-		ANIMATIONMANAGER->addAnimation("playerRight", "하후돈", 6, 7, 2, false, true);
-		playerAni = ANIMATIONMANAGER->findAnimation("playerRight");
-		ANIMATIONMANAGER->resume("playerRight");
-		break;
-	case PLAYER_UP:
-		ANIMATIONMANAGER->addAnimation("playerUp", "하후돈", 2, 3, 2, false, true);
-		playerAni = ANIMATIONMANAGER->findAnimation("playerUp");
-		ANIMATIONMANAGER->resume("playerUp");
-		break;
-	case PLAYER_DOWN:
-		ANIMATIONMANAGER->addAnimation("playerDown", "하후돈", 0, 1, 2, false, true);
-		playerAni = ANIMATIONMANAGER->findAnimation("playerDown");
-		ANIMATIONMANAGER->resume("playerDown");
-		break;
+		switch (pDirection)
+		{
+		case PLAYER_LEFT:
+			ANIMATIONMANAGER->addAnimation("playerLeft", "하후돈", 4, 5, 2, false, true);
+			playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
+			ANIMATIONMANAGER->resume("playerLeft");
+			break;
+		case PLAYER_RIGHT:
+			ANIMATIONMANAGER->addAnimation("playerRight", "하후돈", 6, 7, 2, false, true);
+			playerAni = ANIMATIONMANAGER->findAnimation("playerRight");
+			ANIMATIONMANAGER->resume("playerRight");
+			break;
+		case PLAYER_UP:
+			ANIMATIONMANAGER->addAnimation("playerUp", "하후돈", 2, 3, 2, false, true);
+			playerAni = ANIMATIONMANAGER->findAnimation("playerUp");
+			ANIMATIONMANAGER->resume("playerUp");
+			break;
+		case PLAYER_DOWN:
+			ANIMATIONMANAGER->addAnimation("playerDown", "하후돈", 0, 1, 2, false, true);
+			playerAni = ANIMATIONMANAGER->findAnimation("playerDown");
+			ANIMATIONMANAGER->resume("playerDown");
+			break;
+		}
 	}
-
-	if (!isTurn)
+	else
 	{
-		ANIMATIONMANAGER->addAnimation("playerDie", "하후돈", 12, 13, 2, false, true);
-		playerAni = ANIMATIONMANAGER->findAnimation("playerDie");
-		ANIMATIONMANAGER->resume("playerDie");
+		switch (pDirection)
+		{
+		case PLAYER_LEFT:
+			frameNumY = 10;
+			break;
+		case PLAYER_RIGHT:
+			frameNumY = 11;
+			break;
+		case PLAYER_UP:
+			frameNumY = 9;
+			break;
+		case PLAYER_DOWN:
+			frameNumY = 8;
+			break;
+		}
 	}
 }
 

@@ -3,7 +3,6 @@
 
 enum Direction
 {
-	PLAYER_IDLE,
 	PLAYER_LEFT,
 	PLAYER_RIGHT,
 	PLAYER_UP,
@@ -19,6 +18,7 @@ struct PlayerInfo
 	image* atkImg;			//공격 이미지
 	image* blockImg;		//방어 및 피격 이미지
 	RECT rc;				//캐릭터 렉트
+	RECT rcAtk[8];			//공격용 렉트
 	int hp;					//체력
 	int mp;					//마력
 	int exp;				//경험치
@@ -34,6 +34,8 @@ struct PlayerInfo
 class PlayerBase
 {
 protected:
+	vector<RECT> atkList;		//공격용 렉트를 담는 벡터
+	vector<RECT> menuList;		//메뉴 렉트를 담는 벡터
 	vector<int> openList;		//오픈리스트 벡터
 	vector<int> closeList;		//클로즈리스트 벡터
 	vector<int>::iterator iter;
@@ -43,7 +45,12 @@ protected:
 	animation* playerAni;	//캐릭터 애니메이션
 	Direction pDirection;	//캐릭터 방향
 
+	RECT rcMenu[5];			//메뉴 렉트
+
 protected:	//일반 변수
+	int count;				//캐릭터 더블클릭
+	int frameNumX;			//캐릭터의 프레임을 돌리기위한 변수
+	int frameNumY;			//캐릭터의 프레임을 돌리기위한 변수
 	int playerX, playerY;	//캐릭터 좌표
 	int mapX, mapY;			//클릭한 맵의 중점 좌표
 	int stackX, stackY;		//스택에 쌓아둔 타일의 중점 좌표 (길을 찾을 때 필요하다.)
@@ -51,8 +58,11 @@ protected:	//일반 변수
 	bool isTurn;			//현재 캐릭터의 턴인지 확인하는 변수
 	bool isSelect;			//캐릭터를 선택했는지 확인하는 변수
 	bool isMove;			//캐릭터의 이동을 체크해주는 변수
+	bool isCancel;			//캐릭터의 이동을 취소해주는 변수
+	bool isAtkRng;			//캐릭터의 공격 범위를 체크해주는 변수
 	bool isAtk;				//캐릭터의 공격을 체크해주는 변수
-	
+	bool isClick;			//캐릭터의 메뉴 클릭
+
 protected:	//A*용 변수
 	int startTile;			//A* 시작위치
 	int endTile;			//A* 끝위치
@@ -79,4 +89,6 @@ public:
 	void setMapMemoryAdress(MainMap* map) { mainMap = map; }
 
 	bool getIsSelect() { return isSelect; }
+	bool getIsAtkRng() { return isAtkRng; }
+	bool getIsAtk() { return isAtk; }
 };

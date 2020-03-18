@@ -574,6 +574,47 @@ void image::frameRender(HDC hdc, int destX, int destY, int currentFrameX, int cu
 	}
 }
 
+void image::frameAlphaRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha)
+{
+	_blendFunc.SourceConstantAlpha = alpha;
+	_imageInfo->currentFrameX = currentFrameX;
+	_imageInfo->currentFrameY = currentFrameY;
+
+	if (_isTrans)
+	{
+		BitBlt(_blendImage->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height,
+			hdc, destX, destY, SRCCOPY);
+
+		GdiTransparentBlt(hdc,
+			destX,
+			destY,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_imageInfo->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_transColor);
+
+		AlphaBlend(hdc, destX, destY, _imageInfo->width, _imageInfo->height,
+			_blendImage->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, _blendFunc);
+	}
+	else
+	{
+		BitBlt(hdc, destX, destY,
+			_imageInfo->frameWidth,
+			_imageInfo->frameHeight,
+			_imageInfo->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,
+			SRCCOPY);
+
+		AlphaBlend(hdc, destX, destY, _imageInfo->width, _imageInfo->height,
+			_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, _blendFunc);
+	}
+}
+
 void image::loopRender(HDC hdc, const LPRECT drawArea, int offSetX, int offSetY)
 {
 	//정밀 보정
@@ -585,13 +626,13 @@ void image::loopRender(HDC hdc, const LPRECT drawArea, int offSetX, int offSetY)
 	int sourWidth;
 	int sourHeight;
 
-
 	//그려지는 DC 영역
 	RECT rcDest;
 	int drawAreaX = drawArea->left;
 	int drawAreaY = drawArea->top;
 	int drawAreaW = drawArea->right - drawArea->left;
 	int drawAreaH = drawArea->bottom - drawArea->top;
+
 	//세로 루프 영역
 	for (int y = 0; y < drawAreaH; y += sourHeight)
 	{

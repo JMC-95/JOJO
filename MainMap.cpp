@@ -51,30 +51,7 @@ void MainMap::render(HDC hdc)
 		}
 	}
 
-	//캐릭터의 이동 범위와 공격 범위를 보여준다.
-	for (int i = 0; i < TILE_X * TILE_Y; i++)
-	{
-		if (tiles[i].flood)
-		{
-			if (PLAYERMANAGER->getJojo()->getIsSelect())
-			{
-				PLAYERMANAGER->getJojo()->getPlayerVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-				PLAYERMANAGER->getJojo()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.left - 48, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.top);
-				PLAYERMANAGER->getJojo()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.left + 48, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.top);
-				PLAYERMANAGER->getJojo()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.top - 48);
-				PLAYERMANAGER->getJojo()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.top + 48);
-			}
-
-			if (PLAYERMANAGER->getHahudon()->getIsSelect())
-			{
-				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.left - 48, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.top);
-				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.left + 48, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.top);
-				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.top - 48);
-				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.top + 48);
-			}
-		}
-	}
+	draw(hdc);
 
 	//마우스와 맵의 타일이 충돌하면 그 타일의 속성을 보여준다.
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
@@ -82,6 +59,7 @@ void MainMap::render(HDC hdc)
 		if (PtInRect(&tiles[i].rc, m_ptMouse))
 		{
 			IMAGEMANAGER->render("tileCheck", hdc, tiles[i].rc.left, tiles[i].rc.top);
+			IMAGEMANAGER->alphaRender("배경", hdc, 972, 74, 100);
 
 			if (tiles[i].terrain == TR_PLAIN)
 			{
@@ -132,4 +110,49 @@ void MainMap::load()
 
 	ReadFile(file, tiles, sizeof(tagTile) * TILE_X * TILE_Y, &read, NULL);
 	CloseHandle(file);
+}
+
+void MainMap::draw(HDC hdc)
+{
+	//캐릭터의 이동 범위와 공격 범위를 보여준다.
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		if (tiles[i].flood)
+		{
+			if (PLAYERMANAGER->getJojo()->getIsSelect())
+			{
+				//이동범위
+				PLAYERMANAGER->getJojo()->getPlayerVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+				//공격범위
+				PLAYERMANAGER->getJojo()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[0].top);
+				if (PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].right <= WINSIZEY)
+					PLAYERMANAGER->getJojo()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].top);
+				PLAYERMANAGER->getJojo()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[2].top);
+				PLAYERMANAGER->getJojo()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[3].top);
+			}
+
+			if (PLAYERMANAGER->getHahudon()->getIsSelect())
+			{
+				//이동범위
+				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+				//공격범위
+				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.left - 48, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.top);
+				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.left + 48, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.top);
+				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.top - 48);
+				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].mAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc.top + 48);
+			}
+		}
+	}
+
+	//공격 버튼을 클릭하면 공격범위를 보여준다.
+	if (PLAYERMANAGER->getJojo()->getIsAtkRng())
+	{
+		PLAYERMANAGER->getJojo()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[0].top);
+		if (PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[5].right <= WINSIZEY)
+			PLAYERMANAGER->getJojo()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].top);
+		PLAYERMANAGER->getJojo()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[2].top);
+		PLAYERMANAGER->getJojo()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[3].top);
+	}
 }

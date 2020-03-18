@@ -29,6 +29,7 @@ public:
 	void render(HDC hdc);
 
 	void load();
+	void draw(HDC hdc);
 
 	DWORD* getAttribute() { return attribute; }
 

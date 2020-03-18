@@ -204,6 +204,12 @@ void imageManager::frameRender(string strKey, HDC hdc, int destX, int destY, int
 {
 	//이미지를 찾은 후 렌더
 	image* img = findImage(strKey);
-
 	if (img)img->frameRender(hdc, destX, destY, currentFrameX, currentFrameY);
+}
+
+void imageManager::alphaRender(string strKey, HDC hdc, int destX, int destY, BYTE alpha)
+{
+	//이미지를 찾은 후 렌더
+	image* img = findImage(strKey);
+	if (img)img->alphaRender(hdc, destX, destY, alpha);
 }
