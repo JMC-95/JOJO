@@ -62,12 +62,6 @@ void tank::update()
 	}
 
 	animation();
-
-	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
-	{
-		isTurn = true;
-		isAtk = true;
-	}
 }
 
 void tank::render()
@@ -88,7 +82,7 @@ void tank::render()
 		}
 	}
 
-	if (isAtk)
+	if (isTarget)
 	{
 		atkImg->render(getMemDC(), _rc.left - 48, _rc.top);
 		atkImg->render(getMemDC(), _rc.left + 48, _rc.top);

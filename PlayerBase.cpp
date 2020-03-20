@@ -193,3 +193,8 @@ void PlayerBase::floodFill(int tile, int moveCount)
 		}
 	}
 }
+
+void PlayerBase::hitDamage(int _damage)
+{
+	damage -= _damage;
+}

@@ -1,11 +1,14 @@
 #pragma once
 #include "gameNode.h"
 #include "MainMap.h"
+#include "Interface.h"
+#include "progressBar.h"
 
 class GameScene : public gameNode
 {
 private:
-	MainMap* mainMap;
+	MainMap* _mainMap;
+	Interface* _interface;
 
 public:
 	GameScene();

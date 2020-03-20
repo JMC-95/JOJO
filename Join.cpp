@@ -12,25 +12,50 @@ Join::~Join()
 HRESULT Join::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//구조체 정보 기입
-	PlayerInfo Join;
+	PlayerInfo join;
 	//이미지 및 애니메이션
-	Join.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
-	Join.mAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);		//캐릭터 클릭시 공격범위 이미지
-	Join.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
-	Join.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
-	Join.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
-	Join.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
-	ANIMATIONMANAGER->addAnimation("playerLeft", "조인", 4, 5, 2, false, true);
-	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
+	join.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
+	join.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);		//캐릭터 클릭시 공격범위 이미지
+	join.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
+	join.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
+	join.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
+	join.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
 	//스테이터스
-	Join.speed = 6;				//속도
-	Join.movingCount = 6;		//이동범위
-	vJoin.push_back(Join);
+	join.level = 4;				//레벨
+	join.hp = 120;				//체력
+	join.mp = 18;				//마력
+	join.atk = 56;				//공격력
+	join.will = 41;				//정신력
+	join.def = 50;				//방어력
+	join.agi = 43;				//순발력
+	join.ten = 39;				//사기
+	join.movingCount = 6;		//이동력
+	vJoin.push_back(join);
 
+	//HP ProgressBar
+	_Hp = new progressBar;
+	_Hp->init("images/UI/Info/HP.bmp", "images/UI/Info/Back_P.bmp", 1056, 289, 84, 12);
+	_Hp->setGauge(currentHp, maxHp);
+	currentHp = maxHp = 120;
+	damage = 0;
+
+	//MP ProgressBar
+	_Mp = new progressBar;
+	_Mp->init("images/UI/Info/MP.bmp", "images/UI/Info/Back_P.bmp", 1056, 307, 84, 12);
+	_Mp->setGauge(currentMp, maxMp);
+	currentMp = maxMp = 18;
+
+	//EXP ProgressBar
+	_Exp = new progressBar;
+	_Exp->init("images/UI/Info/EXP.bmp", "images/UI/Info/Back_EXP.bmp", 1095, 243, 45, 12);
+	_Exp->setGauge(currentExp, maxExp);
+	currentExp = 70;
+	maxExp = 100;
+
+	//캐릭터 방향 및 위치
 	pDirection = PLAYER_LEFT;
-
-	count = 2;
-	startTile = endTile = -1;	//A*
+	startTile = endTile = -1;
+	speed = 6;	//속도
 
 	isTurn = true;
 	isSelect = false;
@@ -50,6 +75,7 @@ void Join::update()
 	}
 
 	playerAnimation();
+	playerState();
 }
 
 void Join::render(HDC hdc)
@@ -62,12 +88,7 @@ void Join::render(HDC hdc)
 		}
 		else
 		{
-			vJoin[k].img->frameAlphaRender(hdc, vJoin[k].rc.left, vJoin[k].rc.top, 0, frameNumY, 100);
-		}
-
-		if (isClick)
-		{
-			IMAGEMANAGER->frameRender("메뉴", hdc, vJoin[k].rc.left - 100, vJoin[k].rc.top - 35, frameNumX, 0);
+			vJoin[k].img->frameAlphaRender(hdc, vJoin[k].rc.left, vJoin[k].rc.top, 0, frameY, 100);
 		}
 	}
 }
@@ -76,18 +97,14 @@ void Join::mouseMove()
 {
 	for (int k = 0; k < vJoin.size(); k++)
 	{
-		if (!PLAYERMANAGER->getAgjin()->getIsSelect() && !PLAYERMANAGER->getHahudon()->getIsSelect() &&
-			!PLAYERMANAGER->getHahuyeon()->getIsSelect() && !PLAYERMANAGER->getIjeon()->getIsSelect() &&
-			!PLAYERMANAGER->getJohong()->getIsSelect() && !PLAYERMANAGER->getJojo()->getIsSelect() &&
-			KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			for (int i = 0; i < TILE_X * TILE_Y; i++)
+			if (PtInRect(&vJoin[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
-				if (PtInRect(&vJoin[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//선택한 타일 (캐릭터)
 					startTile = i;
-					count -= 1;
 
 					isSelect = true;
 					isFind = false;
@@ -105,13 +122,16 @@ void Join::mouseMove()
 					}
 
 					//이동범위
-					if (!isCancel)
+					if (!isStop)
 					{
 						floodFill(startTile, vJoin[k].movingCount);
 					}
 				}
+			}
 
-				if (!PtInRect(&vJoin[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			if (!PtInRect(&vJoin[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
@@ -160,14 +180,14 @@ void Join::mouseMove()
 		//목표 타일을 클릭하면 캐릭터 이동
 		if (!optimalPath.empty())
 		{
-			if (!isCancel)
+			if (!isStop)
 			{
 				playerMove();
 			}
 
 			if (playerX == mapX && playerY == mapY)
 			{
-				isCancel = true;
+				isStop = true;
 				isClick = true;
 
 				//공격범위
@@ -195,9 +215,9 @@ void Join::mouseMove()
 
 		if (isClick)
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 			{
-				if (PtInRect(&rcMenu[0], m_ptMouse) && isAtk)	//공격
+				if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 				{
 					atkList.clear();
 					menuList.clear();
@@ -210,14 +230,14 @@ void Join::mouseMove()
 					atkList.clear();
 					menuList.clear();
 
-					isClick = false;
+					//isClick = false;
 				}
 				if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 				{
 					atkList.clear();
 					menuList.clear();
 
-					isClick = false;
+					//isClick = false;
 				}
 				if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 				{
@@ -233,25 +253,10 @@ void Join::mouseMove()
 					atkList.clear();
 					menuList.clear();
 
-					isCancel = false;
+					isStop = false;
 					isClick = false;
 				}
 			}
-		}
-
-		RECT temp;
-
-		if (IntersectRect(&temp, &vJoin[k].rcAtk[0], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vJoin[k].rcAtk[1], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vJoin[k].rcAtk[2], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vJoin[k].rcAtk[3], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc))
-		{
-			isAtk = true;
-			frameNumX = 1;
-		}
-		else
-		{
-			frameNumX = 0;
 		}
 	}
 }
@@ -291,19 +296,19 @@ void Join::playerMove()
 			switch (pDirection)
 			{
 			case PLAYER_LEFT:
-				playerX -= vJoin[k].speed;
+				playerX -= speed;
 				vJoin[k].rc = RectMakeCenter(playerX, playerY, vJoin[k].img->getFrameWidth(), vJoin[k].img->getFrameHeight());
 				break;
 			case PLAYER_RIGHT:
-				playerX += vJoin[k].speed;
+				playerX += speed;
 				vJoin[k].rc = RectMakeCenter(playerX, playerY, vJoin[k].img->getFrameWidth(), vJoin[k].img->getFrameHeight());
 				break;
 			case PLAYER_UP:
-				playerY -= vJoin[k].speed;
+				playerY -= speed;
 				vJoin[k].rc = RectMakeCenter(playerX, playerY, vJoin[k].img->getFrameWidth(), vJoin[k].img->getFrameHeight());
 				break;
 			case PLAYER_DOWN:
-				playerY += vJoin[k].speed;
+				playerY += speed;
 				vJoin[k].rc = RectMakeCenter(playerX, playerY, vJoin[k].img->getFrameWidth(), vJoin[k].img->getFrameHeight());
 				break;
 			}
@@ -350,19 +355,29 @@ void Join::playerAnimation()
 		switch (pDirection)
 		{
 		case PLAYER_LEFT:
-			frameNumY = 10;
+			frameY = 10;
 			break;
 		case PLAYER_RIGHT:
-			frameNumY = 11;
+			frameY = 11;
 			break;
 		case PLAYER_UP:
-			frameNumY = 9;
+			frameY = 9;
 			break;
 		case PLAYER_DOWN:
-			frameNumY = 8;
+			frameY = 8;
 			break;
 		}
 	}
+}
+
+void Join::playerState()
+{
+	_Hp->update();
+	_Hp->setGauge(currentHp, maxHp);
+	_Mp->update();
+	_Mp->setGauge(currentMp, maxMp);
+	_Exp->update();
+	_Exp->setGauge(currentExp, maxExp);
 }
 
 void Join::setPosition(RECT rc)

@@ -29,7 +29,8 @@ public:
 	void render(HDC hdc);
 
 	void load();
-	void draw(HDC hdc);
+	void playerDraw(HDC hdc);
+	void enemyDraw(HDC hdc);
 
 	DWORD* getAttribute() { return attribute; }
 

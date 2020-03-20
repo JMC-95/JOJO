@@ -49,9 +49,6 @@
     <Filter Include="mainGame\MapTool">
       <UniqueIdentifier>{fc933ff5-7e13-4bd4-9b21-5a713588d287}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mainGame\UI">
-      <UniqueIdentifier>{59e0cb41-dd68-4715-87b6-d5d181649aae}</UniqueIdentifier>
-    </Filter>
     <Filter Include="mainGame\Scene">
       <UniqueIdentifier>{30f0321c-a551-4e36-8c04-416461a41560}</UniqueIdentifier>
     </Filter>
@@ -66,6 +63,15 @@
     </Filter>
     <Filter Include="Manager\addManager">
       <UniqueIdentifier>{add97e61-d628-4f5f-9e44-91557ba6b9c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mainGame\UI">
+      <UniqueIdentifier>{638d2572-fec4-48fa-a44b-4663b034ceb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mainGame\Player\Base">
+      <UniqueIdentifier>{4b8c959d-0f76-45e0-bac4-1ba3fc7ac017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mainGame\Enemy\Base">
+      <UniqueIdentifier>{9a6456a3-daf3-4f89-bfc0-a32fe15f0c1f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -180,8 +186,23 @@
     <ClInclude Include="Agjin.h">
       <Filter>mainGame\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Interface.h">
+      <Filter>mainGame\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>Manager\addManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>mainGame\Enemy\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Yeopo.h">
+      <Filter>mainGame\Enemy</Filter>
+    </ClInclude>
     <ClInclude Include="PlayerBase.h">
-      <Filter>mainGame\Player</Filter>
+      <Filter>mainGame\Player\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Manager\addManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -278,8 +299,23 @@
     <ClCompile Include="Agjin.cpp">
       <Filter>mainGame\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Interface.cpp">
+      <Filter>mainGame\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Manager\addManager</Filter>
+    </ClCompile>
     <ClCompile Include="PlayerBase.cpp">
-      <Filter>mainGame\Player</Filter>
+      <Filter>mainGame\Player\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBase.cpp">
+      <Filter>mainGame\Enemy\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Yeopo.cpp">
+      <Filter>mainGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Manager\addManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

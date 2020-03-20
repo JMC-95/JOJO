@@ -15,22 +15,47 @@ HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	PlayerInfo jojo;
 	//이미지 및 애니메이션
 	jojo.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
-	jojo.mAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);		//캐릭터 클릭시 공격범위 이미지
+	jojo.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);		//캐릭터 클릭시 공격범위 이미지
 	jojo.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
 	jojo.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
 	jojo.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	jojo.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
-	ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 2, false, true);
-	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
 	//스테이터스
-	jojo.speed = 6;				//속도
-	jojo.movingCount = 6;		//이동범위
+	jojo.level = 6;				//레벨
+	jojo.hp = 132;				//체력
+	jojo.mp = 36;				//마력
+	jojo.atk = 59;				//공격력
+	jojo.will = 64;				//정신력
+	jojo.def = 67;				//방어력
+	jojo.agi = 58;				//순발력
+	jojo.ten = 60;				//사기
+	jojo.movingCount = 6;		//이동력
 	vJojo.push_back(jojo);
 
-	pDirection = PLAYER_LEFT;
+	//HP ProgressBar
+	_Hp = new progressBar;
+	_Hp->init("images/UI/Info/HP.bmp", "images/UI/Info/Back_P.bmp", 1056, 289, 84, 12);
+	_Hp->setGauge(currentHp, maxHp);
+	currentHp = maxHp = 132;
+	damage = 0;
 
-	count = 2;
-	startTile = endTile = -1;	//A*
+	//MP ProgressBar
+	_Mp = new progressBar;
+	_Mp->init("images/UI/Info/MP.bmp", "images/UI/Info/Back_P.bmp", 1056, 307, 84, 12);
+	_Mp->setGauge(currentMp, maxMp);
+	currentMp = maxMp = 36;
+
+	//EXP ProgressBar
+	_Exp = new progressBar;
+	_Exp->init("images/UI/Info/EXP.bmp", "images/UI/Info/Back_EXP.bmp", 1095, 243, 45, 12);
+	_Exp->setGauge(currentExp, maxExp);
+	currentExp = 11;
+	maxExp = 100;
+
+	//캐릭터 방향 및 위치
+	pDirection = PLAYER_LEFT;
+	startTile = endTile = -1;
+	speed = 6;	//속도
 
 	isTurn = true;
 	isSelect = false;
@@ -40,6 +65,9 @@ HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRng
 
 void Jojo::release()
 {
+	SAFE_DELETE(_Hp);
+	SAFE_DELETE(_Mp);
+	SAFE_DELETE(_Exp);
 }
 
 void Jojo::update()
@@ -50,6 +78,13 @@ void Jojo::update()
 	}
 
 	playerAnimation();
+	playerState();
+
+	if (KEYMANAGER->isOnceKeyDown('1'))
+	{
+		isTurn = true;
+		isSelect = false;
+	}
 }
 
 void Jojo::render(HDC hdc)
@@ -58,17 +93,13 @@ void Jojo::render(HDC hdc)
 	{
 		if (isTurn)
 		{
-			vJojo[k].img->aniRender(hdc, vJojo[k].rc.left, vJojo[k].rc.top, playerAni);
+			if (isAtk)
+				vJojo[k].atkImg->aniRender(hdc, vJojo[k].rc.left - 8, vJojo[k].rc.top - 8, playerAni);
+			else
+				vJojo[k].img->aniRender(hdc, vJojo[k].rc.left, vJojo[k].rc.top, playerAni);
 		}
 		else
-		{
-			vJojo[k].img->frameAlphaRender(hdc, vJojo[k].rc.left, vJojo[k].rc.top, 0, frameNumY, 100);
-		}
-
-		if (isClick)
-		{
-			IMAGEMANAGER->frameRender("메뉴", hdc, vJojo[k].rc.left - 100, vJojo[k].rc.top - 35, frameNumX, 1);
-		}
+			vJojo[k].img->frameAlphaRender(hdc, vJojo[k].rc.left, vJojo[k].rc.top, 0, frameY, 100);
 	}
 }
 
@@ -76,19 +107,15 @@ void Jojo::mouseMove()
 {
 	for (int k = 0; k < vJojo.size(); k++)
 	{
-		if (!PLAYERMANAGER->getAgjin()->getIsSelect() && !PLAYERMANAGER->getHahudon()->getIsSelect() &&
-			!PLAYERMANAGER->getHahuyeon()->getIsSelect() && !PLAYERMANAGER->getIjeon()->getIsSelect() &&
-			!PLAYERMANAGER->getJohong()->getIsSelect() && !PLAYERMANAGER->getJoin()->getIsSelect() &&
-			KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			for (int i = 0; i < TILE_X * TILE_Y; i++)
+			if (PtInRect(&vJojo[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
-				if (PtInRect(&vJojo[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//선택한 타일 (캐릭터)
+					saveTile = startTile;
 					startTile = i;
-					count -= 1;
-
 					isSelect = true;
 					isFind = false;
 					noPath = false;
@@ -105,13 +132,16 @@ void Jojo::mouseMove()
 					}
 
 					//이동범위
-					if (!isCancel)
+					if (!isStop)
 					{
 						floodFill(startTile, vJojo[k].movingCount);
 					}
 				}
+			}
 
-				if (!PtInRect(&vJojo[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			if (!PtInRect(&vJojo[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
@@ -147,6 +177,7 @@ void Jojo::mouseMove()
 				}
 			}
 		}
+		//}
 
 		//목표 타일을 클릭하면 A* 시작
 		if (startAstar && !isFind && !noPath)
@@ -160,14 +191,14 @@ void Jojo::mouseMove()
 		//목표 타일을 클릭하면 캐릭터 이동
 		if (!optimalPath.empty())
 		{
-			if (!isCancel)
+			if (!isStop)
 			{
 				playerMove();
 			}
 
 			if (playerX == mapX && playerY == mapY)
 			{
-				isCancel = true;
+				isStop = true;
 				isClick = true;
 
 				//공격범위
@@ -193,11 +224,12 @@ void Jojo::mouseMove()
 			}
 		}
 
+		//메뉴
 		if (isClick)
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 			{
-				if (PtInRect(&rcMenu[0], m_ptMouse) && isAtk)	//공격
+				if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 				{
 					atkList.clear();
 					menuList.clear();
@@ -210,14 +242,14 @@ void Jojo::mouseMove()
 					atkList.clear();
 					menuList.clear();
 
-					isClick = false;
+					//isClick = false;
 				}
 				if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 				{
 					atkList.clear();
 					menuList.clear();
 
-					isClick = false;
+					//isClick = false;
 				}
 				if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 				{
@@ -226,6 +258,7 @@ void Jojo::mouseMove()
 
 					isTurn = false;
 					isSelect = false;
+					isStop = false;
 					isClick = false;
 				}
 				if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
@@ -233,26 +266,20 @@ void Jojo::mouseMove()
 					atkList.clear();
 					menuList.clear();
 
-					isCancel = false;
+					vJojo[k].rc.left = mainMap->getMap()[saveTile].rc.left;
+					vJojo[k].rc.right = mainMap->getMap()[saveTile].rc.right;
+					vJojo[k].rc.top = mainMap->getMap()[saveTile].rc.top;
+					vJojo[k].rc.bottom = mainMap->getMap()[saveTile].rc.bottom;
+					pDirection = sDirection;
+
+					isSelect = false;
+					isStop = false;
 					isClick = false;
 				}
 			}
 		}
 
-		RECT temp;
-
-		if (IntersectRect(&temp, &vJojo[k].rcAtk[0], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vJojo[k].rcAtk[1], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vJojo[k].rcAtk[2], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vJojo[k].rcAtk[3], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc))
-		{
-			isAtk = true;
-			frameNumX = 1;
-		}
-		else
-		{
-			frameNumX = 0;
-		}
+		collision();
 	}
 }
 
@@ -291,19 +318,19 @@ void Jojo::playerMove()
 			switch (pDirection)
 			{
 			case PLAYER_LEFT:
-				playerX -= vJojo[k].speed;
+				playerX -= speed;
 				vJojo[k].rc = RectMakeCenter(playerX, playerY, vJojo[k].img->getFrameWidth(), vJojo[k].img->getFrameHeight());
 				break;
 			case PLAYER_RIGHT:
-				playerX += vJojo[k].speed;
+				playerX += speed;
 				vJojo[k].rc = RectMakeCenter(playerX, playerY, vJojo[k].img->getFrameWidth(), vJojo[k].img->getFrameHeight());
 				break;
 			case PLAYER_UP:
-				playerY -= vJojo[k].speed;
+				playerY -= speed;
 				vJojo[k].rc = RectMakeCenter(playerX, playerY, vJojo[k].img->getFrameWidth(), vJojo[k].img->getFrameHeight());
 				break;
 			case PLAYER_DOWN:
-				playerY += vJojo[k].speed;
+				playerY += speed;
 				vJojo[k].rc = RectMakeCenter(playerX, playerY, vJojo[k].img->getFrameWidth(), vJojo[k].img->getFrameHeight());
 				break;
 			}
@@ -321,28 +348,57 @@ void Jojo::playerAnimation()
 {
 	if (isTurn)
 	{
-		switch (pDirection)
+		if (isAtk)
 		{
-		case PLAYER_LEFT:
-			ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 2, false, true);
-			playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
-			ANIMATIONMANAGER->resume("playerLeft");
-			break;
-		case PLAYER_RIGHT:
-			ANIMATIONMANAGER->addAnimation("playerRight", "조조", 6, 7, 2, false, true);
-			playerAni = ANIMATIONMANAGER->findAnimation("playerRight");
-			ANIMATIONMANAGER->resume("playerRight");
-			break;
-		case PLAYER_UP:
-			ANIMATIONMANAGER->addAnimation("playerUp", "조조", 2, 3, 2, false, true);
-			playerAni = ANIMATIONMANAGER->findAnimation("playerUp");
-			ANIMATIONMANAGER->resume("playerUp");
-			break;
-		case PLAYER_DOWN:
-			ANIMATIONMANAGER->addAnimation("playerDown", "조조", 0, 1, 2, false, true);
-			playerAni = ANIMATIONMANAGER->findAnimation("playerDown");
-			ANIMATIONMANAGER->resume("playerDown");
-			break;
+			switch (pDirection)
+			{
+			case PLAYER_LEFT:
+				ANIMATIONMANAGER->addAnimation("leftAtk", "조조ATK", 12, 15, 6, false, false);
+				playerAni = ANIMATIONMANAGER->findAnimation("leftAtk");
+				ANIMATIONMANAGER->resume("leftAtk");
+				break;
+			case PLAYER_RIGHT:
+				ANIMATIONMANAGER->addAnimation("rightAtk", "조조ATK", 8, 11, 6, false, false);
+				playerAni = ANIMATIONMANAGER->findAnimation("rightAtk");
+				ANIMATIONMANAGER->resume("rightAtk");
+				break;
+			case PLAYER_UP:
+				ANIMATIONMANAGER->addAnimation("upAtk", "조조ATK", 4, 7, 6, false, false);
+				playerAni = ANIMATIONMANAGER->findAnimation("upAtk");
+				ANIMATIONMANAGER->resume("upAtk");
+				break;
+			case PLAYER_DOWN:
+				ANIMATIONMANAGER->addAnimation("downAtk", "조조ATK", 0, 3, 6, false, false);
+				playerAni = ANIMATIONMANAGER->findAnimation("downAtk");
+				ANIMATIONMANAGER->resume("downAtk");
+				break;
+			}
+		}
+		else
+		{
+			switch (pDirection)
+			{
+			case PLAYER_LEFT:
+				ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 2, false, true);
+				playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
+				ANIMATIONMANAGER->resume("playerLeft");
+				break;
+			case PLAYER_RIGHT:
+				ANIMATIONMANAGER->addAnimation("playerRight", "조조", 6, 7, 2, false, true);
+				playerAni = ANIMATIONMANAGER->findAnimation("playerRight");
+				ANIMATIONMANAGER->resume("playerRight");
+				break;
+			case PLAYER_UP:
+				ANIMATIONMANAGER->addAnimation("playerUp", "조조", 2, 3, 2, false, true);
+				playerAni = ANIMATIONMANAGER->findAnimation("playerUp");
+				ANIMATIONMANAGER->resume("playerUp");
+				break;
+			case PLAYER_DOWN:
+				ANIMATIONMANAGER->addAnimation("playerDown", "조조", 0, 1, 2, false, true);
+				playerAni = ANIMATIONMANAGER->findAnimation("playerDown");
+				ANIMATIONMANAGER->resume("playerDown");
+				break;
+			}
 		}
 	}
 	else
@@ -350,17 +406,63 @@ void Jojo::playerAnimation()
 		switch (pDirection)
 		{
 		case PLAYER_LEFT:
-			frameNumY = 10;
+			frameY = 10;
 			break;
 		case PLAYER_RIGHT:
-			frameNumY = 11;
+			frameY = 11;
 			break;
 		case PLAYER_UP:
-			frameNumY = 9;
+			frameY = 9;
 			break;
 		case PLAYER_DOWN:
-			frameNumY = 8;
+			frameY = 8;
 			break;
+		}
+	}
+}
+
+void Jojo::playerState()
+{
+	_Hp->update();
+	_Hp->setGauge(currentHp, maxHp);
+	_Mp->update();
+	_Mp->setGauge(currentMp, maxMp);
+	_Exp->update();
+	_Exp->setGauge(currentExp, maxExp);
+}
+
+void Jojo::collision()
+{
+	for (int k = 0; k < vJojo.size(); k++)
+	{
+		RECT temp;
+
+		if (IntersectRect(&temp, &vJojo[k].rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &vJojo[k].rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &vJojo[k].rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &vJojo[k].rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
+		{
+			isTarget = true;
+			frameX = 1;
+
+			if (PtInRect(&ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				isAtkRng = false;
+				isAtk = true;
+
+				if (playerX > ENEMYMANAGER->getYeopo()->getEnemyX())
+					pDirection = PLAYER_LEFT;
+				else if (playerX < ENEMYMANAGER->getYeopo()->getEnemyX())
+					pDirection = PLAYER_RIGHT;
+				else if (playerY > ENEMYMANAGER->getYeopo()->getEnemyY())
+					pDirection = PLAYER_UP;
+				else if (playerY < ENEMYMANAGER->getYeopo()->getEnemyY())
+					pDirection = PLAYER_DOWN;
+			}
+		}
+		else
+		{
+			frameX = 0;
 		}
 	}
 }

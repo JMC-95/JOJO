@@ -1,15 +1,15 @@
-	#include "stdafx.h"
+#include "stdafx.h"
 #include "progressBar.h"
+
 progressBar::progressBar()
 {
 }
-
 
 progressBar::~progressBar()
 {
 }
 
-HRESULT progressBar::init(char * frontImage, char * backImage, float x, float y, int width, int height)
+HRESULT progressBar::init(char* frontImage, char* backImage, float x, float y, int width, int height)
 {
 	_x = x;
 	_y = y;
@@ -21,7 +21,6 @@ HRESULT progressBar::init(char * frontImage, char * backImage, float x, float y,
 
 	_progressBarBack = new image;
 	_progressBarBack->init(backImage, x, y, width, height, true, RGB(255, 0, 255));
-
 
 	_width = _progressBarFront->getWidth();
 
@@ -45,9 +44,9 @@ void progressBar::render(HDC hdc)
 {
 	_progressBarBack->render(hdc, _rcProgress.left, _y, 0, 0, _progressBarBack->getWidth(), _progressBarBack->getHeight());
 
-	_progressBarFront->render(hdc,_rcProgress.left + 4, _y, 0, 0, _width, _progressBarBack->getHeight());
-
+	_progressBarFront->render(hdc, _rcProgress.left, _y, 0, 0, _width, _progressBarBack->getHeight());
 }
+
 void progressBar::setGauge(float currentGauge, float maxGauge)
 {
 	_width = (currentGauge / maxGauge)* _progressBarBack->getWidth();

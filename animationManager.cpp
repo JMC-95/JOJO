@@ -48,7 +48,6 @@ void animationManager::addDefAnimation(string animationKeyName, char * imageKeyN
 
 	//이미지와 애니메이션을 초기화 후 맵에 추가한다.
 	_animation.insert(make_pair(animationKeyName, ani));
-
 }
 
 void animationManager::addAnimation(string animationKeyName, char * imageKeyName, int * playArr, int arrLen, int fps, bool loop)
@@ -58,21 +57,21 @@ void animationManager::addAnimation(string animationKeyName, char * imageKeyName
 	animation* ani = new animation;
 
 	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
-	ani->setPlayFrame(playArr,arrLen, loop);
+	ani->setPlayFrame(playArr, arrLen, loop);
 	ani->setFPS(fps);
 
 	//이미지와 애니메이션을 초기화 후 맵에 추가한다.
 	_animation.insert(make_pair(animationKeyName, ani));
 }
 
-void animationManager::addAnimation(string animationKeyName, char * imageKeyName, int start, int end, int fps, bool reverse, bool loop)
+void animationManager::addAnimation(string animationKeyName, char* imageKeyName, int start, int end, int fps, bool reverse, bool loop)
 {
 	//이미지 및 애니메이션 초기화
 	image* img = IMAGEMANAGER->findImage(imageKeyName);
 	animation* ani = new animation;
 
 	ani->init(img->getWidth(), img->getHeight(), img->getFrameWidth(), img->getFrameHeight());
-	ani->setPlayFrame(start, end,reverse, loop);
+	ani->setPlayFrame(start, end, reverse, loop);
 	ani->setFPS(fps);
 
 	//이미지와 애니메이션을 초기화 후 맵에 추가한다.
@@ -129,7 +128,6 @@ void animationManager::deleteALL()
 		else
 		{
 			++iter;
-
 		}
 	}
 }

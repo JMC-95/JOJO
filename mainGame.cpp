@@ -91,6 +91,9 @@ void mainGame::images()
 	IMAGEMANAGER->addFrameImage("폭우", "images/UI/Weather/HeavyRain.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addFrameImage("눈", "images/UI/Weather/Snow.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));
 
+	//정보창 이미지
+	IMAGEMANAGER->addImage("정보창", "images/UI/Info/Status.bmp", 240, 305, true, RGB(247, 0, 255));
+
 	//플레이어 이미지
 	IMAGEMANAGER->addFrameImage("메뉴", "images/UI/InGame/Menu.bmp", 176, 242, 2, 2, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addFrameImage("조조", "images/Player/조조.bmp", 48, 672, 1, 14, true, RGB(247, 0, 255));
@@ -114,4 +117,19 @@ void mainGame::images()
 	IMAGEMANAGER->addFrameImage("이전", "images/Player/이전.bmp", 48, 672, 1, 14, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addFrameImage("이전ATK", "images/Player/이전ATK.bmp", 64, 1024, 1, 16, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addFrameImage("이전BH", "images/Player/이전BH.bmp", 48, 288, 1, 6, true, RGB(247, 0, 255));
+
+	//적 이미지
+	IMAGEMANAGER->addFrameImage("여포", "images/Enemy/여포.bmp", 48, 672, 1, 14, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addFrameImage("여포ATK", "images/Enemy/여포ATK.bmp", 64, 1024, 1, 16, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addFrameImage("여포BH", "images/Enemy/여포BH.bmp", 48, 288, 1, 6, true, RGB(247, 0, 255));
+
+	//얼굴 이미지
+	IMAGEMANAGER->addImage("조조Face", "images/UI/Face/조조face.bmp", 64, 80, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("조인Face", "images/UI/Face/조인face.bmp", 64, 80, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("조홍Face", "images/UI/Face/조홍face.bmp", 64, 80, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("악진Face", "images/UI/Face/악진face.bmp", 64, 80, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("이전Face", "images/UI/Face/이전face.bmp", 64, 80, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("하후돈Face", "images/UI/Face/하후돈face.bmp", 64, 80, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("하후연Face", "images/UI/Face/하후연face.bmp", 64, 80, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("여포Face", "images/UI/Face/여포face.bmp", 64, 80, true, RGB(247, 0, 255));
 }

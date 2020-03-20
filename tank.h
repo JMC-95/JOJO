@@ -46,7 +46,7 @@ private:
 	bool isSelect;			//캐릭터를 선택했는지 확인하는 변수
 	bool isRange;			//캐릭터의 범위를 표시해주는 변수
 	bool isMove;			//캐릭터의 이동을 체크해주는 변수
-	bool isAtk;				//캐릭터의 공격을 체크해주는 변수
+	bool isTarget;				//캐릭터의 공격을 체크해주는 변수
 
 public:
 	tank();

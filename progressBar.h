@@ -1,15 +1,14 @@
 #pragma once
-#include"singletonBase.h"
-class progressBar :public singletonBase<progressBar>
+
+class progressBar
 {
 private:
+	image* _progressBarFront;	//체력바 앞이미지
+	image* _progressBarBack;	//체력바 뒤이미지
+	RECT _rcProgress;			//체력바 렉트
 
-	RECT _rcProgress;		// 체력바 렉트
 	int _x, _y;
-	int _width;				//가로길이(요녀석으로 조정함)
-
-	image* _progressBarFront;		//체력바 앞이미지
-	image* _progressBarBack;		//체력바 뒤이미지
+	int _width;					//가로길이(요녀석으로 조정함)
 
 public:
 	progressBar();
@@ -27,4 +26,3 @@ public:
 
 	RECT getRect() { return _rcProgress; }
 };
-

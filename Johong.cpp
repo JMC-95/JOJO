@@ -12,25 +12,50 @@ Johong::~Johong()
 HRESULT Johong::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//구조체 정보 기입
-	PlayerInfo Johong;
+	PlayerInfo johong;
 	//이미지 및 애니메이션
-	Johong.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
-	Johong.mAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);		//캐릭터 클릭시 공격범위 이미지
-	Johong.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
-	Johong.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
-	Johong.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
-	Johong.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
-	ANIMATIONMANAGER->addAnimation("playerLeft", "조홍", 4, 5, 2, false, true);
-	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
+	johong.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
+	johong.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);		//캐릭터 클릭시 공격범위 이미지
+	johong.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
+	johong.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
+	johong.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
+	johong.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
 	//스테이터스
-	Johong.speed = 6;			//속도
-	Johong.movingCount = 4;		//이동범위
-	vJohong.push_back(Johong);
+	johong.level = 4;			//레벨
+	johong.hp = 134;			//체력
+	johong.mp = 17;				//마력
+	johong.atk = 40;			//공격력
+	johong.will = 53;			//정신력
+	johong.def = 51;			//방어력
+	johong.agi = 41;			//순발력
+	johong.ten = 43;			//사기
+	johong.movingCount = 4;		//이동력
+	vJohong.push_back(johong);
 
+	//HP ProgressBar
+	_Hp = new progressBar;
+	_Hp->init("images/UI/Info/HP.bmp", "images/UI/Info/Back_P.bmp", 1056, 289, 84, 12);
+	_Hp->setGauge(currentHp, maxHp);
+	currentHp = maxHp = 134;
+	damage = 0;
+
+	//MP ProgressBar
+	_Mp = new progressBar;
+	_Mp->init("images/UI/Info/MP.bmp", "images/UI/Info/Back_P.bmp", 1056, 307, 84, 12);
+	_Mp->setGauge(currentMp, maxMp);
+	currentMp = maxMp = 17;
+
+	//EXP ProgressBar
+	_Exp = new progressBar;
+	_Exp->init("images/UI/Info/EXP.bmp", "images/UI/Info/Back_EXP.bmp", 1095, 243, 45, 12);
+	_Exp->setGauge(currentExp, maxExp);
+	currentExp = 47;
+	maxExp = 100;
+
+	//캐릭터 방향 및 위치
 	pDirection = PLAYER_LEFT;
-
-	count = 2;
-	startTile = endTile = -1;	//A*
+	startTile = endTile = -1;
+	speed = 6;	//속도
 
 	isTurn = true;
 	isSelect = false;
@@ -50,6 +75,7 @@ void Johong::update()
 	}
 
 	playerAnimation();
+	playerState();
 }
 
 void Johong::render(HDC hdc)
@@ -62,12 +88,7 @@ void Johong::render(HDC hdc)
 		}
 		else
 		{
-			vJohong[k].img->frameAlphaRender(hdc, vJohong[k].rc.left, vJohong[k].rc.top, 0, frameNumY, 100);
-		}
-
-		if (isClick)
-		{
-			IMAGEMANAGER->frameRender("메뉴", hdc, vJohong[k].rc.left - 100, vJohong[k].rc.top - 35, frameNumX, 0);
+			vJohong[k].img->frameAlphaRender(hdc, vJohong[k].rc.left, vJohong[k].rc.top, 0, frameY, 100);
 		}
 	}
 }
@@ -76,18 +97,14 @@ void Johong::mouseMove()
 {
 	for (int k = 0; k < vJohong.size(); k++)
 	{
-		if (!PLAYERMANAGER->getAgjin()->getIsSelect() && !PLAYERMANAGER->getHahudon()->getIsSelect() &&
-			!PLAYERMANAGER->getHahuyeon()->getIsSelect() && !PLAYERMANAGER->getIjeon()->getIsSelect() &&
-			!PLAYERMANAGER->getJoin()->getIsSelect() && !PLAYERMANAGER->getJojo()->getIsSelect() &&
-			KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			for (int i = 0; i < TILE_X * TILE_Y; i++)
+			if (PtInRect(&vJohong[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
-				if (PtInRect(&vJohong[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//선택한 타일 (캐릭터)
 					startTile = i;
-					count -= 1;
 
 					isSelect = true;
 					isFind = false;
@@ -109,13 +126,16 @@ void Johong::mouseMove()
 					}
 
 					//이동범위
-					if (!isCancel)
+					if (!isStop)
 					{
 						floodFill(startTile, vJohong[k].movingCount);
 					}
 				}
+			}
 
-				if (!PtInRect(&vJohong[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			if (!PtInRect(&vJohong[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
@@ -164,14 +184,14 @@ void Johong::mouseMove()
 		//목표 타일을 클릭하면 캐릭터 이동
 		if (!optimalPath.empty())
 		{
-			if (!isCancel)
+			if (!isStop)
 			{
 				playerMove();
 			}
 
 			if (playerX == mapX && playerY == mapY)
 			{
-				isCancel = true;
+				isStop = true;
 				isClick = true;
 
 				//공격범위
@@ -203,9 +223,9 @@ void Johong::mouseMove()
 
 		if (isClick)
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 			{
-				if (PtInRect(&rcMenu[0], m_ptMouse) && isAtk)	//공격
+				if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 				{
 					atkList.clear();
 					menuList.clear();
@@ -218,14 +238,14 @@ void Johong::mouseMove()
 					atkList.clear();
 					menuList.clear();
 
-					isClick = false;
+					//isClick = false;
 				}
 				if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 				{
 					atkList.clear();
 					menuList.clear();
 
-					isClick = false;
+					//isClick = false;
 				}
 				if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 				{
@@ -241,25 +261,10 @@ void Johong::mouseMove()
 					atkList.clear();
 					menuList.clear();
 
-					isCancel = false;
+					isStop = false;
 					isClick = false;
 				}
 			}
-		}
-
-		RECT temp;
-
-		if (IntersectRect(&temp, &vJohong[k].rcAtk[0], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vJohong[k].rcAtk[1], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vJohong[k].rcAtk[2], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vJohong[k].rcAtk[3], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc))
-		{
-			isAtk = true;
-			frameNumX = 1;
-		}
-		else
-		{
-			frameNumX = 0;
 		}
 	}
 }
@@ -299,19 +304,19 @@ void Johong::playerMove()
 			switch (pDirection)
 			{
 			case PLAYER_LEFT:
-				playerX -= vJohong[k].speed;
+				playerX -= speed;
 				vJohong[k].rc = RectMakeCenter(playerX, playerY, vJohong[k].img->getFrameWidth(), vJohong[k].img->getFrameHeight());
 				break;
 			case PLAYER_RIGHT:
-				playerX += vJohong[k].speed;
+				playerX += speed;
 				vJohong[k].rc = RectMakeCenter(playerX, playerY, vJohong[k].img->getFrameWidth(), vJohong[k].img->getFrameHeight());
 				break;
 			case PLAYER_UP:
-				playerY -= vJohong[k].speed;
+				playerY -= speed;
 				vJohong[k].rc = RectMakeCenter(playerX, playerY, vJohong[k].img->getFrameWidth(), vJohong[k].img->getFrameHeight());
 				break;
 			case PLAYER_DOWN:
-				playerY += vJohong[k].speed;
+				playerY += speed;
 				vJohong[k].rc = RectMakeCenter(playerX, playerY, vJohong[k].img->getFrameWidth(), vJohong[k].img->getFrameHeight());
 				break;
 			}
@@ -358,19 +363,29 @@ void Johong::playerAnimation()
 		switch (pDirection)
 		{
 		case PLAYER_LEFT:
-			frameNumY = 10;
+			frameY = 10;
 			break;
 		case PLAYER_RIGHT:
-			frameNumY = 11;
+			frameY = 11;
 			break;
 		case PLAYER_UP:
-			frameNumY = 9;
+			frameY = 9;
 			break;
 		case PLAYER_DOWN:
-			frameNumY = 8;
+			frameY = 8;
 			break;
 		}
 	}
+}
+
+void Johong::playerState()
+{
+	_Hp->update();
+	_Hp->setGauge(currentHp, maxHp);
+	_Mp->update();
+	_Mp->setGauge(currentMp, maxMp);
+	_Exp->update();
+	_Exp->setGauge(currentExp, maxExp);
 }
 
 void Johong::setPosition(RECT rc)

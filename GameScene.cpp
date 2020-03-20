@@ -11,42 +11,58 @@ GameScene::~GameScene()
 
 HRESULT GameScene::init()
 {
-	mainMap = new MainMap;
-	mainMap->init("¸¼À½");
+	_mainMap = new MainMap;
+	_mainMap->init("¸¼À½");
 
+	_interface = new Interface;
+
+	//¾Æ±º
 	PLAYERMANAGER->init();
-	PLAYERMANAGER->getJojo()->setMapMemoryAdress(mainMap);
-	PLAYERMANAGER->getJojo()->setPosition(mainMap->getMap()[197].rc);
-	PLAYERMANAGER->getHahudon()->setMapMemoryAdress(mainMap);
-	PLAYERMANAGER->getHahudon()->setPosition(mainMap->getMap()[176].rc);
-	PLAYERMANAGER->getHahuyeon()->setMapMemoryAdress(mainMap);
-	PLAYERMANAGER->getHahuyeon()->setPosition(mainMap->getMap()[196].rc);
-	PLAYERMANAGER->getIjeon()->setMapMemoryAdress(mainMap);
-	PLAYERMANAGER->getIjeon()->setPosition(mainMap->getMap()[177].rc);
-	PLAYERMANAGER->getJohong()->setMapMemoryAdress(mainMap);
-	PLAYERMANAGER->getJohong()->setPosition(mainMap->getMap()[237].rc);
-	PLAYERMANAGER->getJoin()->setMapMemoryAdress(mainMap);
-	PLAYERMANAGER->getJoin()->setPosition(mainMap->getMap()[236].rc);
-	PLAYERMANAGER->getAgjin()->setMapMemoryAdress(mainMap);
-	PLAYERMANAGER->getAgjin()->setPosition(mainMap->getMap()[216].rc);
+	PLAYERMANAGER->getAgjin()->setMapMemoryAdress(_mainMap);
+	PLAYERMANAGER->getAgjin()->setPosition(_mainMap->getMap()[216].rc);
+	PLAYERMANAGER->getHahudon()->setMapMemoryAdress(_mainMap);
+	PLAYERMANAGER->getHahudon()->setPosition(_mainMap->getMap()[176].rc);
+	PLAYERMANAGER->getHahuyeon()->setMapMemoryAdress(_mainMap);
+	PLAYERMANAGER->getHahuyeon()->setPosition(_mainMap->getMap()[196].rc);
+	PLAYERMANAGER->getIjeon()->setMapMemoryAdress(_mainMap);
+	PLAYERMANAGER->getIjeon()->setPosition(_mainMap->getMap()[177].rc);
+	PLAYERMANAGER->getJohong()->setMapMemoryAdress(_mainMap);
+	PLAYERMANAGER->getJohong()->setPosition(_mainMap->getMap()[237].rc);
+	PLAYERMANAGER->getJoin()->setMapMemoryAdress(_mainMap);
+	PLAYERMANAGER->getJoin()->setPosition(_mainMap->getMap()[236].rc);
+	PLAYERMANAGER->getJojo()->setMapMemoryAdress(_mainMap);
+	PLAYERMANAGER->getJojo()->setPosition(_mainMap->getMap()[197].rc);
+
+	//¿ì±º
+
+
+	//Àû±º
+	ENEMYMANAGER->init();
+	ENEMYMANAGER->getYeopo()->setMapMemoryAdress(_mainMap);
+	ENEMYMANAGER->getYeopo()->setPosition(_mainMap->getMap()[188].rc);
 
 	return S_OK;
 }
 
 void GameScene::release()
 {
-	SAFE_DELETE(mainMap);
+	SAFE_DELETE(_mainMap);
+	SAFE_DELETE(_interface);
 }
 
 void GameScene::update()
 {
-	mainMap->update();
+	_mainMap->update();
 	PLAYERMANAGER->update();
+	ENEMYMANAGER->update();
+
 	ANIMATIONMANAGER->update();
 }
 
 void GameScene::render()
 {
-	mainMap->render(getMemDC());
+	_mainMap->render(getMemDC());
 	PLAYERMANAGER->render(getMemDC());
+	ENEMYMANAGER->render(getMemDC());
+	_interface->render(getMemDC());
 }

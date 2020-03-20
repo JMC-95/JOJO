@@ -26,7 +26,6 @@ HRESULT animation::init(int totalW, int totalH, int frameW, int frameH)
 	//총 프레임 수
 	_frameNum = frameWidthNum * frameHeightNum;
 
-
 	//프레임 위치 목록 셋팅 하자.
 	_frameList.clear();
 
@@ -45,6 +44,7 @@ HRESULT animation::init(int totalW, int totalH, int frameW, int frameH)
 
 	//기본 프레임으로 셋팅하자.
 	setDefPlayFrame();
+
 	return S_OK;
 }
 
@@ -98,7 +98,7 @@ void animation::setDefPlayFrame(bool reverse, bool loop)
 
 }
 
-void animation::setPlayFrame(int * playArr, int arrLen, bool loop)
+void animation::setPlayFrame(int* playArr, int arrLen, bool loop)
 {
 	_loop = loop;
 	_playList.clear();
@@ -113,18 +113,20 @@ void animation::setPlayFrame(int * playArr, int arrLen, bool loop)
 //시작과 끝
 void animation::setPlayFrame(int start, int end, bool reverse, bool loop)
 {
+	_start = start;
+	_end = end;
 	_loop = loop;
 	_playList.clear();
 
 	//시작과 끝이 같은경우(프레임구간) 재생 하지 말자
-	if (start == end)
+	if (_start == _end)
 	{
 		_playList.clear();
 		stop();
 		return;
 	}
 	//시작 프레임이 끝 프레임보다 크면
-	else if (start > end)
+	else if (_start > _end)
 	{
 		//리버스 후 1번까지만
 		if (reverse)
@@ -132,12 +134,12 @@ void animation::setPlayFrame(int start, int end, bool reverse, bool loop)
 			if (_loop)
 			{
 				//정
-				for (int i = start; i >= end; i--)
+				for (int i = _start; i >= _end; i--)
 				{
 					_playList.push_back(i);
 				}
 				//역
-				for (int i = end + 1; i < start; i++)
+				for (int i = _end + 1; i < _start; i++)
 				{
 					_playList.push_back(i);
 				}
@@ -146,12 +148,12 @@ void animation::setPlayFrame(int start, int end, bool reverse, bool loop)
 			else
 			{
 				//정
-				for (int i = start; i >= end; i--)
+				for (int i = _start; i >= _end; i--)
 				{
 					_playList.push_back(i);
 				}
 				//역
-				for (int i = end + 1; i <= start; i++)
+				for (int i = _end + 1; i <= _start; i++)
 				{
 					_playList.push_back(i);
 				}
@@ -159,7 +161,7 @@ void animation::setPlayFrame(int start, int end, bool reverse, bool loop)
 		}
 		else
 		{
-			for (int i = start; i <= end; i--)
+			for (int i = _start; i <= _end; i--)
 			{
 				_playList.push_back(i);
 			}
@@ -173,24 +175,25 @@ void animation::setPlayFrame(int start, int end, bool reverse, bool loop)
 			//리버스 후 1번
 			if (_loop)
 			{
-				for (int i = start; i <= end; i++)
+				for (int i = _start; i <= _end; i++)
 				{
 					_playList.push_back(i);
 				}
-				for (int i = end - 1; i > start; i--)
+				for (int i = _end - 1; i > _start; i--)
 				{
 					_playList.push_back(i);
 				}
 			}
 			//리버스 후 0번 까지
 			else
-			{	//정
-				for (int i = start; i <= end; i++)
+			{
+				//정
+				for (int i = _start; i <= _end; i++)
 				{
 					_playList.push_back(i);
 				}
 				//역
-				for (int i = end - 1; i <= start; i--)
+				for (int i = _end - 1; i <= _start; i--)
 				{
 					_playList.push_back(i);
 				}
@@ -199,7 +202,7 @@ void animation::setPlayFrame(int start, int end, bool reverse, bool loop)
 		else
 		{
 			//정
-			for (int i = start; i <= end; i++)
+			for (int i = _start; i <= _end; i++)
 			{
 				_playList.push_back(i);
 			}
@@ -233,8 +236,22 @@ void animation::frameUpdate(float elapsedTime)
 				}
 				else
 				{
-					_nowPlayIndex--;
-					_play = false;
+					if (PLAYERMANAGER->getJojo()->getIsAtk())
+					{
+						_nowPlayIndex = 0;
+						_play = false;
+
+						PLAYERMANAGER->getJojo()->setIsTurn(false);
+						PLAYERMANAGER->getJojo()->setIsSelect(false);
+						PLAYERMANAGER->getJojo()->setIsTarget(false);
+						PLAYERMANAGER->getJojo()->setIsAtk(false);
+						PLAYERMANAGER->getJojo()->setIsCancel(false);
+					}
+					else
+					{
+						_nowPlayIndex--;
+						_play = false;
+					}
 				}
 			}
 		}

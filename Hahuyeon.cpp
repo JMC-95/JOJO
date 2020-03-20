@@ -12,25 +12,50 @@ Hahuyeon::~Hahuyeon()
 HRESULT Hahuyeon::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//구조체 정보 기입
-	PlayerInfo Hahuyeon;
+	PlayerInfo hahuyeon;
 	//이미지 및 애니메이션
-	Hahuyeon.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
-	Hahuyeon.mAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);		//캐릭터 클릭시 공격범위 이미지
-	Hahuyeon.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
-	Hahuyeon.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
-	Hahuyeon.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
-	Hahuyeon.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
-	ANIMATIONMANAGER->addAnimation("playerLeft", "하후연", 4, 5, 2, false, true);
-	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
+	hahuyeon.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
+	hahuyeon.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);		//캐릭터 클릭시 공격범위 이미지
+	hahuyeon.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
+	hahuyeon.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
+	hahuyeon.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
+	hahuyeon.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
 	//스테이터스
-	Hahuyeon.speed = 6;			//속도
-	Hahuyeon.movingCount = 6;	//이동범위
-	vHahuyeon.push_back(Hahuyeon);
+	hahuyeon.level = 4;			//레벨
+	hahuyeon.hp = 125;			//체력
+	hahuyeon.mp = 21;			//마력
+	hahuyeon.atk = 62;			//공격력
+	hahuyeon.will = 39;			//정신력
+	hahuyeon.def = 48;			//방어력
+	hahuyeon.agi = 41;			//순발력
+	hahuyeon.ten = 51;			//사기
+	hahuyeon.movingCount = 6;	//이동력
+	vHahuyeon.push_back(hahuyeon);
 
+	//HP ProgressBar
+	_Hp = new progressBar;
+	_Hp->init("images/UI/Info/HP.bmp", "images/UI/Info/Back_P.bmp", 1056, 289, 84, 12);
+	_Hp->setGauge(currentHp, maxHp);
+	currentHp = maxHp = 125;
+	damage = 0;
+
+	//MP ProgressBar
+	_Mp = new progressBar;
+	_Mp->init("images/UI/Info/MP.bmp", "images/UI/Info/Back_P.bmp", 1056, 307, 84, 12);
+	_Mp->setGauge(currentMp, maxMp);
+	currentMp = maxMp = 21;
+
+	//EXP ProgressBar
+	_Exp = new progressBar;
+	_Exp->init("images/UI/Info/EXP.bmp", "images/UI/Info/Back_EXP.bmp", 1095, 243, 45, 12);
+	_Exp->setGauge(currentExp, maxExp);
+	currentExp = 62;
+	maxExp = 100;
+
+	//캐릭터 방향 및 위치
 	pDirection = PLAYER_LEFT;
-
-	count = 2;
-	startTile = endTile = -1;	//A*
+	startTile = endTile = -1;
+	speed = 6;	//속도
 
 	isTurn = true;
 	isSelect = false;
@@ -50,6 +75,7 @@ void Hahuyeon::update()
 	}
 
 	playerAnimation();
+	playerState();
 }
 
 void Hahuyeon::render(HDC hdc)
@@ -62,12 +88,7 @@ void Hahuyeon::render(HDC hdc)
 		}
 		else
 		{
-			vHahuyeon[k].img->frameAlphaRender(hdc, vHahuyeon[k].rc.left, vHahuyeon[k].rc.top, 0, frameNumY, 100);
-		}
-
-		if (isClick)
-		{
-			IMAGEMANAGER->frameRender("메뉴", hdc, vHahuyeon[k].rc.left - 100, vHahuyeon[k].rc.top - 35, frameNumX, 0);
+			vHahuyeon[k].img->frameAlphaRender(hdc, vHahuyeon[k].rc.left, vHahuyeon[k].rc.top, 0, frameY, 100);
 		}
 	}
 }
@@ -76,18 +97,14 @@ void Hahuyeon::mouseMove()
 {
 	for (int k = 0; k < vHahuyeon.size(); k++)
 	{
-		if (!PLAYERMANAGER->getAgjin()->getIsSelect() && !PLAYERMANAGER->getHahudon()->getIsSelect() &&
-			!PLAYERMANAGER->getIjeon()->getIsSelect() && !PLAYERMANAGER->getJohong()->getIsSelect() &&
-			!PLAYERMANAGER->getJoin()->getIsSelect() && !PLAYERMANAGER->getJojo()->getIsSelect() &&
-			KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			for (int i = 0; i < TILE_X * TILE_Y; i++)
+			if (PtInRect(&vHahuyeon[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
-				if (PtInRect(&vHahuyeon[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//선택한 타일 (캐릭터)
 					startTile = i;
-					count -= 1;
 
 					isSelect = true;
 					isFind = false;
@@ -105,13 +122,16 @@ void Hahuyeon::mouseMove()
 					}
 
 					//이동범위
-					if (!isCancel)
+					if (!isStop)
 					{
 						floodFill(startTile, vHahuyeon[k].movingCount);
 					}
 				}
+			}
 
-				if (!PtInRect(&vHahuyeon[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			if (!PtInRect(&vHahuyeon[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
@@ -160,14 +180,14 @@ void Hahuyeon::mouseMove()
 		//목표 타일을 클릭하면 캐릭터 이동
 		if (!optimalPath.empty())
 		{
-			if (!isCancel)
+			if (!isStop)
 			{
 				playerMove();
 			}
 
 			if (playerX == mapX && playerY == mapY)
 			{
-				isCancel = true;
+				isStop = true;
 				isClick = true;
 
 				//공격범위
@@ -195,9 +215,9 @@ void Hahuyeon::mouseMove()
 
 		if (isClick)
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 			{
-				if (PtInRect(&rcMenu[0], m_ptMouse) && isAtk)	//공격
+				if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 				{
 					atkList.clear();
 					menuList.clear();
@@ -210,14 +230,14 @@ void Hahuyeon::mouseMove()
 					atkList.clear();
 					menuList.clear();
 
-					isClick = false;
+					//isClick = false;
 				}
 				if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 				{
 					atkList.clear();
 					menuList.clear();
 
-					isClick = false;
+					//isClick = false;
 				}
 				if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 				{
@@ -233,25 +253,10 @@ void Hahuyeon::mouseMove()
 					atkList.clear();
 					menuList.clear();
 
-					isCancel = false;
+					isStop = false;
 					isClick = false;
 				}
 			}
-		}
-
-		RECT temp;
-
-		if (IntersectRect(&temp, &vHahuyeon[k].rcAtk[0], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vHahuyeon[k].rcAtk[1], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vHahuyeon[k].rcAtk[2], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vHahuyeon[k].rcAtk[3], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc))
-		{
-			isAtk = true;
-			frameNumX = 1;
-		}
-		else
-		{
-			frameNumX = 0;
 		}
 	}
 }
@@ -291,19 +296,19 @@ void Hahuyeon::playerMove()
 			switch (pDirection)
 			{
 			case PLAYER_LEFT:
-				playerX -= vHahuyeon[k].speed;
+				playerX -= speed;
 				vHahuyeon[k].rc = RectMakeCenter(playerX, playerY, vHahuyeon[k].img->getFrameWidth(), vHahuyeon[k].img->getFrameHeight());
 				break;
 			case PLAYER_RIGHT:
-				playerX += vHahuyeon[k].speed;
+				playerX += speed;
 				vHahuyeon[k].rc = RectMakeCenter(playerX, playerY, vHahuyeon[k].img->getFrameWidth(), vHahuyeon[k].img->getFrameHeight());
 				break;
 			case PLAYER_UP:
-				playerY -= vHahuyeon[k].speed;
+				playerY -= speed;
 				vHahuyeon[k].rc = RectMakeCenter(playerX, playerY, vHahuyeon[k].img->getFrameWidth(), vHahuyeon[k].img->getFrameHeight());
 				break;
 			case PLAYER_DOWN:
-				playerY += vHahuyeon[k].speed;
+				playerY += speed;
 				vHahuyeon[k].rc = RectMakeCenter(playerX, playerY, vHahuyeon[k].img->getFrameWidth(), vHahuyeon[k].img->getFrameHeight());
 				break;
 			}
@@ -350,19 +355,29 @@ void Hahuyeon::playerAnimation()
 		switch (pDirection)
 		{
 		case PLAYER_LEFT:
-			frameNumY = 10;
+			frameY = 10;
 			break;
 		case PLAYER_RIGHT:
-			frameNumY = 11;
+			frameY = 11;
 			break;
 		case PLAYER_UP:
-			frameNumY = 9;
+			frameY = 9;
 			break;
 		case PLAYER_DOWN:
-			frameNumY = 8;
+			frameY = 8;
 			break;
 		}
 	}
+}
+
+void Hahuyeon::playerState()
+{
+	_Hp->update();
+	_Hp->setGauge(currentHp, maxHp);
+	_Mp->update();
+	_Mp->setGauge(currentMp, maxMp);
+	_Exp->update();
+	_Exp->setGauge(currentExp, maxExp);
 }
 
 void Hahuyeon::setPosition(RECT rc)

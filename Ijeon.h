@@ -19,6 +19,7 @@ public:
 	void mouseMove();
 	void playerMove();
 	void playerAnimation();
+	void playerState();
 
 	void setPosition(RECT rc);
 

@@ -12,25 +12,50 @@ Agjin::~Agjin()
 HRESULT Agjin::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//구조체 정보 기입
-	PlayerInfo Agjin;
+	PlayerInfo agjin;
 	//이미지 및 애니메이션
-	Agjin.moveRngImg = IMAGEMANAGER->findImage(moveImg);	//캐릭터 클릭시 이동범위 이미지
-	Agjin.mAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
-	Agjin.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
-	Agjin.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
-	Agjin.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
-	Agjin.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
-	ANIMATIONMANAGER->addAnimation("playerLeft", "악진", 4, 5, 2, false, true);
-	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
+	agjin.moveRngImg = IMAGEMANAGER->findImage(moveImg);	//캐릭터 클릭시 이동범위 이미지
+	agjin.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
+	agjin.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
+	agjin.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
+	agjin.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
+	agjin.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
 	//스테이터스
-	Agjin.speed = 6;			//속도
-	Agjin.movingCount = 4;		//이동범위
-	vAgjin.push_back(Agjin);
+	agjin.level = 4;		//레벨
+	agjin.hp = 142;			//체력
+	agjin.mp = 19;			//마력
+	agjin.atk = 47;			//공격력
+	agjin.will = 50;		//정신력
+	agjin.def = 62;			//방어력
+	agjin.agi = 35;			//순발력
+	agjin.ten = 51;			//사기
+	agjin.movingCount = 4;	//이동력
+	vAgjin.push_back(agjin);
 
+	//HP ProgressBar
+	_Hp = new progressBar;
+	_Hp->init("images/UI/Info/HP.bmp", "images/UI/Info/Back_P.bmp", 1056, 289, 84, 12);
+	_Hp->setGauge(currentHp, maxHp);
+	currentHp = maxHp = 142;
+	damage = 0;
+
+	//MP ProgressBar
+	_Mp = new progressBar;
+	_Mp->init("images/UI/Info/MP.bmp", "images/UI/Info/Back_P.bmp", 1056, 307, 84, 12);
+	_Mp->setGauge(currentMp, maxMp);
+	currentMp = maxMp = 19;
+
+	//EXP ProgressBar
+	_Exp = new progressBar;
+	_Exp->init("images/UI/Info/EXP.bmp", "images/UI/Info/Back_EXP.bmp", 1095, 243, 45, 12);
+	_Exp->setGauge(currentExp, maxExp);
+	currentExp = 52;
+	maxExp = 100;
+
+	//캐릭터 방향 및 위치
 	pDirection = PLAYER_LEFT;
-
-	count = 2;
-	startTile = endTile = -1;	//A*
+	startTile = endTile = -1;
+	speed = 6;	//속도
 
 	isTurn = true;
 	isSelect = false;
@@ -50,6 +75,7 @@ void Agjin::update()
 	}
 
 	playerAnimation();
+	playerState();
 }
 
 void Agjin::render(HDC hdc)
@@ -62,12 +88,7 @@ void Agjin::render(HDC hdc)
 		}
 		else
 		{
-			vAgjin[k].img->frameAlphaRender(hdc, vAgjin[k].rc.left, vAgjin[k].rc.top, 0, frameNumY, 100);
-		}
-
-		if (isClick)
-		{
-			IMAGEMANAGER->frameRender("메뉴", hdc, vAgjin[k].rc.left - 100, vAgjin[k].rc.top - 35, frameNumX, 0);
+			vAgjin[k].img->frameAlphaRender(hdc, vAgjin[k].rc.left, vAgjin[k].rc.top, 0, frameY, 100);
 		}
 	}
 }
@@ -76,18 +97,14 @@ void Agjin::mouseMove()
 {
 	for (int k = 0; k < vAgjin.size(); k++)
 	{
-		if (!PLAYERMANAGER->getHahudon()->getIsSelect() && !PLAYERMANAGER->getHahuyeon()->getIsSelect() &&
-			!PLAYERMANAGER->getIjeon()->getIsSelect() && !PLAYERMANAGER->getJohong()->getIsSelect() &&
-			!PLAYERMANAGER->getJoin()->getIsSelect() && !PLAYERMANAGER->getJojo()->getIsSelect() &&
-			KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			for (int i = 0; i < TILE_X * TILE_Y; i++)
+			if (PtInRect(&vAgjin[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
-				if (PtInRect(&vAgjin[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//선택한 타일 (캐릭터)
 					startTile = i;
-					count -= 1;
 
 					isSelect = true;
 					isFind = false;
@@ -109,13 +126,16 @@ void Agjin::mouseMove()
 					}
 
 					//이동범위
-					if (!isCancel)
+					if (!isStop)
 					{
 						floodFill(startTile, vAgjin[k].movingCount);
 					}
 				}
+			}
 
-				if (!PtInRect(&vAgjin[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			if (!PtInRect(&vAgjin[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
@@ -164,14 +184,14 @@ void Agjin::mouseMove()
 		//목표 타일을 클릭하면 캐릭터 이동
 		if (!optimalPath.empty())
 		{
-			if (!isCancel)
+			if (!isStop)
 			{
 				playerMove();
 			}
 
 			if (playerX == mapX && playerY == mapY)
 			{
-				isCancel = true;
+				isStop = true;
 				isClick = true;
 
 				//공격범위
@@ -203,9 +223,9 @@ void Agjin::mouseMove()
 
 		if (isClick)
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 			{
-				if (PtInRect(&rcMenu[0], m_ptMouse) && isAtk)	//공격
+				if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 				{
 					atkList.clear();
 					menuList.clear();
@@ -218,14 +238,14 @@ void Agjin::mouseMove()
 					atkList.clear();
 					menuList.clear();
 
-					isClick = false;
+					//isClick = false;
 				}
 				if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 				{
 					atkList.clear();
 					menuList.clear();
 
-					isClick = false;
+					//isClick = false;
 				}
 				if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 				{
@@ -241,25 +261,10 @@ void Agjin::mouseMove()
 					atkList.clear();
 					menuList.clear();
 
-					isCancel = false;
+					isStop = false;
 					isClick = false;
 				}
 			}
-		}
-
-		RECT temp;
-
-		if (IntersectRect(&temp, &vAgjin[k].rcAtk[0], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vAgjin[k].rcAtk[1], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vAgjin[k].rcAtk[2], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vAgjin[k].rcAtk[3], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc))
-		{
-			isAtk = true;
-			frameNumX = 1;
-		}
-		else
-		{
-			frameNumX = 0;
 		}
 	}
 }
@@ -299,19 +304,19 @@ void Agjin::playerMove()
 			switch (pDirection)
 			{
 			case PLAYER_LEFT:
-				playerX -= vAgjin[k].speed;
+				playerX -= speed;
 				vAgjin[k].rc = RectMakeCenter(playerX, playerY, vAgjin[k].img->getFrameWidth(), vAgjin[k].img->getFrameHeight());
 				break;
 			case PLAYER_RIGHT:
-				playerX += vAgjin[k].speed;
+				playerX += speed;
 				vAgjin[k].rc = RectMakeCenter(playerX, playerY, vAgjin[k].img->getFrameWidth(), vAgjin[k].img->getFrameHeight());
 				break;
 			case PLAYER_UP:
-				playerY -= vAgjin[k].speed;
+				playerY -= speed;
 				vAgjin[k].rc = RectMakeCenter(playerX, playerY, vAgjin[k].img->getFrameWidth(), vAgjin[k].img->getFrameHeight());
 				break;
 			case PLAYER_DOWN:
-				playerY += vAgjin[k].speed;
+				playerY += speed;
 				vAgjin[k].rc = RectMakeCenter(playerX, playerY, vAgjin[k].img->getFrameWidth(), vAgjin[k].img->getFrameHeight());
 				break;
 			}
@@ -358,19 +363,29 @@ void Agjin::playerAnimation()
 		switch (pDirection)
 		{
 		case PLAYER_LEFT:
-			frameNumY = 10;
+			frameY = 10;
 			break;
 		case PLAYER_RIGHT:
-			frameNumY = 11;
+			frameY = 11;
 			break;
 		case PLAYER_UP:
-			frameNumY = 9;
+			frameY = 9;
 			break;
 		case PLAYER_DOWN:
-			frameNumY = 8;
+			frameY = 8;
 			break;
 		}
 	}
+}
+
+void Agjin::playerState()
+{
+	_Hp->update();
+	_Hp->setGauge(currentHp, maxHp);
+	_Mp->update();
+	_Mp->setGauge(currentMp, maxMp);
+	_Exp->update();
+	_Exp->setGauge(currentExp, maxExp);
 }
 
 void Agjin::setPosition(RECT rc)
