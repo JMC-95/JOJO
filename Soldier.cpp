@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "Soldier.h"
 
-Soldier::Soldier()
+Soldier::Soldier(int num)
 {
+	number = num;
 }
 
 Soldier::~Soldier()
@@ -29,7 +30,7 @@ HRESULT Soldier::init(const char * moveImg, const char * mAtkImg, const char * a
 	soldier.def = 56;			//방어력
 	soldier.agi = 51;			//순발력
 	soldier.ten = 65;			//사기
-	soldier.movingCount = 6;	//이동력
+	soldier.movingCount = 4;	//이동력
 	vSoldier.push_back(soldier);
 
 	//HP ProgressBar
@@ -54,7 +55,7 @@ HRESULT Soldier::init(const char * moveImg, const char * mAtkImg, const char * a
 	//캐릭터 방향 및 위치
 	fDirection = FRIEND_LEFT;
 	startTile = endTile = -1;
-	speed = 4;	//속도
+	speed = 6;	//속도
 
 	isTurn = true;
 	isSelect = false;

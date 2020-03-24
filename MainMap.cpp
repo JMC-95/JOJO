@@ -385,23 +385,28 @@ void MainMap::friendDraw(HDC hdc)
 			}
 
 			//우군보병
-			if (FRIENDMANAGER->getSoldier()->getIsSelect())
+			for (int j = 0; j < 4; j++)
 			{
-				//이동범위
-				FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-				//공격범위
-				FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].top);
-				FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].top);
-				FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].top);
-				if (FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].right <= WINSIZEY)
+				if (FRIENDMANAGER->getFriend()[j]->getIsSelect())
 				{
-					FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].top);
-					FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].top);
-					FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].top);
+					//이동범위
+					//FRIENDMANAGER->getFriend()[i]->getFriendVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+					auto rngImage = FRIENDMANAGER->getFriend()[j]->getFriendVector()[0].moveRngImg;
+					rngImage->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+					//공격범위
+					//FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].top);
+					//FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].top);
+					//FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].top);
+					//if (FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].right <= WINSIZEY)
+					//{
+					//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].top);
+					//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].top);
+					//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].top);
+					//}
+					//FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].top);
+					//FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].top);
 				}
-				FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].top);
-				FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].top);
 			}
 
 			//원소
@@ -475,20 +480,20 @@ void MainMap::friendDraw(HDC hdc)
 	}
 
 	//우군보병
-	if (FRIENDMANAGER->getSoldier()->getIsAtkRng())
-	{
-		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].top);
-		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].top);
-		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].top);
-		if (FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].right <= WINSIZEY)
-		{
-			FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].top);
-			FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].top);
-			FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].top);
-		}
-		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].top);
-		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].top);
-	}
+	//if (FRIENDMANAGER->getSoldier()->getIsAtkRng())
+	//{
+	//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].top);
+	//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].top);
+	//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].top);
+	//	if (FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].right <= WINSIZEY)
+	//	{
+	//		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].top);
+	//		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].top);
+	//		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].top);
+	//	}
+	//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].top);
+	//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].top);
+	//}
 
 	//원소
 	if (FRIENDMANAGER->getWonso()->getIsAtkRng())

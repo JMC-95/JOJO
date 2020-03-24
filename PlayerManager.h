@@ -18,7 +18,7 @@ private:
 	Johong* m_Johong;
 	Join* m_Join;
 	Jojo* m_Jojo;
-
+	
 public:
 	PlayerManager();
 	~PlayerManager();

@@ -15,7 +15,7 @@ private:
 	Dogyeom* m_Dogyeom;
 	Gwanu* m_Gwanu;
 	Jangbi* m_Jangbi;
-	Soldier* m_Soldier;
+	//Soldier* m_Soldier;
 	Wonso* m_Wonso;
 	Yubi* m_Yubi;
 
@@ -32,9 +32,11 @@ public:
 	Dogyeom* getDogyeom() { return m_Dogyeom; }
 	Gwanu* getGwanu() { return m_Gwanu; }
 	Jangbi* getJangbi() { return m_Jangbi; }
-	Soldier* getSoldier() { return m_Soldier; }
+	//Soldier* getSoldier() { return m_Soldier; }
 	Wonso* getWonso() { return m_Wonso; }
 	Yubi* getYubi() { return m_Yubi; }
+
+	int nSoldier;
 
 	//베이스 클래스의 벡터를 반환하는 함수
 	vector<FriendlyBase*> getFriend() { return vFriend; }

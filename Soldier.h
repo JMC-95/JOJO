@@ -1,13 +1,13 @@
 #pragma once
 #include "FriendlyBase.h"
-
+#include <array>
 class Soldier : public FriendlyBase
 {
 private:
 	vector<FriendInfo> vSoldier;
 
 public:
-	Soldier();
+	Soldier(int num);
 	~Soldier();
 
 	//이동범위, 이동시 공격범위, 전투시 공격범위, 캐릭터 이미지, 공격시 이미지, 방어 or 피격 이미지
@@ -27,5 +27,5 @@ public:
 	virtual void setPosition(RECT rc);
 
 	//벡터를 반환하는 함수
-	vector<FriendInfo> getFriendVector() { return vSoldier; }
+	virtual vector<FriendInfo> getFriendVector() override { return vSoldier; }
 };
