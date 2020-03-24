@@ -4,7 +4,7 @@
 class Dogyeom : public FriendlyBase
 {
 private:
-	vector<FriendInfo> vDogyeom;
+	FriendInfo dogyeom;
 
 public:
 	Dogyeom();
@@ -26,6 +26,5 @@ public:
 
 	virtual void setPosition(RECT rc);
 
-	//벡터를 반환하는 함수
-	vector<FriendInfo> getFriendVector() { return vDogyeom; }
+	virtual FriendInfo getFriendInfo() { return dogyeom; }
 };

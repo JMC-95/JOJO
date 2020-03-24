@@ -76,8 +76,6 @@ void Agjin::update()
 
 void Agjin::render(HDC hdc)
 {
-	//for (int k = 0; k < vAgjin.size(); k++)
-	//{
 	if (isTurn)
 	{
 		if (isAtk)
@@ -120,13 +118,10 @@ void Agjin::render(HDC hdc)
 			agjin.img->frameAlphaRender(hdc, agjin.rc.left, agjin.rc.top, 0, frameY, 100);
 		}
 	}
-	//}
 }
 
 void Agjin::mouseMove()
 {
-	//for (int k = 0; k < vAgjin.size(); k++)
-	//{
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
 		if (PtInRect(&agjin.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
@@ -207,7 +202,6 @@ void Agjin::mouseMove()
 			}
 		}
 	}
-	//}
 
 	playerAstar();
 	playerMenu();
@@ -216,8 +210,6 @@ void Agjin::mouseMove()
 
 void Agjin::playerMove()
 {
-	//for (int k = 0; k < vAgjin.size(); k++)
-	//{
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
@@ -272,14 +264,11 @@ void Agjin::playerMove()
 			optimalPath.pop();
 		}
 	}
-	//}
 }
 
 void Agjin::playerAstar()
 {
-	//	for (int k = 0; k < vAgjin.size(); k++)
-		//{
-			//목표 타일을 클릭하면 A* 시작
+	//목표 타일을 클릭하면 A* 시작
 	if (startAstar && !isFind && !noPath)
 	{
 		while (!isFind)
@@ -327,14 +316,11 @@ void Agjin::playerAstar()
 			}
 		}
 	}
-	//}
 }
 
 void Agjin::playerMenu()
 {
-	//for (int k = 0; k < vAgjin.size(); k++)
-	//{
-		//메뉴
+	//메뉴
 	if (isClick)
 	{
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
@@ -393,40 +379,37 @@ void Agjin::playerMenu()
 			}
 		}
 	}
-	//}
 }
 
 void Agjin::playerCollision()
 {
-	//for (int k = 0; k < vAgjin.size(); k++)
-	//{
 	RECT temp;
 
-	if (IntersectRect(&temp, &agjin.rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-		IntersectRect(&temp, &agjin.rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-		IntersectRect(&temp, &agjin.rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-		IntersectRect(&temp, &agjin.rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-		IntersectRect(&temp, &agjin.rcAtk[4], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-		IntersectRect(&temp, &agjin.rcAtk[5], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-		IntersectRect(&temp, &agjin.rcAtk[6], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-		IntersectRect(&temp, &agjin.rcAtk[7], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
+	if (IntersectRect(&temp, &agjin.rcAtk[0], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
+		IntersectRect(&temp, &agjin.rcAtk[1], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
+		IntersectRect(&temp, &agjin.rcAtk[2], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
+		IntersectRect(&temp, &agjin.rcAtk[3], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
+		IntersectRect(&temp, &agjin.rcAtk[4], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
+		IntersectRect(&temp, &agjin.rcAtk[5], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
+		IntersectRect(&temp, &agjin.rcAtk[6], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
+		IntersectRect(&temp, &agjin.rcAtk[7], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc))
 	{
 		isTarget = true;
 		frameX = 1;
 
-		if (PtInRect(&ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc, m_ptMouse) &&
+		if (PtInRect(&ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc, m_ptMouse) &&
 			KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
 		{
 			isAtkRng = false;
 			isAtk = true;
 
-			if (playerX > ENEMYMANAGER->getYeopo()->getEnemyX())
+			if (playerX > ENEMYMANAGER->getEnemy()[4]->getEnemyX())
 				pDirection = PLAYER_LEFT;
-			else if (playerX < ENEMYMANAGER->getYeopo()->getEnemyX())
+			else if (playerX < ENEMYMANAGER->getEnemy()[4]->getEnemyX())
 				pDirection = PLAYER_RIGHT;
-			else if (playerY > ENEMYMANAGER->getYeopo()->getEnemyY())
+			else if (playerY > ENEMYMANAGER->getEnemy()[4]->getEnemyY())
 				pDirection = PLAYER_UP;
-			else if (playerY < ENEMYMANAGER->getYeopo()->getEnemyY())
+			else if (playerY < ENEMYMANAGER->getEnemy()[4]->getEnemyY())
 				pDirection = PLAYER_DOWN;
 		}
 	}
@@ -434,7 +417,6 @@ void Agjin::playerCollision()
 	{
 		frameX = 0;
 	}
-	//}
 }
 
 void Agjin::playerAnimation()
@@ -526,10 +508,7 @@ void Agjin::playerState()
 
 void Agjin::setPosition(RECT rc)
 {
-	//for (int k = 0; k < vAgjin.size(); k++)
-	//{
 	agjin.rc = rc;
 	playerX = agjin.rc.left + (agjin.rc.right - agjin.rc.left) / 2;
 	playerY = agjin.rc.top + (agjin.rc.bottom - agjin.rc.top) / 2;
-	//}
 }

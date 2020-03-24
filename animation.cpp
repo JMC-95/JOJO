@@ -234,168 +234,53 @@ void animation::frameUpdate(float elapsedTime)
 				}
 				else
 				{
-					//악진
-					//if (PLAYERMANAGER->getAgjin()->getIsAtk())
-					//{
-					//	_nowPlayIndex = 0;
-					//	_play = false;
+					//플레이어
+					for (int j = 0; j < PLAYERMANAGER->getPlayer().size(); j++)
+					{
+						if (PLAYERMANAGER->getPlayer()[j]->getIsAtk())
+						{
+							_nowPlayIndex = 0;
+							_play = false;
 
-					//	PLAYERMANAGER->getAgjin()->setIsTurn(false);
-					//	PLAYERMANAGER->getAgjin()->setIsSelect(false);
-					//	PLAYERMANAGER->getAgjin()->setIsTarget(false);
-					//	PLAYERMANAGER->getAgjin()->setIsAtk(false);
-					//	PLAYERMANAGER->getAgjin()->setIsCancel(false);
-					//}
-					////하후돈
-					//else if (PLAYERMANAGER->getHahudon()->getIsAtk())
-					//{
-					//	_nowPlayIndex = 0;
-					//	_play = false;
+							PLAYERMANAGER->getPlayer()[j]->setIsTurn(false);
+							PLAYERMANAGER->getPlayer()[j]->setIsSelect(false);
+							PLAYERMANAGER->getPlayer()[j]->setIsTarget(false);
+							PLAYERMANAGER->getPlayer()[j]->setIsAtk(false);
+							PLAYERMANAGER->getPlayer()[j]->setIsCancel(false);
+						}
+					}
 
-					//	PLAYERMANAGER->getHahudon()->setIsTurn(false);
-					//	PLAYERMANAGER->getHahudon()->setIsSelect(false);
-					//	PLAYERMANAGER->getHahudon()->setIsTarget(false);
-					//	PLAYERMANAGER->getHahudon()->setIsAtk(false);
-					//	PLAYERMANAGER->getHahudon()->setIsCancel(false);
-					//}
-					////하후연
-					//else if (PLAYERMANAGER->getHahuyeon()->getIsAtk())
-					//{
-					//	_nowPlayIndex = 0;
-					//	_play = false;
+					//우군
+					for (int j = 0; j < FRIENDMANAGER->getFriend().size(); j++)
+					{
+						if (FRIENDMANAGER->getFriend()[j]->getIsAtk())
+						{
+							_nowPlayIndex = 0;
+							_play = false;
 
-					//	PLAYERMANAGER->getHahuyeon()->setIsTurn(false);
-					//	PLAYERMANAGER->getHahuyeon()->setIsSelect(false);
-					//	PLAYERMANAGER->getHahuyeon()->setIsTarget(false);
-					//	PLAYERMANAGER->getHahuyeon()->setIsAtk(false);
-					//	PLAYERMANAGER->getHahuyeon()->setIsCancel(false);
-					//}
-					////이전
-					//else if (PLAYERMANAGER->getIjeon()->getIsAtk())
-					//{
-					//	_nowPlayIndex = 0;
-					//	_play = false;
+							FRIENDMANAGER->getFriend()[j]->setIsTurn(false);
+							FRIENDMANAGER->getFriend()[j]->setIsSelect(false);
+							FRIENDMANAGER->getFriend()[j]->setIsTarget(false);
+							FRIENDMANAGER->getFriend()[j]->setIsAtk(false);
+							FRIENDMANAGER->getFriend()[j]->setIsCancel(false);
+						}
+					}
 
-					//	PLAYERMANAGER->getIjeon()->setIsTurn(false);
-					//	PLAYERMANAGER->getIjeon()->setIsSelect(false);
-					//	PLAYERMANAGER->getIjeon()->setIsTarget(false);
-					//	PLAYERMANAGER->getIjeon()->setIsAtk(false);
-					//	PLAYERMANAGER->getIjeon()->setIsCancel(false);
-					//}
-					////조홍
-					//else if (PLAYERMANAGER->getJohong()->getIsAtk())
-					//{
-					//	_nowPlayIndex = 0;
-					//	_play = false;
+					//적군
+					for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
+					{
+						if (ENEMYMANAGER->getEnemy()[j]->getIsAtk())
+						{
+							_nowPlayIndex = 0;
+							_play = false;
 
-					//	PLAYERMANAGER->getJohong()->setIsTurn(false);
-					//	PLAYERMANAGER->getJohong()->setIsSelect(false);
-					//	PLAYERMANAGER->getJohong()->setIsTarget(false);
-					//	PLAYERMANAGER->getJohong()->setIsAtk(false);
-					//	PLAYERMANAGER->getJohong()->setIsCancel(false);
-					//}
-					////조인
-					//else if (PLAYERMANAGER->getJoin()->getIsAtk())
-					//{
-					//	_nowPlayIndex = 0;
-					//	_play = false;
-
-					//	PLAYERMANAGER->getJoin()->setIsTurn(false);
-					//	PLAYERMANAGER->getJoin()->setIsSelect(false);
-					//	PLAYERMANAGER->getJoin()->setIsTarget(false);
-					//	PLAYERMANAGER->getJoin()->setIsAtk(false);
-					//	PLAYERMANAGER->getJoin()->setIsCancel(false);
-					//}
-					////조조
-					//else if (PLAYERMANAGER->getJojo()->getIsAtk())
-					//{
-					//	_nowPlayIndex = 0;
-					//	_play = false;
-
-					//	PLAYERMANAGER->getJojo()->setIsHit(true);
-					//	PLAYERMANAGER->getJojo()->setIsTurn(false);
-					//	PLAYERMANAGER->getJojo()->setIsSelect(false);
-					//	PLAYERMANAGER->getJojo()->setIsTarget(false);
-					//	PLAYERMANAGER->getJojo()->setIsAtk(false);
-					//	PLAYERMANAGER->getJojo()->setIsCancel(false);
-					//}
-					////도겸
-					//else if (FRIENDMANAGER->getDogyeom()->getIsAtk())
-					//{
-					//	_nowPlayIndex = 0;
-					//	_play = false;
-
-					//	FRIENDMANAGER->getDogyeom()->setIsTurn(false);
-					//	FRIENDMANAGER->getDogyeom()->setIsSelect(false);
-					//	FRIENDMANAGER->getDogyeom()->setIsTarget(false);
-					//	FRIENDMANAGER->getDogyeom()->setIsAtk(false);
-					//	FRIENDMANAGER->getDogyeom()->setIsCancel(false);
-					//}
-					////관우
-					//else if (FRIENDMANAGER->getGwanu()->getIsAtk())
-					//{
-					//	_nowPlayIndex = 0;
-					//	_play = false;
-
-					//	FRIENDMANAGER->getGwanu()->setIsTurn(false);
-					//	FRIENDMANAGER->getGwanu()->setIsSelect(false);
-					//	FRIENDMANAGER->getGwanu()->setIsTarget(false);
-					//	FRIENDMANAGER->getGwanu()->setIsAtk(false);
-					//	FRIENDMANAGER->getGwanu()->setIsCancel(false);
-					//}
-					////장비
-					//else if (FRIENDMANAGER->getJangbi()->getIsAtk())
-					//{
-					//_nowPlayIndex = 0;
-					//_play = false;
-
-					//FRIENDMANAGER->getJangbi()->setIsTurn(false);
-					//FRIENDMANAGER->getJangbi()->setIsSelect(false);
-					//FRIENDMANAGER->getJangbi()->setIsTarget(false);
-					//FRIENDMANAGER->getJangbi()->setIsAtk(false);
-					//FRIENDMANAGER->getJangbi()->setIsCancel(false);
-					//}
-					////원소
-					//else if (FRIENDMANAGER->getWonso()->getIsAtk())
-					//{
-					//_nowPlayIndex = 0;
-					//_play = false;
-
-					//FRIENDMANAGER->getWonso()->setIsTurn(false);
-					//FRIENDMANAGER->getWonso()->setIsSelect(false);
-					//FRIENDMANAGER->getWonso()->setIsTarget(false);
-					//FRIENDMANAGER->getWonso()->setIsAtk(false);
-					//FRIENDMANAGER->getWonso()->setIsCancel(false);
-					//}
-					////유비
-					//else if (FRIENDMANAGER->getYubi()->getIsAtk())
-					//{
-					//_nowPlayIndex = 0;
-					//_play = false;
-
-					//FRIENDMANAGER->getYubi()->setIsTurn(false);
-					//FRIENDMANAGER->getYubi()->setIsSelect(false);
-					//FRIENDMANAGER->getYubi()->setIsTarget(false);
-					//FRIENDMANAGER->getYubi()->setIsAtk(false);
-					//FRIENDMANAGER->getYubi()->setIsCancel(false);
-					//}
-					////여포
-					//else if (ENEMYMANAGER->getYeopo()->getIsAtk())
-					//{
-					//	_nowPlayIndex = 0;
-					//	_play = false;
-
-					//	ENEMYMANAGER->getYeopo()->setIsTurn(false);
-					//	ENEMYMANAGER->getYeopo()->setIsSelect(false);
-					//	ENEMYMANAGER->getYeopo()->setIsTarget(false);
-					//	ENEMYMANAGER->getYeopo()->setIsAtk(false);
-					//	ENEMYMANAGER->getYeopo()->setIsCancel(false);
-					//}
-					//else
-					//{
-						_nowPlayIndex--;
-						_play = false;
-					//}
+							ENEMYMANAGER->getEnemy()[j]->setIsTurn(false);
+							ENEMYMANAGER->getEnemy()[j]->setIsSelect(false);
+							ENEMYMANAGER->getEnemy()[j]->setIsTarget(false);
+							ENEMYMANAGER->getEnemy()[j]->setIsAtk(false);
+							ENEMYMANAGER->getEnemy()[j]->setIsCancel(false);
+						}
+					}
 				}
 			}
 		}

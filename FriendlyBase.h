@@ -49,7 +49,6 @@ protected:
 	progressBar* _Exp;			//EXP Bar
 
 	RECT rcMenu[5];				//메뉴 렉트
-	RECT temp;
 
 protected:	//일반 변수
 	int number;				//번호
@@ -145,15 +144,5 @@ public:
 	progressBar* getProgressBarMp() { return _Mp; }
 	progressBar* getProgressBarExp() { return _Exp; }
 
-	//벡터를 반환하는 함수
-	// = 0 이 붙은 함수는 순수가상 함수라고 부른다.
-	// 순수가상 함수가 하나라도 있는 클래스를 순수가상 클래스 또는 인터페이스 클래스라고 부른다.
-	// 순수 가상 클래스는 그 자체로 인스턴스로 만들지 못하고, 반드시 이 클래스를 상속받은 자식클래스에서 
-	// 순수가상함수를 재정의해야만 인터페이스화 할수 있다.
-
-	// 순수가상함수를 정의하는 이유는 뭘까?
-	// 바로 이 클래스를 상속받는 클래스에 명세를 준다.
-	// 이 클래스를 상속받는 클래스는 반드시 이러한 함수를 구현한다는 것을 강요하는것이다.
-	// 또는 이 클래스가 되기위해 최소한의 기능을 정의하는것이다.
-	virtual vector<FriendInfo> getFriendVector() = 0;
+	virtual FriendInfo getFriendInfo() = 0;
 };

@@ -140,211 +140,208 @@ void MainMap::playerDraw(HDC hdc)
 				PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[6].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[6].top);
 				PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[7].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[7].top);
 			}
-			//			//악진
-			//			if (PLAYERMANAGER->getAgjin()->getIsSelect())
-			//			{
-			//				//이동범위
-			//				PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-			//
-			//				//공격범위
-			//				PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[0].top);
-			//				PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[1].top);
-			//				PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[2].top);
-			//				if (PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[3].right <= WINSIZEY)
-			//				{
-			//					PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[3].top);
-			//					PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[4].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[4].top);
-			//					PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[5].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[5].top);
-			//				}
-			//				PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[6].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[6].top);
-			//				PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[7].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[7].top);
-			//			}
-			//
-			//			//하후돈
-			//			if (PLAYERMANAGER->getHahudon()->getIsSelect())
-			//			{
-			//				//이동범위
-			//				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-			//
-			//				//공격범위
-			//				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[0].top);
-			//				if (PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[1].right <= WINSIZEY)
-			//					PLAYERMANAGER->getHahudon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[1].top);
-			//				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[2].top);
-			//				PLAYERMANAGER->getHahudon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[3].top);
-			//			}
-			//
-			//			//하후연
-			//			if (PLAYERMANAGER->getHahuyeon()->getIsSelect())
-			//			{
-			//				//이동범위
-			//				PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-			//
-			//				//공격범위
-			//				PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[0].top);
-			//				if (PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[1].right <= WINSIZEY)
-			//					PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[1].top);
-			//				PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[2].top);
-			//				PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[3].top);
-			//			}
-			//
-			//			//이전
-			//			if (PLAYERMANAGER->getIjeon()->getIsSelect())
-			//			{
-			//				//이동범위
-			//				PLAYERMANAGER->getIjeon()->getPlayerVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-			//
-			//				//공격범위
-			//				PLAYERMANAGER->getIjeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[0].top);
-			//				PLAYERMANAGER->getIjeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[1].top);
-			//				PLAYERMANAGER->getIjeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[2].top);
-			//				if (PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[3].right <= WINSIZEY)
-			//				{
-			//					PLAYERMANAGER->getIjeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[3].top);
-			//					PLAYERMANAGER->getIjeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[4].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[4].top);
-			//					PLAYERMANAGER->getIjeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[5].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[5].top);
-			//				}
-			//				PLAYERMANAGER->getIjeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[6].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[6].top);
-			//				PLAYERMANAGER->getIjeon()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[7].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[7].top);
-			//			}
-			//
-			//			//조홍
-			//			if (PLAYERMANAGER->getJohong()->getIsSelect())
-			//			{
-			//				//이동범위
-			//				PLAYERMANAGER->getJohong()->getPlayerVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-			//
-			//				//공격범위
-			//				PLAYERMANAGER->getJohong()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[0].top);
-			//				PLAYERMANAGER->getJohong()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[1].top);
-			//				PLAYERMANAGER->getJohong()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[2].top);
-			//				if (PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[3].right <= WINSIZEY)
-			//				{
-			//					PLAYERMANAGER->getJohong()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[3].top);
-			//					PLAYERMANAGER->getJohong()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[4].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[4].top);
-			//					PLAYERMANAGER->getJohong()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[5].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[5].top);
-			//				}
-			//				PLAYERMANAGER->getJohong()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[6].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[6].top);
-			//				PLAYERMANAGER->getJohong()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[7].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[7].top);
-			//			}
-			//
-			//			//조인
-			//			if (PLAYERMANAGER->getJoin()->getIsSelect())
-			//			{
-			//				//이동범위
-			//				PLAYERMANAGER->getJoin()->getPlayerVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-			//
-			//				//공격범위
-			//				PLAYERMANAGER->getJoin()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[0].top);
-			//				if (PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[1].right <= WINSIZEY)
-			//					PLAYERMANAGER->getJoin()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[1].top);
-			//				PLAYERMANAGER->getJoin()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[2].top);
-			//				PLAYERMANAGER->getJoin()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[3].top);
-			//			}
-			//
-			//			//조조
-			//			if (PLAYERMANAGER->getJojo()->getIsSelect())
-			//			{
-			//				//이동범위
-			//				PLAYERMANAGER->getJojo()->getPlayerVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-			//
-			//				//공격범위
-			//				PLAYERMANAGER->getJojo()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[0].top);
-			//				if (PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].right <= WINSIZEY)
-			//					PLAYERMANAGER->getJojo()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].top);
-			//				PLAYERMANAGER->getJojo()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[2].top);
-			//				PLAYERMANAGER->getJojo()->getPlayerVector()[0].moveAtkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[3].top);
-			//			}
-			//		}
+
+			//하후돈
+			if (PLAYERMANAGER->getPlayer()[1]->getIsSelect())
+			{
+				//이동범위
+				PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+				//공격범위
+				PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[0].top);
+				if (PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[1].right <= WINSIZEY)
+				{
+					PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[1].top);
+				}
+				PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[2].top);
+				PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[3].top);
+			}
+
+			//하후연
+			if (PLAYERMANAGER->getPlayer()[2]->getIsSelect())
+			{
+				//이동범위
+				PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+				//공격범위
+				PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[0].top);
+				if (PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[1].right <= WINSIZEY)
+				{
+					PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[1].top);
+				}
+				PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[2].top);
+				PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[3].top);
+			}
+
+			//이전
+			if (PLAYERMANAGER->getPlayer()[3]->getIsSelect())
+			{
+				//이동범위
+				PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+				//공격범위
+				PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[0].top);
+				PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[1].top);
+				PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[2].top);
+				if (PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[3].right <= WINSIZEY)
+				{
+					PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[3].top);
+					PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[4].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[4].top);
+					PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[5].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[5].top);
+				}
+				PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[6].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[6].top);
+				PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[7].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[7].top);
+			}
+
+			//조홍
+			if (PLAYERMANAGER->getPlayer()[4]->getIsSelect())
+			{
+				//이동범위
+				PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+				//공격범위
+				PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[0].top);
+				PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[1].top);
+				PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[2].top);
+				if (PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[3].right <= WINSIZEY)
+				{
+					PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[3].top);
+					PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[4].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[4].top);
+					PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[5].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[5].top);
+				}
+				PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[6].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[6].top);
+				PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[7].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[7].top);
+			}
+
+			//조인
+			if (PLAYERMANAGER->getPlayer()[5]->getIsSelect())
+			{
+				//이동범위
+				PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+				//공격범위
+				PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[0].top);
+				if (PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[1].right <= WINSIZEY)
+				{
+					PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[1].top);
+				}
+				PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[2].top);
+				PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[3].top);
+			}
+
+			//조조
+			if (PLAYERMANAGER->getPlayer()[6]->getIsSelect())
+			{
+				//이동범위
+				PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+				//공격범위
+				PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[0].top);
+				if (PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[1].right <= WINSIZEY)
+				{
+					PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[1].top);
+				}
+				PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[2].top);
+				PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().moveAtkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[3].top);
+			}
 		}
-		//
-			//공격 버튼을 클릭하면 공격범위를 보여준다.
-		//	//악진
-		//	if (PLAYERMANAGER->getAgjin()->getIsAtkRng())
-		//	{
-		//		PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[0].top);
-		//		PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[1].top);
-		//		PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[2].top);
-		//		if (PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[3].right <= WINSIZEY)
-		//		{
-		//			PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[3].top);
-		//			PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[4].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[4].top);
-		//			PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[5].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[5].top);
-		//		}
-		//		PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[6].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[6].top);
-		//		PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[7].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[7].top);
-		//	}
-		//
-		//	//하후돈
-		//	if (PLAYERMANAGER->getHahudon()->getIsAtkRng())
-		//	{
-		//		PLAYERMANAGER->getHahudon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[0].top);
-		//		if (PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[1].right <= WINSIZEY)
-		//			PLAYERMANAGER->getHahudon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[1].top);
-		//		PLAYERMANAGER->getHahudon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[2].top);
-		//		PLAYERMANAGER->getHahudon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rcAtk[3].top);
-		//	}
-		//
-		//	//하후연
-		//	if (PLAYERMANAGER->getHahuyeon()->getIsAtkRng())
-		//	{
-		//		PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[0].top);
-		//		if (PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[1].right <= WINSIZEY)
-		//			PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[1].top);
-		//		PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[2].top);
-		//		PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rcAtk[3].top);
-		//	}
-		//
-		//	//이전
-		//	if (PLAYERMANAGER->getIjeon()->getIsAtkRng())
-		//	{
-		//		PLAYERMANAGER->getIjeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[0].top);
-		//		PLAYERMANAGER->getIjeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[1].top);
-		//		PLAYERMANAGER->getIjeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[2].top);
-		//		if (PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[3].right <= WINSIZEY)
-		//		{
-		//			PLAYERMANAGER->getIjeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[3].top);
-		//			PLAYERMANAGER->getIjeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[4].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[4].top);
-		//			PLAYERMANAGER->getIjeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[5].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[5].top);
-		//		}
-		//		PLAYERMANAGER->getIjeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[6].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[6].top);
-		//		PLAYERMANAGER->getIjeon()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[7].left, PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rcAtk[7].top);
-		//	}
-		//
-		//	//조홍
-		//	if (PLAYERMANAGER->getJohong()->getIsAtkRng())
-		//	{
-		//		PLAYERMANAGER->getJohong()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[0].top);
-		//		PLAYERMANAGER->getJohong()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[1].top);
-		//		PLAYERMANAGER->getJohong()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[2].top);
-		//		if (PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[3].right <= WINSIZEY)
-		//		{
-		//			PLAYERMANAGER->getJohong()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[3].top);
-		//			PLAYERMANAGER->getJohong()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[4].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[4].top);
-		//			PLAYERMANAGER->getJohong()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[5].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[5].top);
-		//		}
-		//		PLAYERMANAGER->getJohong()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[6].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[6].top);
-		//		PLAYERMANAGER->getJohong()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[7].left, PLAYERMANAGER->getJohong()->getPlayerVector()[0].rcAtk[7].top);
-		//	}
-		//
-		//	//조인
-		//	if (PLAYERMANAGER->getJoin()->getIsAtkRng())
-		//	{
-		//		PLAYERMANAGER->getJoin()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[0].top);
-		//		if (PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[1].right <= WINSIZEY)
-		//			PLAYERMANAGER->getJoin()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[1].top);
-		//		PLAYERMANAGER->getJoin()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[2].top);
-		//		PLAYERMANAGER->getJoin()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getJoin()->getPlayerVector()[0].rcAtk[3].top);
-		//	}
-		//
-		//	//조조
-		//	if (PLAYERMANAGER->getJojo()->getIsAtkRng())
-		//	{
-		//		PLAYERMANAGER->getJojo()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[0].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[0].top);
-		//		if (PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].right <= WINSIZEY)
-		//			PLAYERMANAGER->getJojo()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[1].top);
-		//		PLAYERMANAGER->getJojo()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[2].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[2].top);
-		//		PLAYERMANAGER->getJojo()->getPlayerVector()[0].atkRngImg->render(hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[3].left, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rcAtk[3].top);
+	}
+
+	//공격 버튼을 클릭하면 공격범위를 보여준다.
+	//악진
+	if (PLAYERMANAGER->getPlayer()[0]->getIsAtkRng())
+	{
+		PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[0].top);
+		PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[1].top);
+		PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[2].top);
+		if (PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[3].right <= WINSIZEY)
+		{
+			PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[3].top);
+			PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[4].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[4].top);
+			PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[5].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[5].top);
+		}
+		PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[6].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[6].top);
+		PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[7].left, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rcAtk[7].top);
+	}
+
+	//하후돈
+	if (PLAYERMANAGER->getPlayer()[1]->getIsAtkRng())
+	{
+		PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[0].top);
+		if (PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[1].right <= WINSIZEY)
+		{
+			PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[1].top);
+		}
+		PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[2].top);
+		PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[1]->getPlayerInfo().rcAtk[3].top);
+	}
+
+	//하후연
+	if (PLAYERMANAGER->getPlayer()[2]->getIsAtkRng())
+	{
+		PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[0].top);
+		if (PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[1].right <= WINSIZEY)
+		{
+			PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[1].top);
+		}
+		PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[2].top);
+		PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[2]->getPlayerInfo().rcAtk[3].top);
+	}
+
+	//이전
+	if (PLAYERMANAGER->getPlayer()[3]->getIsAtkRng())
+	{
+		PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[0].top);
+		PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[1].top);
+		PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[2].top);
+		if (PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[3].right <= WINSIZEY)
+		{
+			PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[3].top);
+			PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[4].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[4].top);
+			PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[5].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[5].top);
+		}
+		PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[6].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[6].top);
+		PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[7].left, PLAYERMANAGER->getPlayer()[3]->getPlayerInfo().rcAtk[7].top);
+	}
+
+	//조홍
+	if (PLAYERMANAGER->getPlayer()[4]->getIsAtkRng())
+	{
+		PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[0].top);
+		PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[1].top);
+		PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[2].top);
+		if (PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[3].right <= WINSIZEY)
+		{
+			PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[3].top);
+			PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[4].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[4].top);
+			PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[5].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[5].top);
+		}
+		PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[6].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[6].top);
+		PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[7].left, PLAYERMANAGER->getPlayer()[4]->getPlayerInfo().rcAtk[7].top);
+	}
+
+	//조인
+	if (PLAYERMANAGER->getPlayer()[5]->getIsAtkRng())
+	{
+		PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[0].top);
+		if (PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[1].right <= WINSIZEY)
+		{
+			PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[1].top);
+		}
+		PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[2].top);
+		PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[5]->getPlayerInfo().rcAtk[3].top);
+	}
+
+	if (PLAYERMANAGER->getPlayer()[6]->getIsAtkRng())
+	{
+		//조조
+		PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[0].left, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[0].top);
+		if (PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[1].right <= WINSIZEY)
+		{
+			PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[1].left, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[1].top);
+		}
+		PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[2].left, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[2].top);
+		PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().atkRngImg->render(hdc, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[3].left, PLAYERMANAGER->getPlayer()[6]->getPlayerInfo().rcAtk[3].top);
 	}
 }
 
@@ -356,186 +353,187 @@ void MainMap::friendDraw(HDC hdc)
 		if (tiles[i].flood)
 		{
 			//도겸
-			if (FRIENDMANAGER->getDogyeom()->getIsSelect())
+			if (FRIENDMANAGER->getFriend()[0]->getIsSelect())
 			{
 				//이동범위
-				FRIENDMANAGER->getDogyeom()->getFriendVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+				FRIENDMANAGER->getFriend()[0]->getFriendInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
 
 				//공격범위
-				FRIENDMANAGER->getDogyeom()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[0].top);
-				if (FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[1].right <= WINSIZEY)
+				FRIENDMANAGER->getFriend()[0]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[0].top);
+				if (FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[1].right <= WINSIZEY)
 				{
-					FRIENDMANAGER->getDogyeom()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[1].top);
+					FRIENDMANAGER->getFriend()[0]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[1].top);
 				}
-				FRIENDMANAGER->getDogyeom()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[2].top);
-				FRIENDMANAGER->getDogyeom()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[3].top);
+				FRIENDMANAGER->getFriend()[0]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[2].top);
+				FRIENDMANAGER->getFriend()[0]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[3].top);
 			}
 
 			//관우
-			if (FRIENDMANAGER->getGwanu()->getIsSelect())
+			if (FRIENDMANAGER->getFriend()[1]->getIsSelect())
 			{
 				//이동범위
-				FRIENDMANAGER->getGwanu()->getFriendVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+				FRIENDMANAGER->getFriend()[1]->getFriendInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
 
 				//공격범위
-				FRIENDMANAGER->getGwanu()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[0].top);
-				if (FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[1].right <= WINSIZEY)
+				FRIENDMANAGER->getFriend()[1]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[0].top);
+				if (FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[1].right <= WINSIZEY)
 				{
-					FRIENDMANAGER->getGwanu()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[1].top);
+					FRIENDMANAGER->getFriend()[1]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[1].top);
 				}
-				FRIENDMANAGER->getGwanu()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[2].top);
-				FRIENDMANAGER->getGwanu()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[3].top);
+				FRIENDMANAGER->getFriend()[1]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[2].top);
+				FRIENDMANAGER->getFriend()[1]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[3].top);
 			}
 
 			//장비
-			if (FRIENDMANAGER->getJangbi()->getIsSelect())
+			if (FRIENDMANAGER->getFriend()[2]->getIsSelect())
 			{
 				//이동범위
-				FRIENDMANAGER->getJangbi()->getFriendVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+				FRIENDMANAGER->getFriend()[2]->getFriendInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
 
 				//공격범위
-				FRIENDMANAGER->getJangbi()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[0].top);
-				if (FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[1].right <= WINSIZEY)
+				FRIENDMANAGER->getFriend()[2]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[0].top);
+				if (FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[1].right <= WINSIZEY)
 				{
-					FRIENDMANAGER->getJangbi()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[1].top);
+					FRIENDMANAGER->getFriend()[2]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[1].top);
 				}
-				FRIENDMANAGER->getJangbi()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[2].top);
-				FRIENDMANAGER->getJangbi()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[3].top);
+				FRIENDMANAGER->getFriend()[2]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[2].top);
+				FRIENDMANAGER->getFriend()[2]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[3].top);
+			}
+
+			//원소
+			if (FRIENDMANAGER->getFriend()[3]->getIsSelect())
+			{
+				//이동범위
+				FRIENDMANAGER->getFriend()[3]->getFriendInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+				//공격범위
+				FRIENDMANAGER->getFriend()[3]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[0].top);
+				if (FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[1].right <= WINSIZEY)
+				{
+					FRIENDMANAGER->getFriend()[3]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[1].top);
+				}
+				FRIENDMANAGER->getFriend()[3]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[2].top);
+				FRIENDMANAGER->getFriend()[3]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[3].top);
+			}
+
+			//유비
+			if (FRIENDMANAGER->getFriend()[4]->getIsSelect())
+			{
+				//이동범위
+				FRIENDMANAGER->getFriend()[4]->getFriendInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+				//공격범위
+				FRIENDMANAGER->getFriend()[4]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[0].top);
+				if (FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[1].right <= WINSIZEY)
+				{
+					FRIENDMANAGER->getFriend()[4]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[1].top);
+				}
+				FRIENDMANAGER->getFriend()[4]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[2].top);
+				FRIENDMANAGER->getFriend()[4]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[3].top);
 			}
 
 			//우군보병
-			for (int j = 0; j < 4; j++)
+			for (int j = 5; j < 9; j++)
 			{
 				if (FRIENDMANAGER->getFriend()[j]->getIsSelect())
 				{
 					//이동범위
-					//FRIENDMANAGER->getFriend()[i]->getFriendVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-					auto rngImage = FRIENDMANAGER->getFriend()[j]->getFriendVector()[0].moveRngImg;
-					rngImage->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+					FRIENDMANAGER->getFriend()[j]->getFriendInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
 
 					//공격범위
-					//FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].top);
-					//FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].top);
-					//FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].top);
-					//if (FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].right <= WINSIZEY)
-					//{
-					//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].top);
-					//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].top);
-					//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].top);
-					//}
-					//FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].top);
-					//FRIENDMANAGER->getSoldier()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].top);
+					FRIENDMANAGER->getFriend()[j]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[0].top);
+					FRIENDMANAGER->getFriend()[j]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[1].top);
+					FRIENDMANAGER->getFriend()[j]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[2].top);
+					if (FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[3].right <= WINSIZEY)
+					{
+						FRIENDMANAGER->getFriend()[j]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[3].top);
+						FRIENDMANAGER->getFriend()[j]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[4].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[4].top);
+						FRIENDMANAGER->getFriend()[j]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[5].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[5].top);
+					}
+					FRIENDMANAGER->getFriend()[j]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[6].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[6].top);
+					FRIENDMANAGER->getFriend()[j]->getFriendInfo().moveAtkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[7].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[7].top);
 				}
-			}
-
-			//원소
-			if (FRIENDMANAGER->getWonso()->getIsSelect())
-			{
-				//이동범위
-				FRIENDMANAGER->getWonso()->getFriendVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-				//공격범위
-				FRIENDMANAGER->getWonso()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[0].top);
-				if (FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[1].right <= WINSIZEY)
-				{
-					FRIENDMANAGER->getWonso()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[1].top);
-				}
-				FRIENDMANAGER->getWonso()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[2].top);
-				FRIENDMANAGER->getWonso()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[3].top);
-			}
-
-			//유비
-			if (FRIENDMANAGER->getYubi()->getIsSelect())
-			{
-				//이동범위
-				FRIENDMANAGER->getYubi()->getFriendVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-				//공격범위
-				FRIENDMANAGER->getYubi()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[0].top);
-				if (FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[1].right <= WINSIZEY)
-				{
-					FRIENDMANAGER->getYubi()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[1].top);
-				}
-				FRIENDMANAGER->getYubi()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[2].top);
-				FRIENDMANAGER->getYubi()->getFriendVector()[0].moveAtkRngImg->render(hdc, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[3].top);
 			}
 		}
 	}
 
 	//도겸
-	if (FRIENDMANAGER->getDogyeom()->getIsAtkRng())
+	if (FRIENDMANAGER->getFriend()[0]->getIsAtkRng())
 	{
-		FRIENDMANAGER->getDogyeom()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[0].top);
-		if (FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[1].right <= WINSIZEY)
+		FRIENDMANAGER->getFriend()[0]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[0].top);
+		if (FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[1].right <= WINSIZEY)
 		{
-			FRIENDMANAGER->getDogyeom()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[1].top);
+			FRIENDMANAGER->getFriend()[0]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[1].top);
 		}
-		FRIENDMANAGER->getDogyeom()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[2].top);
-		FRIENDMANAGER->getDogyeom()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rcAtk[3].top);
+		FRIENDMANAGER->getFriend()[0]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[2].top);
+		FRIENDMANAGER->getFriend()[0]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rcAtk[3].top);
 	}
 
 	//관우
-	if (FRIENDMANAGER->getGwanu()->getIsAtkRng())
+	if (FRIENDMANAGER->getFriend()[1]->getIsAtkRng())
 	{
-		FRIENDMANAGER->getGwanu()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[0].top);
-		if (FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[1].right <= WINSIZEY)
+		FRIENDMANAGER->getFriend()[1]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[0].top);
+		if (FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[1].right <= WINSIZEY)
 		{
-			FRIENDMANAGER->getGwanu()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[1].top);
+			FRIENDMANAGER->getFriend()[1]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[1].top);
 		}
-		FRIENDMANAGER->getGwanu()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[2].top);
-		FRIENDMANAGER->getGwanu()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getGwanu()->getFriendVector()[0].rcAtk[3].top);
+		FRIENDMANAGER->getFriend()[1]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[2].top);
+		FRIENDMANAGER->getFriend()[1]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[1]->getFriendInfo().rcAtk[3].top);
 	}
 
 	//장비
-	if (FRIENDMANAGER->getJangbi()->getIsAtkRng())
+	if (FRIENDMANAGER->getFriend()[2]->getIsAtkRng())
 	{
-		FRIENDMANAGER->getJangbi()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[0].top);
-		if (FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[1].right <= WINSIZEY)
+		FRIENDMANAGER->getFriend()[2]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[0].top);
+		if (FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[1].right <= WINSIZEY)
 		{
-			FRIENDMANAGER->getJangbi()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[1].top);
+			FRIENDMANAGER->getFriend()[2]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[1].top);
 		}
-		FRIENDMANAGER->getJangbi()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[2].top);
-		FRIENDMANAGER->getJangbi()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getJangbi()->getFriendVector()[0].rcAtk[3].top);
+		FRIENDMANAGER->getFriend()[2]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[2].top);
+		FRIENDMANAGER->getFriend()[2]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[2]->getFriendInfo().rcAtk[3].top);
 	}
 
-	//우군보병
-	//if (FRIENDMANAGER->getSoldier()->getIsAtkRng())
-	//{
-	//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[0].top);
-	//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[1].top);
-	//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[2].top);
-	//	if (FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].right <= WINSIZEY)
-	//	{
-	//		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[3].top);
-	//		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[4].top);
-	//		FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[5].top);
-	//	}
-	//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[6].top);
-	//	FRIENDMANAGER->getSoldier()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].left, FRIENDMANAGER->getSoldier()->getFriendVector()[0].rcAtk[7].top);
-	//}
-
 	//원소
-	if (FRIENDMANAGER->getWonso()->getIsAtkRng())
+	if (FRIENDMANAGER->getFriend()[3]->getIsAtkRng())
 	{
-		FRIENDMANAGER->getWonso()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[0].top);
-		if (FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[1].right <= WINSIZEY)
+		FRIENDMANAGER->getFriend()[3]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[0].top);
+		if (FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[1].right <= WINSIZEY)
 		{
-			FRIENDMANAGER->getWonso()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[1].top);
+			FRIENDMANAGER->getFriend()[3]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[1].top);
 		}
-		FRIENDMANAGER->getWonso()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[2].top);
-		FRIENDMANAGER->getWonso()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getWonso()->getFriendVector()[0].rcAtk[3].top);
+		FRIENDMANAGER->getFriend()[3]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[2].top);
+		FRIENDMANAGER->getFriend()[3]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[3]->getFriendInfo().rcAtk[3].top);
 	}
 
 	//유비
-	if (FRIENDMANAGER->getYubi()->getIsAtkRng())
+	if (FRIENDMANAGER->getFriend()[4]->getIsAtkRng())
 	{
-		FRIENDMANAGER->getYubi()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[0].left, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[0].top);
-		if (FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[1].right <= WINSIZEY)
+		FRIENDMANAGER->getFriend()[4]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[0].top);
+		if (FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[1].right <= WINSIZEY)
 		{
-			FRIENDMANAGER->getYubi()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[1].left, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[1].top);
+			FRIENDMANAGER->getFriend()[4]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[1].top);
 		}
-		FRIENDMANAGER->getYubi()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[2].left, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[2].top);
-		FRIENDMANAGER->getYubi()->getFriendVector()[0].atkRngImg->render(hdc, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[3].left, FRIENDMANAGER->getYubi()->getFriendVector()[0].rcAtk[3].top);
+		FRIENDMANAGER->getFriend()[4]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[2].top);
+		FRIENDMANAGER->getFriend()[4]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[4]->getFriendInfo().rcAtk[3].top);
+	}
+
+	//우군보병
+	for (int j = 5; j < 9; j++)
+	{
+		if (FRIENDMANAGER->getFriend()[j]->getIsAtkRng())
+		{
+			FRIENDMANAGER->getFriend()[j]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[0].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[0].top);
+			FRIENDMANAGER->getFriend()[j]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[1].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[1].top);
+			FRIENDMANAGER->getFriend()[j]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[2].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[2].top);
+			if (FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[3].right <= WINSIZEY)
+			{
+				FRIENDMANAGER->getFriend()[j]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[3].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[3].top);
+				FRIENDMANAGER->getFriend()[j]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[4].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[4].top);
+				FRIENDMANAGER->getFriend()[j]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[5].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[5].top);
+			}
+			FRIENDMANAGER->getFriend()[j]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[6].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[6].top);
+			FRIENDMANAGER->getFriend()[j]->getFriendInfo().atkRngImg->render(hdc, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[7].left, FRIENDMANAGER->getFriend()[j]->getFriendInfo().rcAtk[7].top);
+		}
 	}
 }
 
@@ -546,97 +544,38 @@ void MainMap::enemyDraw(HDC hdc)
 	{
 		if (tiles[i].flood)
 		{
-			//번주
-			if (ENEMYMANAGER->getBeonju()->getIsSelect())
+			for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
 			{
-				//이동범위
-				ENEMYMANAGER->getBeonju()->getEnemyVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-				//공격범위
-				ENEMYMANAGER->getBeonju()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getBeonju()->getEnemyVector()[0].rcAtk[0].left, ENEMYMANAGER->getBeonju()->getEnemyVector()[0].rcAtk[0].top);
-				if (ENEMYMANAGER->getBeonju()->getEnemyVector()[0].rcAtk[1].right <= WINSIZEY)
+				//번주
+				if (ENEMYMANAGER->getEnemy()[j]->getIsSelect())
 				{
-					ENEMYMANAGER->getBeonju()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getBeonju()->getEnemyVector()[0].rcAtk[1].left, ENEMYMANAGER->getBeonju()->getEnemyVector()[0].rcAtk[1].top);
+					//이동범위
+					ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+					//공격범위
+					ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().moveAtkRngImg->render(hdc, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[0].left, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[0].top);
+					if (ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[1].right <= WINSIZEY)
+					{
+						ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().moveAtkRngImg->render(hdc, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[1].left, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[1].top);
+					}
+					ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().moveAtkRngImg->render(hdc, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[2].left, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[2].top);
+					ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().moveAtkRngImg->render(hdc, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[3].left, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[3].top);
 				}
-				ENEMYMANAGER->getBeonju()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getBeonju()->getEnemyVector()[0].rcAtk[2].left, ENEMYMANAGER->getBeonju()->getEnemyVector()[0].rcAtk[2].top);
-				ENEMYMANAGER->getBeonju()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getBeonju()->getEnemyVector()[0].rcAtk[3].left, ENEMYMANAGER->getBeonju()->getEnemyVector()[0].rcAtk[3].top);
-			}
-
-			//동탁
-			if (ENEMYMANAGER->getDongtak()->getIsSelect())
-			{
-				//이동범위
-				ENEMYMANAGER->getDongtak()->getEnemyVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-				//공격범위
-				ENEMYMANAGER->getDongtak()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getDongtak()->getEnemyVector()[0].rcAtk[0].left, ENEMYMANAGER->getDongtak()->getEnemyVector()[0].rcAtk[0].top);
-				if (ENEMYMANAGER->getDongtak()->getEnemyVector()[0].rcAtk[1].right <= WINSIZEY)
-				{
-					ENEMYMANAGER->getDongtak()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getDongtak()->getEnemyVector()[0].rcAtk[1].left, ENEMYMANAGER->getDongtak()->getEnemyVector()[0].rcAtk[1].top);
-				}
-				ENEMYMANAGER->getDongtak()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getDongtak()->getEnemyVector()[0].rcAtk[2].left, ENEMYMANAGER->getDongtak()->getEnemyVector()[0].rcAtk[2].top);
-				ENEMYMANAGER->getDongtak()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getDongtak()->getEnemyVector()[0].rcAtk[3].left, ENEMYMANAGER->getDongtak()->getEnemyVector()[0].rcAtk[3].top);
-			}
-
-			//이유
-			if (ENEMYMANAGER->getIyu()->getIsSelect())
-			{
-				//이동범위
-				ENEMYMANAGER->getIyu()->getEnemyVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-				//공격범위
-				ENEMYMANAGER->getIyu()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getIyu()->getEnemyVector()[0].rcAtk[0].left, ENEMYMANAGER->getIyu()->getEnemyVector()[0].rcAtk[0].top);
-				if (ENEMYMANAGER->getIyu()->getEnemyVector()[0].rcAtk[1].right <= WINSIZEY)
-				{
-					ENEMYMANAGER->getIyu()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getIyu()->getEnemyVector()[0].rcAtk[1].left, ENEMYMANAGER->getIyu()->getEnemyVector()[0].rcAtk[1].top);
-				}
-				ENEMYMANAGER->getIyu()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getIyu()->getEnemyVector()[0].rcAtk[2].left, ENEMYMANAGER->getIyu()->getEnemyVector()[0].rcAtk[2].top);
-				ENEMYMANAGER->getIyu()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getIyu()->getEnemyVector()[0].rcAtk[3].left, ENEMYMANAGER->getIyu()->getEnemyVector()[0].rcAtk[3].top);
-			}
-
-			//장제
-			if (ENEMYMANAGER->getJangje()->getIsSelect())
-			{
-				//이동범위
-				ENEMYMANAGER->getJangje()->getEnemyVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-				//공격범위
-				ENEMYMANAGER->getJangje()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getJangje()->getEnemyVector()[0].rcAtk[0].left, ENEMYMANAGER->getJangje()->getEnemyVector()[0].rcAtk[0].top);
-				if (ENEMYMANAGER->getJangje()->getEnemyVector()[0].rcAtk[1].right <= WINSIZEY)
-				{
-					ENEMYMANAGER->getJangje()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getJangje()->getEnemyVector()[0].rcAtk[1].left, ENEMYMANAGER->getJangje()->getEnemyVector()[0].rcAtk[1].top);
-				}
-				ENEMYMANAGER->getJangje()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getJangje()->getEnemyVector()[0].rcAtk[2].left, ENEMYMANAGER->getJangje()->getEnemyVector()[0].rcAtk[2].top);
-				ENEMYMANAGER->getJangje()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getJangje()->getEnemyVector()[0].rcAtk[3].left, ENEMYMANAGER->getJangje()->getEnemyVector()[0].rcAtk[3].top);
-			}
-
-			//여포
-			if (ENEMYMANAGER->getYeopo()->getIsSelect())
-			{
-				//이동범위
-				ENEMYMANAGER->getYeopo()->getEnemyVector()[0].moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-				//공격범위
-				ENEMYMANAGER->getYeopo()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[0].left, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[0].top);
-				if (ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[1].right <= WINSIZEY)
-				{
-					ENEMYMANAGER->getYeopo()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[1].left, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[1].top);
-				}
-				ENEMYMANAGER->getYeopo()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[2].left, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[2].top);
-				ENEMYMANAGER->getYeopo()->getEnemyVector()[0].moveAtkRngImg->render(hdc, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[3].left, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[3].top);
 			}
 		}
 	}
 
-	//여포
-	if (ENEMYMANAGER->getYeopo()->getIsAtkRng())
+	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
 	{
-		ENEMYMANAGER->getYeopo()->getEnemyVector()[0].atkRngImg->render(hdc, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[0].left, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[0].top);
-		if (ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[1].right <= WINSIZEY)
+		if (ENEMYMANAGER->getEnemy()[j]->getIsAtkRng())
 		{
-			ENEMYMANAGER->getYeopo()->getEnemyVector()[0].atkRngImg->render(hdc, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[1].left, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[1].top);
+			ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().atkRngImg->render(hdc, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[0].left, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[0].top);
+			if (ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[1].right <= WINSIZEY)
+			{
+				ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().atkRngImg->render(hdc, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[1].left, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[1].top);
+			}
+			ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().atkRngImg->render(hdc, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[2].left, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[2].top);
+			ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().atkRngImg->render(hdc, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[3].left, ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rcAtk[3].top);
 		}
-		ENEMYMANAGER->getYeopo()->getEnemyVector()[0].atkRngImg->render(hdc, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[2].left, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[2].top);
-		ENEMYMANAGER->getYeopo()->getEnemyVector()[0].atkRngImg->render(hdc, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[3].left, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rcAtk[3].top);
 	}
 }

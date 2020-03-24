@@ -4,7 +4,7 @@
 class Beonju : public EnemyBase
 {
 private:
-	vector<EnemyInfo> vBeonju;
+	EnemyInfo beonju;
 
 public:
 	Beonju();
@@ -16,16 +16,15 @@ public:
 	virtual void update();
 	virtual void render(HDC hdc);
 
-	void mouseMove();
-	void enemyMove();
-	void enemyAstar();
-	void enemyMenu();
-	void enemyCollision();
-	void enemyAnimation();
-	void enemyState();
+	virtual void mouseMove();
+	virtual void enemyMove();
+	virtual void enemyAstar();
+	virtual void enemyMenu();
+	virtual void enemyCollision();
+	virtual void enemyAnimation();
+	virtual void enemyState();
 
-	void setPosition(RECT rc);
+	virtual void setPosition(RECT rc);
 
-	//벡터를 반환하는 함수
-	vector<EnemyInfo> getEnemyVector() { return vBeonju; }
+	virtual EnemyInfo getEnemyInfo() { return beonju; }
 };

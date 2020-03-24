@@ -4,7 +4,6 @@
 class Jojo : public PlayerBase
 {
 private:
-	//vector<PlayerInfo> vJojo;
 	PlayerInfo jojo;
 
 public:
@@ -27,6 +26,5 @@ public:
 
 	void setPosition(RECT rc);
 
-	//벡터를 반환하는 함수
-	//vector<PlayerInfo> getPlayerVector() { return vJojo; }
+	virtual PlayerInfo getPlayerInfo() { return jojo; }
 };

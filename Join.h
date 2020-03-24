@@ -4,8 +4,8 @@
 class Join : public PlayerBase
 {
 private:
-	//vector<PlayerInfo> vJoin;
 	PlayerInfo join;
+
 public:
 	Join();
 	~Join();
@@ -26,6 +26,5 @@ public:
 
 	void setPosition(RECT rc);
 
-	//벡터를 반환하는 함수
-//	vector<PlayerInfo> getPlayerVector() { return vJoin; }
+	virtual PlayerInfo getPlayerInfo() { return join; }
 };

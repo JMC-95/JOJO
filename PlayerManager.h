@@ -12,7 +12,7 @@ class PlayerManager : public singletonBase<PlayerManager>
 {
 private:
 	vector<PlayerBase*> vPlayer;
-	
+
 public:
 	PlayerManager();
 	~PlayerManager();
@@ -22,5 +22,6 @@ public:
 	void update();
 	void render(HDC hdc);
 
+	//베이스 클래스의 벡터를 반환하는 함수
 	vector<PlayerBase*>& getPlayer() { return vPlayer; }
 };

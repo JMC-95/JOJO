@@ -40,7 +40,7 @@ protected:
 	vector<int> closeList;		//클로즈리스트 벡터
 	vector<int>::iterator iter;
 	stack<tagTile> optimalPath;	//찾은 길을 저장해두는 스택
-	
+
 	PlayerDirection pDirection;	//캐릭터 방향
 	PlayerDirection sDirection;	//캐릭터 방향 저장용
 	MainMap* mainMap;			//맵을 불러옴
@@ -50,7 +50,6 @@ protected:
 	progressBar* _Exp;			//EXP Bar
 
 	RECT rcMenu[5];				//메뉴 렉트
-	RECT temp;
 
 protected:	//일반 변수
 	int currentHp, maxHp;	//체력

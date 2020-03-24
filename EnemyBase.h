@@ -49,9 +49,9 @@ protected:
 	progressBar* _Exp;			//EXP Bar
 
 	RECT rcMenu[5];				//메뉴 렉트
-	RECT temp;
 
 protected:	//일반 변수
+	int number;				//번호
 	int currentHp, maxHp;	//체력
 	int currentMp, maxMp;	//마력
 	int currentExp, maxExp;	//경험치
@@ -93,6 +93,16 @@ public:
 	virtual void update();
 	virtual void render(HDC hdc);
 
+	virtual void mouseMove();
+	virtual void enemyMove();
+	virtual void enemyAstar();
+	virtual void enemyMenu();
+	virtual void enemyCollision();
+	virtual void enemyAnimation();
+	virtual void enemyState();
+
+	virtual void setPosition(RECT rc);
+
 	//A* 및 FloodFill
 	void aStar();
 	void floodFill(int tile, int moveCount);
@@ -133,4 +143,6 @@ public:
 	progressBar* getProgressBarHp() { return _Hp; }
 	progressBar* getProgressBarMp() { return _Mp; }
 	progressBar* getProgressBarExp() { return _Exp; }
+
+	virtual EnemyInfo getEnemyInfo() = 0;
 };

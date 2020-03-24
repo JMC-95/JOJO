@@ -4,7 +4,7 @@
 class Yubi : public FriendlyBase
 {
 private:
-	vector<FriendInfo> vYubi;
+	FriendInfo yubi;
 
 public:
 	Yubi();
@@ -26,6 +26,5 @@ public:
 
 	virtual void setPosition(RECT rc);
 
-	//벡터를 반환하는 함수
-	vector<FriendInfo> getFriendVector() { return vYubi; }
+	virtual FriendInfo getFriendInfo() { return yubi; }
 };

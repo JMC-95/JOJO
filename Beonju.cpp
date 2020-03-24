@@ -11,8 +11,6 @@ Beonju::~Beonju()
 
 HRESULT Beonju::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * enemyImg, const char * atkImg, const char * blockImg)
 {
-	//구조체 정보 기입
-	EnemyInfo beonju;
 	//이미지 및 애니메이션
 	beonju.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	beonju.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -30,7 +28,6 @@ HRESULT Beonju::init(const char * moveImg, const char * mAtkImg, const char * aR
 	beonju.agi = 62;			//순발력
 	beonju.ten = 50;			//사기
 	beonju.movingCount = 6;		//이동력
-	vBeonju.push_back(beonju);
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -82,242 +79,230 @@ void Beonju::update()
 
 void Beonju::render(HDC hdc)
 {
-	for (int k = 0; k < vBeonju.size(); k++)
+	if (isTurn)
 	{
-		if (isTurn)
+		if (isAtk)
 		{
-			if (isAtk)
-			{
-				vBeonju[k].atkImg->aniRender(hdc, vBeonju[k].rc.left - 8, vBeonju[k].rc.top - 8, enemyAni);
-			}
-			else if (isHit)
-			{
-				vBeonju[k].blockImg->frameRender(hdc, vBeonju[k].rc.left, vBeonju[k].rc.top, 0, 4);
+			beonju.atkImg->aniRender(hdc, beonju.rc.left - 8, beonju.rc.top - 8, enemyAni);
+		}
+		else if (isHit)
+		{
+			beonju.blockImg->frameRender(hdc, beonju.rc.left, beonju.rc.top, 0, 4);
 
-				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
-				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
-				SetTextColor(hdc, RGB(255, 255, 255));
-				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vBeonju[k].rc.left, vBeonju[k].rc.top, str, strlen(str));
-				SelectObject(hdc, oldFont);
-				DeleteObject(myFont);
-			}
-			else
-			{
-				vBeonju[k].img->aniRender(hdc, vBeonju[k].rc.left, vBeonju[k].rc.top, enemyAni);
-			}
+			HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+			HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+			SetTextColor(hdc, RGB(255, 255, 255));
+			sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
+			TextOut(hdc, beonju.rc.left, beonju.rc.top, str, strlen(str));
+			SelectObject(hdc, oldFont);
+			DeleteObject(myFont);
 		}
 		else
 		{
-			if (isHit)
-			{
-				vBeonju[k].blockImg->frameRender(hdc, vBeonju[k].rc.left, vBeonju[k].rc.top, 0, 4);
+			beonju.img->aniRender(hdc, beonju.rc.left, beonju.rc.top, enemyAni);
+		}
+	}
+	else
+	{
+		if (isHit)
+		{
+			beonju.blockImg->frameRender(hdc, beonju.rc.left, beonju.rc.top, 0, 4);
 
-				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
-				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
-				SetTextColor(hdc, RGB(255, 255, 255));
-				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vBeonju[k].rc.left, vBeonju[k].rc.top, str, strlen(str));
-				SelectObject(hdc, oldFont);
-				DeleteObject(myFont);
-			}
-			else
-			{
-				vBeonju[k].img->frameAlphaRender(hdc, vBeonju[k].rc.left, vBeonju[k].rc.top, 0, frameY, 100);
-			}
+			HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+			HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+			SetTextColor(hdc, RGB(255, 255, 255));
+			sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
+			TextOut(hdc, beonju.rc.left, beonju.rc.top, str, strlen(str));
+			SelectObject(hdc, oldFont);
+			DeleteObject(myFont);
+		}
+		else
+		{
+			beonju.img->frameAlphaRender(hdc, beonju.rc.left, beonju.rc.top, 0, frameY, 100);
 		}
 	}
 }
 
 void Beonju::mouseMove()
 {
-	for (int k = 0; k < vBeonju.size(); k++)
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		if (PtInRect(&beonju.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 		{
-			if (PtInRect(&vBeonju[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
-				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				//선택한 타일 (캐릭터)
+				startTile = i;
+
+				isSelect = true;
+				isFind = false;
+				noPath = false;
+				startAstar = false;
+
+				//공격범위
+				for (int j = 0; j < 4; j++)
 				{
-					//선택한 타일 (캐릭터)
-					startTile = i;
-
-					isSelect = true;
-					isFind = false;
-					noPath = false;
-					startAstar = false;
-
-					//공격범위
-					for (int j = 0; j < 4; j++)
-					{
-						vBeonju[k].rcAtk[0] = RectMake(vBeonju[k].rc.left - 48, vBeonju[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vBeonju[k].rcAtk[1] = RectMake(vBeonju[k].rc.left + 48, vBeonju[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vBeonju[k].rcAtk[2] = RectMake(vBeonju[k].rc.left, vBeonju[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vBeonju[k].rcAtk[3] = RectMake(vBeonju[k].rc.left, vBeonju[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						atkList.push_back(vBeonju[k].rcAtk[j]);
-					}
-
-					//이동범위
-					if (!isStop)
-					{
-						floodFill(startTile, vBeonju[k].movingCount);
-					}
+					beonju.rcAtk[0] = RectMake(beonju.rc.left - 48, beonju.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					beonju.rcAtk[1] = RectMake(beonju.rc.left + 48, beonju.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					beonju.rcAtk[2] = RectMake(beonju.rc.left, beonju.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					beonju.rcAtk[3] = RectMake(beonju.rc.left, beonju.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(beonju.rcAtk[j]);
 				}
-			}
 
-			if (!PtInRect(&vBeonju[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
-			{
-				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				//이동범위
+				if (!isStop)
 				{
-					if (mainMap->getMap()[i].flood)
-					{
-						//선택한 맵의 x좌표와 y좌표
-						mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
-						mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
-						//선택한 타일 (목표)
-						endTile = i;
-
-						//이순간 Astar가 시작된다.
-						//Astar에 필요한 모든 것을 초기화 시켜주자.
-						openList.clear();
-						closeList.clear();
-
-						if (startTile != -1 && endTile != -1)
-						{
-							startAstar = true;
-							currentTile = startTile;
-
-							//시작 지점을 openList에 넣자
-							openList.push_back(currentTile);
-						}
-					}
-					else
-					{
-						isSelect = false;
-					}
-
-					for (int i = 0; i < TILE_X * TILE_Y; i++)
-					{
-						if (mainMap->getMap()[i].flood)
-						{
-							mainMap->getMap()[i].flood = false;
-						}
-					}
+					floodFill(startTile, beonju.movingCount);
 				}
 			}
 		}
 
-		enemyAstar();
-		enemyMenu();
-		enemyCollision();
+		if (!PtInRect(&beonju.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				if (mainMap->getMap()[i].flood)
+				{
+					//선택한 맵의 x좌표와 y좌표
+					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
+					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
+					//선택한 타일 (목표)
+					endTile = i;
+
+					//이순간 Astar가 시작된다.
+					//Astar에 필요한 모든 것을 초기화 시켜주자.
+					openList.clear();
+					closeList.clear();
+
+					if (startTile != -1 && endTile != -1)
+					{
+						startAstar = true;
+						currentTile = startTile;
+
+						//시작 지점을 openList에 넣자
+						openList.push_back(currentTile);
+					}
+				}
+				else
+				{
+					isSelect = false;
+				}
+
+				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				{
+					if (mainMap->getMap()[i].flood)
+					{
+						mainMap->getMap()[i].flood = false;
+					}
+				}
+			}
+		}
 	}
+
+	enemyAstar();
+	enemyMenu();
+	enemyCollision();
 }
 
 void Beonju::enemyMove()
 {
-	for (int k = 0; k < vBeonju.size(); k++)
+	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
+	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
+
+	if (!isMove)
 	{
-		stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
-		stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
-
-		if (!isMove)
+		if (enemyX > stackX)
 		{
-			if (enemyX > stackX)
-			{
-				eDirection = ENEMY_LEFT;
-			}
-			else if (enemyX < stackX)
-			{
-				eDirection = ENEMY_RIGHT;
-			}
-			else if (enemyY > stackY)
-			{
-				eDirection = ENEMY_UP;
-			}
-			else if (enemyY < stackY)
-			{
-				eDirection = ENEMY_DOWN;
-			}
-
-			isMove = true;
+			eDirection = ENEMY_LEFT;
+		}
+		else if (enemyX < stackX)
+		{
+			eDirection = ENEMY_RIGHT;
+		}
+		else if (enemyY > stackY)
+		{
+			eDirection = ENEMY_UP;
+		}
+		else if (enemyY < stackY)
+		{
+			eDirection = ENEMY_DOWN;
 		}
 
-		if (vBeonju[k].rc.left > 0 || vBeonju[k].rc.right < WINSIZEY ||
-			vBeonju[k].rc.top > 0 || vBeonju[k].rc.bottom < WINSIZEY)
-		{
-			switch (eDirection)
-			{
-			case ENEMY_LEFT:
-				enemyX -= speed;
-				vBeonju[k].rc = RectMakeCenter(enemyX, enemyY, vBeonju[k].img->getFrameWidth(), vBeonju[k].img->getFrameHeight());
-				break;
-			case ENEMY_RIGHT:
-				enemyX += speed;
-				vBeonju[k].rc = RectMakeCenter(enemyX, enemyY, vBeonju[k].img->getFrameWidth(), vBeonju[k].img->getFrameHeight());
-				break;
-			case ENEMY_UP:
-				enemyY -= speed;
-				vBeonju[k].rc = RectMakeCenter(enemyX, enemyY, vBeonju[k].img->getFrameWidth(), vBeonju[k].img->getFrameHeight());
-				break;
-			case ENEMY_DOWN:
-				enemyY += speed;
-				vBeonju[k].rc = RectMakeCenter(enemyX, enemyY, vBeonju[k].img->getFrameWidth(), vBeonju[k].img->getFrameHeight());
-				break;
-			}
+		isMove = true;
+	}
 
-			if (enemyX == stackX && enemyY == stackY)
-			{
-				isMove = false;
-				optimalPath.pop();
-			}
+	if (beonju.rc.left > 0 || beonju.rc.right < WINSIZEY ||
+		beonju.rc.top > 0 || beonju.rc.bottom < WINSIZEY)
+	{
+		switch (eDirection)
+		{
+		case ENEMY_LEFT:
+			enemyX -= speed;
+			beonju.rc = RectMakeCenter(enemyX, enemyY, beonju.img->getFrameWidth(), beonju.img->getFrameHeight());
+			break;
+		case ENEMY_RIGHT:
+			enemyX += speed;
+			beonju.rc = RectMakeCenter(enemyX, enemyY, beonju.img->getFrameWidth(), beonju.img->getFrameHeight());
+			break;
+		case ENEMY_UP:
+			enemyY -= speed;
+			beonju.rc = RectMakeCenter(enemyX, enemyY, beonju.img->getFrameWidth(), beonju.img->getFrameHeight());
+			break;
+		case ENEMY_DOWN:
+			enemyY += speed;
+			beonju.rc = RectMakeCenter(enemyX, enemyY, beonju.img->getFrameWidth(), beonju.img->getFrameHeight());
+			break;
+		}
+
+		if (enemyX == stackX && enemyY == stackY)
+		{
+			isMove = false;
+			optimalPath.pop();
 		}
 	}
 }
 
 void Beonju::enemyAstar()
 {
-	for (int k = 0; k < vBeonju.size(); k++)
+	//목표 타일을 클릭하면 A* 시작
+	if (startAstar && !isFind && !noPath)
 	{
-		//목표 타일을 클릭하면 A* 시작
-		if (startAstar && !isFind && !noPath)
+		while (!isFind)
 		{
-			while (!isFind)
-			{
-				aStar();
-			}
+			aStar();
 		}
+	}
 
-		//목표 타일을 클릭하면 캐릭터 이동
-		if (!optimalPath.empty())
+	//목표 타일을 클릭하면 캐릭터 이동
+	if (!optimalPath.empty())
+	{
+		if (!isStop)
+			enemyMove();
+
+		if (enemyX == mapX && enemyY == mapY)
 		{
-			if (!isStop)
-				enemyMove();
+			isStop = true;
+			isClick = true;
 
-			if (enemyX == mapX && enemyY == mapY)
+			//공격범위
+			for (int j = 0; j < 4; j++)
 			{
-				isStop = true;
-				isClick = true;
+				beonju.rcAtk[0] = RectMake(beonju.rc.left - 48, beonju.rc.top, TILE_WIDTH, TILE_HEIGHT);
+				beonju.rcAtk[1] = RectMake(beonju.rc.left + 48, beonju.rc.top, TILE_WIDTH, TILE_HEIGHT);
+				beonju.rcAtk[2] = RectMake(beonju.rc.left, beonju.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+				beonju.rcAtk[3] = RectMake(beonju.rc.left, beonju.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+				atkList.push_back(beonju.rcAtk[j]);
+			}
 
-				//공격범위
-				for (int j = 0; j < 4; j++)
-				{
-					vBeonju[k].rcAtk[0] = RectMake(vBeonju[k].rc.left - 48, vBeonju[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vBeonju[k].rcAtk[1] = RectMake(vBeonju[k].rc.left + 48, vBeonju[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vBeonju[k].rcAtk[2] = RectMake(vBeonju[k].rc.left, vBeonju[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vBeonju[k].rcAtk[3] = RectMake(vBeonju[k].rc.left, vBeonju[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					atkList.push_back(vBeonju[k].rcAtk[j]);
-				}
-
-				//메뉴선택 렉트
-				for (int j = 0; j < 5; j++)
-				{
-					rcMenu[0] = RectMake(vBeonju[k].rc.left - 97, vBeonju[k].rc.top - 30, 82, 20);
-					rcMenu[1] = RectMake(vBeonju[k].rc.left - 97, vBeonju[k].rc.top - 9, 82, 20);
-					rcMenu[2] = RectMake(vBeonju[k].rc.left - 97, vBeonju[k].rc.top + 12, 82, 20);
-					rcMenu[3] = RectMake(vBeonju[k].rc.left - 97, vBeonju[k].rc.top + 38, 82, 20);
-					rcMenu[4] = RectMake(vBeonju[k].rc.left - 97, vBeonju[k].rc.top + 63, 82, 20);
-					menuList.push_back(rcMenu[j]);
-				}
+			//메뉴선택 렉트
+			for (int j = 0; j < 5; j++)
+			{
+				rcMenu[0] = RectMake(beonju.rc.left - 97, beonju.rc.top - 30, 82, 20);
+				rcMenu[1] = RectMake(beonju.rc.left - 97, beonju.rc.top - 9, 82, 20);
+				rcMenu[2] = RectMake(beonju.rc.left - 97, beonju.rc.top + 12, 82, 20);
+				rcMenu[3] = RectMake(beonju.rc.left - 97, beonju.rc.top + 38, 82, 20);
+				rcMenu[4] = RectMake(beonju.rc.left - 97, beonju.rc.top + 63, 82, 20);
+				menuList.push_back(rcMenu[j]);
 			}
 		}
 	}
@@ -412,54 +397,51 @@ void Beonju::enemyState()
 
 void Beonju::enemyMenu()
 {
-	for (int k = 0; k < vBeonju.size(); k++)
+	//메뉴
+	if (isClick)
 	{
-		//메뉴
-		if (isClick)
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
-			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
-				if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
-				{
-					atkList.clear();
-					menuList.clear();
+				atkList.clear();
+				menuList.clear();
 
-					isAtkRng = true;
-					isClick = false;
-				}
-				if (PtInRect(&rcMenu[1], m_ptMouse))	//책략
-				{
-					atkList.clear();
-					menuList.clear();
+				isAtkRng = true;
+				isClick = false;
+			}
+			if (PtInRect(&rcMenu[1], m_ptMouse))	//책략
+			{
+				atkList.clear();
+				menuList.clear();
 
-					//isClick = false;
-				}
-				if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
-				{
-					atkList.clear();
-					menuList.clear();
+				//isClick = false;
+			}
+			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
+			{
+				atkList.clear();
+				menuList.clear();
 
-					//isClick = false;
-				}
-				if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
-				{
-					atkList.clear();
-					menuList.clear();
+				//isClick = false;
+			}
+			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
+			{
+				atkList.clear();
+				menuList.clear();
 
-					isTurn = false;
-					isSelect = false;
-					isStop = false;
-					isClick = false;
-				}
-				if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
-				{
-					atkList.clear();
-					menuList.clear();
+				isTurn = false;
+				isSelect = false;
+				isStop = false;
+				isClick = false;
+			}
+			if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
+			{
+				atkList.clear();
+				menuList.clear();
 
-					isSelect = false;
-					isStop = false;
-					isClick = false;
-				}
+				isSelect = false;
+				isStop = false;
+				isClick = false;
 			}
 		}
 	}
@@ -467,191 +449,11 @@ void Beonju::enemyMenu()
 
 void Beonju::enemyCollision()
 {
-	/*for (int k = 0; k < vBeonju.size(); k++)
-	{
-		RECT temp;
-
-		if (IntersectRect(&temp, &vBeonju[k].rcAtk[0], &PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[1], &PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[2], &PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[3], &PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getAgjin()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getAgjin()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getAgjin()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getAgjin()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &vBeonju[k].rcAtk[0], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[1], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[2], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[3], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getHahudon()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getHahudon()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getHahudon()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getHahudon()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &vBeonju[k].rcAtk[0], &PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[1], &PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[2], &PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[3], &PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getHahuyeon()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getHahuyeon()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getHahuyeon()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getHahuyeon()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &vBeonju[k].rcAtk[0], &PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[1], &PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[2], &PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[3], &PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getIjeon()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getIjeon()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getIjeon()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getIjeon()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &vBeonju[k].rcAtk[0], &PLAYERMANAGER->getJohong()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[1], &PLAYERMANAGER->getJohong()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[2], &PLAYERMANAGER->getJohong()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[3], &PLAYERMANAGER->getJohong()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getJohong()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getJohong()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getJohong()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getJohong()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getJohong()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &vBeonju[k].rcAtk[0], &PLAYERMANAGER->getJoin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[1], &PLAYERMANAGER->getJoin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[2], &PLAYERMANAGER->getJoin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[3], &PLAYERMANAGER->getJoin()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getJoin()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getJoin()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getJoin()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getJoin()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getJoin()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &vBeonju[k].rcAtk[0], &PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[1], &PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[2], &PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &vBeonju[k].rcAtk[3], &PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getJojo()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getJojo()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getJojo()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getJojo()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else
-		{
-			frameX = 0;
-		}
-	}*/
 }
 
 void Beonju::setPosition(RECT rc)
 {
-	for (int k = 0; k < vBeonju.size(); k++)
-	{
-		vBeonju[k].rc = rc;
-		enemyX = vBeonju[k].rc.left + (vBeonju[k].rc.right - vBeonju[k].rc.left) / 2;
-		enemyY = vBeonju[k].rc.top + (vBeonju[k].rc.bottom - vBeonju[k].rc.top) / 2;
-	}
+	beonju.rc = rc;
+	enemyX = beonju.rc.left + (beonju.rc.right - beonju.rc.left) / 2;
+	enemyY = beonju.rc.top + (beonju.rc.bottom - beonju.rc.top) / 2;
 }

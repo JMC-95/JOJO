@@ -4,7 +4,7 @@
 class Soldier : public FriendlyBase
 {
 private:
-	vector<FriendInfo> vSoldier;
+	FriendInfo soldier;
 
 public:
 	Soldier(int num);
@@ -26,6 +26,5 @@ public:
 
 	virtual void setPosition(RECT rc);
 
-	//벡터를 반환하는 함수
-	virtual vector<FriendInfo> getFriendVector() override { return vSoldier; }
+	virtual FriendInfo getFriendInfo() { return soldier; }
 };

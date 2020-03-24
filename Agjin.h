@@ -4,7 +4,6 @@
 class Agjin : public PlayerBase
 {
 private:
-	//vector<PlayerInfo> vAgjin;
 	PlayerInfo agjin;
 
 public:
@@ -27,7 +26,5 @@ public:
 
 	virtual void setPosition(RECT rc);
 
-	//벡터를 반환하는 함수
-	//vector<PlayerInfo> getPlayerVector() { return vAgjin; }
 	virtual PlayerInfo getPlayerInfo() { return agjin; }
 };

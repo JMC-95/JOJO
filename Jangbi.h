@@ -4,7 +4,7 @@
 class Jangbi : public FriendlyBase
 {
 private:
-	vector<FriendInfo> vJangbi;
+	FriendInfo jangbi;
 
 public:
 	Jangbi();
@@ -26,6 +26,5 @@ public:
 
 	virtual void setPosition(RECT rc);
 
-	//벡터를 반환하는 함수
-	vector<FriendInfo> getFriendVector() { return vJangbi; }
+	virtual FriendInfo getFriendInfo() { return jangbi; }
 };

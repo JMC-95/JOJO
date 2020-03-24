@@ -26,6 +26,38 @@ void EnemyBase::render(HDC hdc)
 {
 }
 
+void EnemyBase::mouseMove()
+{
+}
+
+void EnemyBase::enemyMove()
+{
+}
+
+void EnemyBase::enemyAstar()
+{
+}
+
+void EnemyBase::enemyMenu()
+{
+}
+
+void EnemyBase::enemyCollision()
+{
+}
+
+void EnemyBase::enemyAnimation()
+{
+}
+
+void EnemyBase::enemyState()
+{
+}
+
+void EnemyBase::setPosition(RECT rc)
+{
+}
+
 void EnemyBase::aStar()
 {
 	int endX = endTile % TILE_X;

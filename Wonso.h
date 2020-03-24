@@ -4,7 +4,7 @@
 class Wonso : public FriendlyBase
 {
 private:
-	vector<FriendInfo> vWonso;
+	FriendInfo wonso;
 
 public:
 	Wonso();
@@ -26,6 +26,5 @@ public:
 
 	virtual void setPosition(RECT rc);
 
-	//벡터를 반환하는 함수
-	vector<FriendInfo> getFriendVector() { return vWonso; }
+	virtual FriendInfo getFriendInfo() { return wonso; }
 };

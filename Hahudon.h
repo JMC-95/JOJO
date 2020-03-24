@@ -4,8 +4,8 @@
 class Hahudon : public PlayerBase
 {
 private:
-	//vector<PlayerInfo> vHahudon;
 	PlayerInfo hahudon;
+
 public:
 	Hahudon();
 	~Hahudon();
@@ -26,6 +26,5 @@ public:
 
 	void setPosition(RECT rc);
 
-	//벡터를 반환하는 함수
-	//vector<PlayerInfo> getPlayerVector() { return vHahudon; }
+	virtual PlayerInfo getPlayerInfo() { return hahudon; }
 };

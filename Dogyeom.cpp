@@ -11,8 +11,6 @@ Dogyeom::~Dogyeom()
 
 HRESULT Dogyeom::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * friendImg, const char * atkImg, const char * blockImg)
 {
-	//구조체 정보 기입
-	FriendInfo dogyeom;
 	//이미지 및 애니메이션
 	dogyeom.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	dogyeom.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -30,7 +28,6 @@ HRESULT Dogyeom::init(const char * moveImg, const char * mAtkImg, const char * a
 	dogyeom.agi = 62;			//순발력
 	dogyeom.ten = 62;			//사기
 	dogyeom.movingCount = 6;	//이동력
-	vDogyeom.push_back(dogyeom);
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -82,242 +79,230 @@ void Dogyeom::update()
 
 void Dogyeom::render(HDC hdc)
 {
-	for (int k = 0; k < vDogyeom.size(); k++)
+	if (isTurn)
 	{
-		if (isTurn)
+		if (isAtk)
 		{
-			if (isAtk)
-			{
-				vDogyeom[k].atkImg->aniRender(hdc, vDogyeom[k].rc.left - 8, vDogyeom[k].rc.top - 8, friendAni);
-			}
-			else if (isHit)
-			{
-				vDogyeom[k].blockImg->frameRender(hdc, vDogyeom[k].rc.left, vDogyeom[k].rc.top, 0, 4);
+			dogyeom.atkImg->aniRender(hdc, dogyeom.rc.left - 8, dogyeom.rc.top - 8, friendAni);
+		}
+		else if (isHit)
+		{
+			dogyeom.blockImg->frameRender(hdc, dogyeom.rc.left, dogyeom.rc.top, 0, 4);
 
-				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
-				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
-				SetTextColor(hdc, RGB(255, 255, 255));
-				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vDogyeom[k].rc.left, vDogyeom[k].rc.top, str, strlen(str));
-				SelectObject(hdc, oldFont);
-				DeleteObject(myFont);
-			}
-			else
-			{
-				vDogyeom[k].img->aniRender(hdc, vDogyeom[k].rc.left, vDogyeom[k].rc.top, friendAni);
-			}
+			HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+			HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+			SetTextColor(hdc, RGB(255, 255, 255));
+			sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
+			TextOut(hdc, dogyeom.rc.left, dogyeom.rc.top, str, strlen(str));
+			SelectObject(hdc, oldFont);
+			DeleteObject(myFont);
 		}
 		else
 		{
-			if (isHit)
-			{
-				vDogyeom[k].blockImg->frameRender(hdc, vDogyeom[k].rc.left, vDogyeom[k].rc.top, 0, 4);
+			dogyeom.img->aniRender(hdc, dogyeom.rc.left, dogyeom.rc.top, friendAni);
+		}
+	}
+	else
+	{
+		if (isHit)
+		{
+			dogyeom.blockImg->frameRender(hdc, dogyeom.rc.left, dogyeom.rc.top, 0, 4);
 
-				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
-				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
-				SetTextColor(hdc, RGB(255, 255, 255));
-				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vDogyeom[k].rc.left, vDogyeom[k].rc.top, str, strlen(str));
-				SelectObject(hdc, oldFont);
-				DeleteObject(myFont);
-			}
-			else
-			{
-				vDogyeom[k].img->frameAlphaRender(hdc, vDogyeom[k].rc.left, vDogyeom[k].rc.top, 0, frameY, 100);
-			}
+			HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+			HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+			SetTextColor(hdc, RGB(255, 255, 255));
+			sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
+			TextOut(hdc, dogyeom.rc.left, dogyeom.rc.top, str, strlen(str));
+			SelectObject(hdc, oldFont);
+			DeleteObject(myFont);
+		}
+		else
+		{
+			dogyeom.img->frameAlphaRender(hdc, dogyeom.rc.left, dogyeom.rc.top, 0, frameY, 100);
 		}
 	}
 }
 
 void Dogyeom::mouseMove()
 {
-	for (int k = 0; k < vDogyeom.size(); k++)
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
-		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		if (PtInRect(&dogyeom.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 		{
-			if (PtInRect(&vDogyeom[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
-				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				//선택한 타일 (캐릭터)
+				startTile = i;
+
+				isSelect = true;
+				isFind = false;
+				noPath = false;
+				startAstar = false;
+
+				//공격범위
+				for (int j = 0; j < 4; j++)
 				{
-					//선택한 타일 (캐릭터)
-					startTile = i;
-
-					isSelect = true;
-					isFind = false;
-					noPath = false;
-					startAstar = false;
-
-					//공격범위
-					for (int j = 0; j < 4; j++)
-					{
-						vDogyeom[k].rcAtk[0] = RectMake(vDogyeom[k].rc.left - 48, vDogyeom[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vDogyeom[k].rcAtk[1] = RectMake(vDogyeom[k].rc.left + 48, vDogyeom[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vDogyeom[k].rcAtk[2] = RectMake(vDogyeom[k].rc.left, vDogyeom[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vDogyeom[k].rcAtk[3] = RectMake(vDogyeom[k].rc.left, vDogyeom[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						atkList.push_back(vDogyeom[k].rcAtk[j]);
-					}
-
-					//이동범위
-					if (!isStop)
-					{
-						floodFill(startTile, vDogyeom[k].movingCount);
-					}
+					dogyeom.rcAtk[0] = RectMake(dogyeom.rc.left - 48, dogyeom.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					dogyeom.rcAtk[1] = RectMake(dogyeom.rc.left + 48, dogyeom.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					dogyeom.rcAtk[2] = RectMake(dogyeom.rc.left, dogyeom.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					dogyeom.rcAtk[3] = RectMake(dogyeom.rc.left, dogyeom.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(dogyeom.rcAtk[j]);
 				}
-			}
 
-			if (!PtInRect(&vDogyeom[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
-			{
-				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				//이동범위
+				if (!isStop)
 				{
-					if (mainMap->getMap()[i].flood)
-					{
-						//선택한 맵의 x좌표와 y좌표
-						mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
-						mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
-						//선택한 타일 (목표)
-						endTile = i;
-
-						//이순간 Astar가 시작된다.
-						//Astar에 필요한 모든 것을 초기화 시켜주자.
-						openList.clear();
-						closeList.clear();
-
-						if (startTile != -1 && endTile != -1)
-						{
-							startAstar = true;
-							currentTile = startTile;
-
-							//시작 지점을 openList에 넣자
-							openList.push_back(currentTile);
-						}
-					}
-					else
-					{
-						isSelect = false;
-					}
-
-					for (int i = 0; i < TILE_X * TILE_Y; i++)
-					{
-						if (mainMap->getMap()[i].flood)
-						{
-							mainMap->getMap()[i].flood = false;
-						}
-					}
+					floodFill(startTile, dogyeom.movingCount);
 				}
 			}
 		}
 
-		friendAstar();
-		friendMenu();
-		friendCollision();
+		if (!PtInRect(&dogyeom.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				if (mainMap->getMap()[i].flood)
+				{
+					//선택한 맵의 x좌표와 y좌표
+					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
+					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
+					//선택한 타일 (목표)
+					endTile = i;
+
+					//이순간 Astar가 시작된다.
+					//Astar에 필요한 모든 것을 초기화 시켜주자.
+					openList.clear();
+					closeList.clear();
+
+					if (startTile != -1 && endTile != -1)
+					{
+						startAstar = true;
+						currentTile = startTile;
+
+						//시작 지점을 openList에 넣자
+						openList.push_back(currentTile);
+					}
+				}
+				else
+				{
+					isSelect = false;
+				}
+
+				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				{
+					if (mainMap->getMap()[i].flood)
+					{
+						mainMap->getMap()[i].flood = false;
+					}
+				}
+			}
+		}
 	}
+
+	friendAstar();
+	friendMenu();
+	friendCollision();
 }
 
 void Dogyeom::friendMove()
 {
-	for (int k = 0; k < vDogyeom.size(); k++)
+	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
+	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
+
+	if (!isMove)
 	{
-		stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
-		stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
-
-		if (!isMove)
+		if (friendX > stackX)
 		{
-			if (friendX > stackX)
-			{
-				fDirection = FRIEND_LEFT;
-			}
-			else if (friendX < stackX)
-			{
-				fDirection = FRIEND_RIGHT;
-			}
-			else if (friendY > stackY)
-			{
-				fDirection = FRIEND_UP;
-			}
-			else if (friendY < stackY)
-			{
-				fDirection = FRIEND_DOWN;
-			}
-
-			isMove = true;
+			fDirection = FRIEND_LEFT;
+		}
+		else if (friendX < stackX)
+		{
+			fDirection = FRIEND_RIGHT;
+		}
+		else if (friendY > stackY)
+		{
+			fDirection = FRIEND_UP;
+		}
+		else if (friendY < stackY)
+		{
+			fDirection = FRIEND_DOWN;
 		}
 
-		if (vDogyeom[k].rc.left > 0 || vDogyeom[k].rc.right < WINSIZEY ||
-			vDogyeom[k].rc.top > 0 || vDogyeom[k].rc.bottom < WINSIZEY)
-		{
-			switch (fDirection)
-			{
-			case FRIEND_LEFT:
-				friendX -= speed;
-				vDogyeom[k].rc = RectMakeCenter(friendX, friendY, vDogyeom[k].img->getFrameWidth(), vDogyeom[k].img->getFrameHeight());
-				break;
-			case FRIEND_RIGHT:
-				friendX += speed;
-				vDogyeom[k].rc = RectMakeCenter(friendX, friendY, vDogyeom[k].img->getFrameWidth(), vDogyeom[k].img->getFrameHeight());
-				break;
-			case FRIEND_UP:
-				friendY -= speed;
-				vDogyeom[k].rc = RectMakeCenter(friendX, friendY, vDogyeom[k].img->getFrameWidth(), vDogyeom[k].img->getFrameHeight());
-				break;
-			case FRIEND_DOWN:
-				friendY += speed;
-				vDogyeom[k].rc = RectMakeCenter(friendX, friendY, vDogyeom[k].img->getFrameWidth(), vDogyeom[k].img->getFrameHeight());
-				break;
-			}
+		isMove = true;
+	}
 
-			if (friendX == stackX && friendY == stackY)
-			{
-				isMove = false;
-				optimalPath.pop();
-			}
+	if (dogyeom.rc.left > 0 || dogyeom.rc.right < WINSIZEY ||
+		dogyeom.rc.top > 0 || dogyeom.rc.bottom < WINSIZEY)
+	{
+		switch (fDirection)
+		{
+		case FRIEND_LEFT:
+			friendX -= speed;
+			dogyeom.rc = RectMakeCenter(friendX, friendY, dogyeom.img->getFrameWidth(), dogyeom.img->getFrameHeight());
+			break;
+		case FRIEND_RIGHT:
+			friendX += speed;
+			dogyeom.rc = RectMakeCenter(friendX, friendY, dogyeom.img->getFrameWidth(), dogyeom.img->getFrameHeight());
+			break;
+		case FRIEND_UP:
+			friendY -= speed;
+			dogyeom.rc = RectMakeCenter(friendX, friendY, dogyeom.img->getFrameWidth(), dogyeom.img->getFrameHeight());
+			break;
+		case FRIEND_DOWN:
+			friendY += speed;
+			dogyeom.rc = RectMakeCenter(friendX, friendY, dogyeom.img->getFrameWidth(), dogyeom.img->getFrameHeight());
+			break;
+		}
+
+		if (friendX == stackX && friendY == stackY)
+		{
+			isMove = false;
+			optimalPath.pop();
 		}
 	}
 }
 
 void Dogyeom::friendAstar()
 {
-	for (int k = 0; k < vDogyeom.size(); k++)
+	//목표 타일을 클릭하면 A* 시작
+	if (startAstar && !isFind && !noPath)
 	{
-		//목표 타일을 클릭하면 A* 시작
-		if (startAstar && !isFind && !noPath)
+		while (!isFind)
 		{
-			while (!isFind)
-			{
-				aStar();
-			}
+			aStar();
 		}
+	}
 
-		//목표 타일을 클릭하면 캐릭터 이동
-		if (!optimalPath.empty())
+	//목표 타일을 클릭하면 캐릭터 이동
+	if (!optimalPath.empty())
+	{
+		if (!isStop)
+			friendMove();
+
+		if (friendX == mapX && friendY == mapY)
 		{
-			if (!isStop)
-				friendMove();
+			isStop = true;
+			isClick = true;
 
-			if (friendX == mapX && friendY == mapY)
+			//공격범위
+			for (int j = 0; j < 4; j++)
 			{
-				isStop = true;
-				isClick = true;
+				dogyeom.rcAtk[0] = RectMake(dogyeom.rc.left - 48, dogyeom.rc.top, TILE_WIDTH, TILE_HEIGHT);
+				dogyeom.rcAtk[1] = RectMake(dogyeom.rc.left + 48, dogyeom.rc.top, TILE_WIDTH, TILE_HEIGHT);
+				dogyeom.rcAtk[2] = RectMake(dogyeom.rc.left, dogyeom.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+				dogyeom.rcAtk[3] = RectMake(dogyeom.rc.left, dogyeom.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+				atkList.push_back(dogyeom.rcAtk[j]);
+			}
 
-				//공격범위
-				for (int j = 0; j < 4; j++)
-				{
-					vDogyeom[k].rcAtk[0] = RectMake(vDogyeom[k].rc.left - 48, vDogyeom[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vDogyeom[k].rcAtk[1] = RectMake(vDogyeom[k].rc.left + 48, vDogyeom[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vDogyeom[k].rcAtk[2] = RectMake(vDogyeom[k].rc.left, vDogyeom[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vDogyeom[k].rcAtk[3] = RectMake(vDogyeom[k].rc.left, vDogyeom[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					atkList.push_back(vDogyeom[k].rcAtk[j]);
-				}
-
-				//메뉴선택 렉트
-				for (int j = 0; j < 5; j++)
-				{
-					rcMenu[0] = RectMake(vDogyeom[k].rc.left - 97, vDogyeom[k].rc.top - 30, 82, 20);
-					rcMenu[1] = RectMake(vDogyeom[k].rc.left - 97, vDogyeom[k].rc.top - 9, 82, 20);
-					rcMenu[2] = RectMake(vDogyeom[k].rc.left - 97, vDogyeom[k].rc.top + 12, 82, 20);
-					rcMenu[3] = RectMake(vDogyeom[k].rc.left - 97, vDogyeom[k].rc.top + 38, 82, 20);
-					rcMenu[4] = RectMake(vDogyeom[k].rc.left - 97, vDogyeom[k].rc.top + 63, 82, 20);
-					menuList.push_back(rcMenu[j]);
-				}
+			//메뉴선택 렉트
+			for (int j = 0; j < 5; j++)
+			{
+				rcMenu[0] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top - 30, 82, 20);
+				rcMenu[1] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top - 9, 82, 20);
+				rcMenu[2] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top + 12, 82, 20);
+				rcMenu[3] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top + 38, 82, 20);
+				rcMenu[4] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top + 63, 82, 20);
+				menuList.push_back(rcMenu[j]);
 			}
 		}
 	}
@@ -325,54 +310,51 @@ void Dogyeom::friendAstar()
 
 void Dogyeom::friendMenu()
 {
-	for (int k = 0; k < vDogyeom.size(); k++)
+	//메뉴
+	if (isClick)
 	{
-		//메뉴
-		if (isClick)
+		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
-			if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
-				if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
-				{
-					atkList.clear();
-					menuList.clear();
+				atkList.clear();
+				menuList.clear();
 
-					isAtkRng = true;
-					isClick = false;
-				}
-				if (PtInRect(&rcMenu[1], m_ptMouse))	//책략
-				{
-					atkList.clear();
-					menuList.clear();
+				isAtkRng = true;
+				isClick = false;
+			}
+			if (PtInRect(&rcMenu[1], m_ptMouse))	//책략
+			{
+				atkList.clear();
+				menuList.clear();
 
-					//isClick = false;
-				}
-				if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
-				{
-					atkList.clear();
-					menuList.clear();
+				//isClick = false;
+			}
+			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
+			{
+				atkList.clear();
+				menuList.clear();
 
-					//isClick = false;
-				}
-				if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
-				{
-					atkList.clear();
-					menuList.clear();
+				//isClick = false;
+			}
+			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
+			{
+				atkList.clear();
+				menuList.clear();
 
-					isTurn = false;
-					isSelect = false;
-					isStop = false;
-					isClick = false;
-				}
-				if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
-				{
-					atkList.clear();
-					menuList.clear();
+				isTurn = false;
+				isSelect = false;
+				isStop = false;
+				isClick = false;
+			}
+			if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
+			{
+				atkList.clear();
+				menuList.clear();
 
-					isSelect = false;
-					isStop = false;
-					isClick = false;
-				}
+				isSelect = false;
+				isStop = false;
+				isClick = false;
 			}
 		}
 	}
@@ -380,38 +362,35 @@ void Dogyeom::friendMenu()
 
 void Dogyeom::friendCollision()
 {
-	for (int k = 0; k < vDogyeom.size(); k++)
+	RECT temp;
+
+	if (IntersectRect(&temp, &dogyeom.rcAtk[0], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
+		IntersectRect(&temp, &dogyeom.rcAtk[1], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
+		IntersectRect(&temp, &dogyeom.rcAtk[2], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
+		IntersectRect(&temp, &dogyeom.rcAtk[3], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc))
 	{
-		RECT temp;
+		isTarget = true;
+		frameX = 1;
 
-		if (IntersectRect(&temp, &vDogyeom[k].rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vDogyeom[k].rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vDogyeom[k].rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vDogyeom[k].rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
+		if (PtInRect(&ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc, m_ptMouse) &&
+			KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
 		{
-			isTarget = true;
-			frameX = 1;
+			isAtkRng = false;
+			isAtk = true;
 
-			if (PtInRect(&ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (friendX > ENEMYMANAGER->getYeopo()->getEnemyX())
-					fDirection = FRIEND_LEFT;
-				else if (friendX < ENEMYMANAGER->getYeopo()->getEnemyX())
-					fDirection = FRIEND_RIGHT;
-				else if (friendY > ENEMYMANAGER->getYeopo()->getEnemyY())
-					fDirection = FRIEND_UP;
-				else if (friendY < ENEMYMANAGER->getYeopo()->getEnemyY())
-					fDirection = FRIEND_DOWN;
-			}
+			if (friendX > ENEMYMANAGER->getEnemy()[4]->getEnemyX())
+				fDirection = FRIEND_LEFT;
+			else if (friendX < ENEMYMANAGER->getEnemy()[4]->getEnemyX())
+				fDirection = FRIEND_RIGHT;
+			else if (friendY > ENEMYMANAGER->getEnemy()[4]->getEnemyY())
+				fDirection = FRIEND_UP;
+			else if (friendY < ENEMYMANAGER->getEnemy()[4]->getEnemyY())
+				fDirection = FRIEND_DOWN;
 		}
-		else
-		{
-			frameX = 0;
-		}
+	}
+	else
+	{
+		frameX = 0;
 	}
 }
 
@@ -504,10 +483,7 @@ void Dogyeom::friendState()
 
 void Dogyeom::setPosition(RECT rc)
 {
-	for (int k = 0; k < vDogyeom.size(); k++)
-	{
-		vDogyeom[k].rc = rc;
-		friendX = vDogyeom[k].rc.left + (vDogyeom[k].rc.right - vDogyeom[k].rc.left) / 2;
-		friendY = vDogyeom[k].rc.top + (vDogyeom[k].rc.bottom - vDogyeom[k].rc.top) / 2;
-	}
+	dogyeom.rc = rc;
+	friendX = dogyeom.rc.left + (dogyeom.rc.right - dogyeom.rc.left) / 2;
+	friendY = dogyeom.rc.top + (dogyeom.rc.bottom - dogyeom.rc.top) / 2;
 }
