@@ -4,7 +4,8 @@
 class Agjin : public PlayerBase
 {
 private:
-	vector<PlayerInfo> vAgjin;
+	//vector<PlayerInfo> vAgjin;
+	PlayerInfo agjin;
 
 public:
 	Agjin();
@@ -16,16 +17,17 @@ public:
 	virtual void update();
 	virtual void render(HDC hdc);
 
-	void mouseMove();
-	void playerMove();
-	void playerAstar();
-	void playerMenu();
-	void playerCollision();
-	void playerAnimation();
-	void playerState();
+	virtual void mouseMove();
+	virtual void playerMove();
+	virtual void playerAstar();
+	virtual void playerMenu();
+	virtual void playerCollision();
+	virtual void playerAnimation();
+	virtual void playerState();
 
-	void setPosition(RECT rc);
+	virtual void setPosition(RECT rc);
 
 	//벡터를 반환하는 함수
-	vector<PlayerInfo> getPlayerVector() { return vAgjin; }
+	//vector<PlayerInfo> getPlayerVector() { return vAgjin; }
+	virtual PlayerInfo getPlayerInfo() { return agjin; }
 };

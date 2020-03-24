@@ -36,8 +36,6 @@ public:
 	Wonso* getWonso() { return m_Wonso; }
 	Yubi* getYubi() { return m_Yubi; }
 
-	int nSoldier;
-
 	//베이스 클래스의 벡터를 반환하는 함수
 	vector<FriendlyBase*> getFriend() { return vFriend; }
 };

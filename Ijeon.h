@@ -4,8 +4,8 @@
 class Ijeon : public PlayerBase
 {
 private:
-	vector<PlayerInfo> vIjeon;
-
+	//vector<PlayerInfo> vIjeon;
+	PlayerInfo ijeon;
 public:
 	Ijeon();
 	~Ijeon();
@@ -27,5 +27,5 @@ public:
 	void setPosition(RECT rc);
 
 	//벡터를 반환하는 함수
-	vector<PlayerInfo> getPlayerVector() { return vIjeon; }
+	//vector<PlayerInfo> getPlayerVector() { return vIjeon; }
 };

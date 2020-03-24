@@ -11,8 +11,6 @@ Hahudon::~Hahudon()
 
 HRESULT Hahudon::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
-	//구조체 정보 기입
-	PlayerInfo hahudon;
 	//이미지 및 애니메이션
 	hahudon.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	hahudon.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -30,7 +28,6 @@ HRESULT Hahudon::init(const char * moveImg, const char * mAtkImg, const char * a
 	hahudon.agi = 63;			//순발력
 	hahudon.ten = 45;			//사기
 	hahudon.movingCount = 6;	//이동력
-	vHahudon.push_back(hahudon);
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -79,60 +76,60 @@ void Hahudon::update()
 
 void Hahudon::render(HDC hdc)
 {
-	for (int k = 0; k < vHahudon.size(); k++)
-	{
+	//for (int k = 0; k < vHahudon.size(); k++)
+	//{
 		if (isTurn)
 		{
 			if (isAtk)
 			{
-				vHahudon[k].atkImg->aniRender(hdc, vHahudon[k].rc.left - 8, vHahudon[k].rc.top - 8, playerAni);
+				hahudon.atkImg->aniRender(hdc, hahudon.rc.left - 8, hahudon.rc.top - 8, playerAni);
 			}
 			else if (isHit)
 			{
-				vHahudon[k].blockImg->frameRender(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top, 0, 4);
+				hahudon.blockImg->frameRender(hdc, hahudon.rc.left, hahudon.rc.top, 0, 4);
 
 				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 				SetTextColor(hdc, RGB(255, 255, 255));
 				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top, str, strlen(str));
+				TextOut(hdc, hahudon.rc.left, hahudon.rc.top, str, strlen(str));
 				SelectObject(hdc, oldFont);
 				DeleteObject(myFont);
 			}
 			else
 			{
-				vHahudon[k].img->aniRender(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top, playerAni);
+				hahudon.img->aniRender(hdc, hahudon.rc.left, hahudon.rc.top, playerAni);
 			}
 		}
 		else
 		{
 			if (isHit)
 			{
-				vHahudon[k].blockImg->frameRender(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top, 0, 4);
+				hahudon.blockImg->frameRender(hdc, hahudon.rc.left, hahudon.rc.top, 0, 4);
 
 				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 				SetTextColor(hdc, RGB(255, 255, 255));
 				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top, str, strlen(str));
+				TextOut(hdc, hahudon.rc.left, hahudon.rc.top, str, strlen(str));
 				SelectObject(hdc, oldFont);
 				DeleteObject(myFont);
 			}
 			else
 			{
-				vHahudon[k].img->frameAlphaRender(hdc, vHahudon[k].rc.left, vHahudon[k].rc.top, 0, frameY, 100);
+				hahudon.img->frameAlphaRender(hdc, hahudon.rc.left, hahudon.rc.top, 0, frameY, 100);
 			}
 		}
-	}
+	//}
 }
 
 void Hahudon::mouseMove()
 {
-	for (int k = 0; k < vHahudon.size(); k++)
-	{
+	//for (int k = 0; k < vHahudon.size(); k++)
+	//{
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			if (PtInRect(&vHahudon[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+			if (PtInRect(&hahudon.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
@@ -149,22 +146,22 @@ void Hahudon::mouseMove()
 					//공격범위
 					for (int j = 0; j < 4; j++)
 					{
-						vHahudon[k].rcAtk[0] = RectMake(vHahudon[k].rc.left - 48, vHahudon[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vHahudon[k].rcAtk[1] = RectMake(vHahudon[k].rc.left + 48, vHahudon[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vHahudon[k].rcAtk[2] = RectMake(vHahudon[k].rc.left, vHahudon[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vHahudon[k].rcAtk[3] = RectMake(vHahudon[k].rc.left, vHahudon[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						atkList.push_back(vHahudon[k].rcAtk[j]);
+						hahudon.rcAtk[0] = RectMake(hahudon.rc.left - 48, hahudon.rc.top, TILE_WIDTH, TILE_HEIGHT);
+						hahudon.rcAtk[1] = RectMake(hahudon.rc.left + 48, hahudon.rc.top, TILE_WIDTH, TILE_HEIGHT);
+						hahudon.rcAtk[2] = RectMake(hahudon.rc.left, hahudon.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+						hahudon.rcAtk[3] = RectMake(hahudon.rc.left, hahudon.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+						atkList.push_back(hahudon.rcAtk[j]);
 					}
 
 					//이동범위
 					if (!isStop)
 					{
-						floodFill(startTile, vHahudon[k].movingCount);
+						floodFill(startTile, hahudon.movingCount);
 					}
 				}
 			}
 
-			if (!PtInRect(&vHahudon[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			if (!PtInRect(&hahudon.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
@@ -206,7 +203,7 @@ void Hahudon::mouseMove()
 				}
 			}
 		}
-	}
+	//}
 
 	playerAstar();
 	playerMenu();
@@ -215,8 +212,8 @@ void Hahudon::mouseMove()
 
 void Hahudon::playerMove()
 {
-	for (int k = 0; k < vHahudon.size(); k++)
-	{
+	//for (int k = 0; k < vHahudon.size(); k++)
+	//{
 		stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 		stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
@@ -242,26 +239,26 @@ void Hahudon::playerMove()
 			isMove = true;
 		}
 
-		if (vHahudon[k].rc.left > 0 || vHahudon[k].rc.right < WINSIZEY ||
-			vHahudon[k].rc.top > 0 || vHahudon[k].rc.bottom < WINSIZEY)
+		if (hahudon.rc.left > 0 || hahudon.rc.right < WINSIZEY ||
+			hahudon.rc.top > 0 || hahudon.rc.bottom < WINSIZEY)
 		{
 			switch (pDirection)
 			{
 			case PLAYER_LEFT:
 				playerX -= speed;
-				vHahudon[k].rc = RectMakeCenter(playerX, playerY, vHahudon[k].img->getFrameWidth(), vHahudon[k].img->getFrameHeight());
+				hahudon.rc = RectMakeCenter(playerX, playerY, hahudon.img->getFrameWidth(), hahudon.img->getFrameHeight());
 				break;
 			case PLAYER_RIGHT:
 				playerX += speed;
-				vHahudon[k].rc = RectMakeCenter(playerX, playerY, vHahudon[k].img->getFrameWidth(), vHahudon[k].img->getFrameHeight());
+				hahudon.rc = RectMakeCenter(playerX, playerY, hahudon.img->getFrameWidth(), hahudon.img->getFrameHeight());
 				break;
 			case PLAYER_UP:
 				playerY -= speed;
-				vHahudon[k].rc = RectMakeCenter(playerX, playerY, vHahudon[k].img->getFrameWidth(), vHahudon[k].img->getFrameHeight());
+				hahudon.rc = RectMakeCenter(playerX, playerY, hahudon.img->getFrameWidth(), hahudon.img->getFrameHeight());
 				break;
 			case PLAYER_DOWN:
 				playerY += speed;
-				vHahudon[k].rc = RectMakeCenter(playerX, playerY, vHahudon[k].img->getFrameWidth(), vHahudon[k].img->getFrameHeight());
+				hahudon.rc = RectMakeCenter(playerX, playerY, hahudon.img->getFrameWidth(), hahudon.img->getFrameHeight());
 				break;
 			}
 
@@ -271,13 +268,13 @@ void Hahudon::playerMove()
 				optimalPath.pop();
 			}
 		}
-	}
+	//}
 }
 
 void Hahudon::playerAstar()
 {
-	for (int k = 0; k < vHahudon.size(); k++)
-	{
+	//for (int k = 0; k < vHahudon.size(); k++)
+	//{
 		//목표 타일을 클릭하면 A* 시작
 		if (startAstar && !isFind && !noPath)
 		{
@@ -303,32 +300,32 @@ void Hahudon::playerAstar()
 				//공격범위
 				for (int j = 0; j < 4; j++)
 				{
-					vHahudon[k].rcAtk[0] = RectMake(vHahudon[k].rc.left - 48, vHahudon[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vHahudon[k].rcAtk[1] = RectMake(vHahudon[k].rc.left + 48, vHahudon[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vHahudon[k].rcAtk[2] = RectMake(vHahudon[k].rc.left, vHahudon[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vHahudon[k].rcAtk[3] = RectMake(vHahudon[k].rc.left, vHahudon[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					atkList.push_back(vHahudon[k].rcAtk[j]);
+					hahudon.rcAtk[0] = RectMake(hahudon.rc.left - 48, hahudon.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					hahudon.rcAtk[1] = RectMake(hahudon.rc.left + 48, hahudon.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					hahudon.rcAtk[2] = RectMake(hahudon.rc.left, hahudon.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					hahudon.rcAtk[3] = RectMake(hahudon.rc.left, hahudon.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(hahudon.rcAtk[j]);
 				}
 
 				//메뉴선택 렉트
 				for (int j = 0; j < 5; j++)
 				{
-					rcMenu[0] = RectMake(vHahudon[k].rc.left - 97, vHahudon[k].rc.top - 30, 82, 20);
-					rcMenu[1] = RectMake(vHahudon[k].rc.left - 97, vHahudon[k].rc.top - 9, 82, 20);
-					rcMenu[2] = RectMake(vHahudon[k].rc.left - 97, vHahudon[k].rc.top + 12, 82, 20);
-					rcMenu[3] = RectMake(vHahudon[k].rc.left - 97, vHahudon[k].rc.top + 38, 82, 20);
-					rcMenu[4] = RectMake(vHahudon[k].rc.left - 97, vHahudon[k].rc.top + 63, 82, 20);
+					rcMenu[0] = RectMake(hahudon.rc.left - 97, hahudon.rc.top - 30, 82, 20);
+					rcMenu[1] = RectMake(hahudon.rc.left - 97, hahudon.rc.top - 9, 82, 20);
+					rcMenu[2] = RectMake(hahudon.rc.left - 97, hahudon.rc.top + 12, 82, 20);
+					rcMenu[3] = RectMake(hahudon.rc.left - 97, hahudon.rc.top + 38, 82, 20);
+					rcMenu[4] = RectMake(hahudon.rc.left - 97, hahudon.rc.top + 63, 82, 20);
 					menuList.push_back(rcMenu[j]);
 				}
 			}
 		}
-	}
+	//}
 }
 
 void Hahudon::playerMenu()
 {
-	for (int k = 0; k < vHahudon.size(); k++)
-	{
+	//for (int k = 0; k < vHahudon.size(); k++)
+	//{
 		//메뉴
 		if (isClick)
 		{
@@ -373,10 +370,10 @@ void Hahudon::playerMenu()
 
 					auto& prevTile = mainMap->getMap()[saveTile];
 
-					vHahudon[k].rc.left = prevTile.rc.left;
-					vHahudon[k].rc.right = prevTile.rc.right;
-					vHahudon[k].rc.top = prevTile.rc.top;
-					vHahudon[k].rc.bottom = prevTile.rc.bottom;
+					hahudon.rc.left = prevTile.rc.left;
+					hahudon.rc.right = prevTile.rc.right;
+					hahudon.rc.top = prevTile.rc.top;
+					hahudon.rc.bottom = prevTile.rc.bottom;
 					pDirection = sDirection;
 
 					playerX = prevTile.rc.left + TILE_WIDTH * 0.5;
@@ -388,19 +385,19 @@ void Hahudon::playerMenu()
 				}
 			}
 		}
-	}
+	//}
 }
 
 void Hahudon::playerCollision()
 {
-	for (int k = 0; k < vHahudon.size(); k++)
-	{
+	//for (int k = 0; k < vHahudon.size(); k++)
+	//{
 		RECT temp;
 
-		if (IntersectRect(&temp, &vHahudon[k].rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vHahudon[k].rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vHahudon[k].rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vHahudon[k].rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
+		if (IntersectRect(&temp, &hahudon.rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &hahudon.rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &hahudon.rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &hahudon.rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
 		{
 			isTarget = true;
 			frameX = 1;
@@ -425,7 +422,7 @@ void Hahudon::playerCollision()
 		{
 			frameX = 0;
 		}
-	}
+	//}
 }
 
 void Hahudon::playerAnimation()
@@ -517,10 +514,10 @@ void Hahudon::playerState()
 
 void Hahudon::setPosition(RECT rc)
 {
-	for (int k = 0; k < vHahudon.size(); k++)
-	{
-		vHahudon[k].rc = rc;
-		playerX = vHahudon[k].rc.left + (vHahudon[k].rc.right - vHahudon[k].rc.left) / 2;
-		playerY = vHahudon[k].rc.top + (vHahudon[k].rc.bottom - vHahudon[k].rc.top) / 2;
-	}
+	//for (int k = 0; k < vHahudon.size(); k++)
+	//{
+		hahudon.rc = rc;
+		playerX = hahudon.rc.left + (hahudon.rc.right - hahudon.rc.left) / 2;
+		playerY = hahudon.rc.top + (hahudon.rc.bottom - hahudon.rc.top) / 2;
+	//}
 }

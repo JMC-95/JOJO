@@ -18,20 +18,22 @@ HRESULT GameScene::init()
 
 	//아군
 	PLAYERMANAGER->init();
-	PLAYERMANAGER->getAgjin()->setMapMemoryAdress(_mainMap);
-	PLAYERMANAGER->getAgjin()->setPosition(_mainMap->getMap()[216].rc);
-	PLAYERMANAGER->getHahudon()->setMapMemoryAdress(_mainMap);
-	PLAYERMANAGER->getHahudon()->setPosition(_mainMap->getMap()[176].rc);
-	PLAYERMANAGER->getHahuyeon()->setMapMemoryAdress(_mainMap);
-	PLAYERMANAGER->getHahuyeon()->setPosition(_mainMap->getMap()[196].rc);
-	PLAYERMANAGER->getIjeon()->setMapMemoryAdress(_mainMap);
-	PLAYERMANAGER->getIjeon()->setPosition(_mainMap->getMap()[177].rc);
-	PLAYERMANAGER->getJohong()->setMapMemoryAdress(_mainMap);
-	PLAYERMANAGER->getJohong()->setPosition(_mainMap->getMap()[237].rc);
-	PLAYERMANAGER->getJoin()->setMapMemoryAdress(_mainMap);
-	PLAYERMANAGER->getJoin()->setPosition(_mainMap->getMap()[236].rc);
-	PLAYERMANAGER->getJojo()->setMapMemoryAdress(_mainMap);
-	PLAYERMANAGER->getJojo()->setPosition(_mainMap->getMap()[197].rc);
+	PLAYERMANAGER->getPlayer()[0]->setMapMemoryAdress(_mainMap);
+	PLAYERMANAGER->getPlayer()[0]->setPosition(_mainMap->getMap()[216].rc);
+	//PLAYERMANAGER->getAgjin()->setMapMemoryAdress(_mainMap);
+	//PLAYERMANAGER->getAgjin()->setPosition(_mainMap->getMap()[216].rc);
+	//PLAYERMANAGER->getHahudon()->setMapMemoryAdress(_mainMap);
+	//PLAYERMANAGER->getHahudon()->setPosition(_mainMap->getMap()[176].rc);
+	//PLAYERMANAGER->getHahuyeon()->setMapMemoryAdress(_mainMap);
+	//PLAYERMANAGER->getHahuyeon()->setPosition(_mainMap->getMap()[196].rc);
+	//PLAYERMANAGER->getIjeon()->setMapMemoryAdress(_mainMap);
+	//PLAYERMANAGER->getIjeon()->setPosition(_mainMap->getMap()[177].rc);
+	//PLAYERMANAGER->getJohong()->setMapMemoryAdress(_mainMap);
+	//PLAYERMANAGER->getJohong()->setPosition(_mainMap->getMap()[237].rc);
+	//PLAYERMANAGER->getJoin()->setMapMemoryAdress(_mainMap);
+	//PLAYERMANAGER->getJoin()->setPosition(_mainMap->getMap()[236].rc);
+	//PLAYERMANAGER->getJojo()->setMapMemoryAdress(_mainMap);
+	//PLAYERMANAGER->getJojo()->setPosition(_mainMap->getMap()[197].rc);
 
 	//우군
 	FRIENDMANAGER->init();
@@ -89,6 +91,23 @@ void GameScene::update()
 
 	ANIMATIONMANAGER->update();
 	COLLISIONMANAGER->update();
+
+	if (KEYMANAGER->isOnceKeyDown('2'))
+	{
+		auto& playerVector = PLAYERMANAGER->getPlayer();
+		for (auto player = playerVector.begin(); player != playerVector.end(); )
+		{
+			int hp = (*player)->getPlayerInfo.getCurrentHp();
+			if (hp == 0)
+			{
+				player = playerVector.erase(player);
+			}
+			else
+			{
+				player++;
+			}
+		}
+	}
 }
 
 void GameScene::render()

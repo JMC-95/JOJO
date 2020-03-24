@@ -12,7 +12,7 @@ Join::~Join()
 HRESULT Join::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//구조체 정보 기입
-	PlayerInfo join;
+	//PlayerInfo join;
 	//이미지 및 애니메이션
 	join.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	join.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -30,7 +30,7 @@ HRESULT Join::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	join.agi = 43;				//순발력
 	join.ten = 39;				//사기
 	join.movingCount = 6;		//이동력
-	vJoin.push_back(join);
+	//vJoin.push_back(join);
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -79,60 +79,60 @@ void Join::update()
 
 void Join::render(HDC hdc)
 {
-	for (int k = 0; k < vJoin.size(); k++)
-	{
+	//for (int k = 0; k < vJoin.size(); k++)
+	//{
 		if (isTurn)
 		{
 			if (isAtk)
 			{
-				vJoin[k].atkImg->aniRender(hdc, vJoin[k].rc.left - 8, vJoin[k].rc.top - 8, playerAni);
+				join.atkImg->aniRender(hdc, join.rc.left - 8, join.rc.top - 8, playerAni);
 			}
 			else if (isHit)
 			{
-				vJoin[k].blockImg->frameRender(hdc, vJoin[k].rc.left, vJoin[k].rc.top, 0, 4);
+				join.blockImg->frameRender(hdc, join.rc.left, join.rc.top, 0, 4);
 
 				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 				SetTextColor(hdc, RGB(255, 255, 255));
 				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vJoin[k].rc.left, vJoin[k].rc.top, str, strlen(str));
+				TextOut(hdc, join.rc.left, join.rc.top, str, strlen(str));
 				SelectObject(hdc, oldFont);
 				DeleteObject(myFont);
 			}
 			else
 			{
-				vJoin[k].img->aniRender(hdc, vJoin[k].rc.left, vJoin[k].rc.top, playerAni);
+				join.img->aniRender(hdc, join.rc.left, join.rc.top, playerAni);
 			}
 		}
 		else
 		{
 			if (isHit)
 			{
-				vJoin[k].blockImg->frameRender(hdc, vJoin[k].rc.left, vJoin[k].rc.top, 0, 4);
+				join.blockImg->frameRender(hdc, join.rc.left, join.rc.top, 0, 4);
 
 				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 				SetTextColor(hdc, RGB(255, 255, 255));
 				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vJoin[k].rc.left, vJoin[k].rc.top, str, strlen(str));
+				TextOut(hdc, join.rc.left, join.rc.top, str, strlen(str));
 				SelectObject(hdc, oldFont);
 				DeleteObject(myFont);
 			}
 			else
 			{
-				vJoin[k].img->frameAlphaRender(hdc, vJoin[k].rc.left, vJoin[k].rc.top, 0, frameY, 100);
+				join.img->frameAlphaRender(hdc, join.rc.left, join.rc.top, 0, frameY, 100);
 			}
 		}
-	}
+	//}
 }
 
 void Join::mouseMove()
 {
-	for (int k = 0; k < vJoin.size(); k++)
-	{
+	//for (int k = 0; k < vJoin.size(); k++)
+	//{
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			if (PtInRect(&vJoin[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+			if (PtInRect(&join.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
@@ -149,22 +149,22 @@ void Join::mouseMove()
 					//공격범위
 					for (int j = 0; j < 4; j++)
 					{
-						vJoin[k].rcAtk[0] = RectMake(vJoin[k].rc.left - 48, vJoin[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vJoin[k].rcAtk[1] = RectMake(vJoin[k].rc.left + 48, vJoin[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vJoin[k].rcAtk[2] = RectMake(vJoin[k].rc.left, vJoin[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vJoin[k].rcAtk[3] = RectMake(vJoin[k].rc.left, vJoin[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						atkList.push_back(vJoin[k].rcAtk[j]);
+						join.rcAtk[0] = RectMake(join.rc.left - 48, join.rc.top, TILE_WIDTH, TILE_HEIGHT);
+						join.rcAtk[1] = RectMake(join.rc.left + 48, join.rc.top, TILE_WIDTH, TILE_HEIGHT);
+						join.rcAtk[2] = RectMake(join.rc.left, join.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+						join.rcAtk[3] = RectMake(join.rc.left, join.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+						atkList.push_back(join.rcAtk[j]);
 					}
 
 					//이동범위
 					if (!isStop)
 					{
-						floodFill(startTile, vJoin[k].movingCount);
+						floodFill(startTile, join.movingCount);
 					}
 				}
 			}
 
-			if (!PtInRect(&vJoin[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			if (!PtInRect(&join.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
@@ -206,7 +206,7 @@ void Join::mouseMove()
 				}
 			}
 		}
-	}
+	//}
 
 	playerAstar();
 	playerMenu();
@@ -215,8 +215,8 @@ void Join::mouseMove()
 
 void Join::playerMove()
 {
-	for (int k = 0; k < vJoin.size(); k++)
-	{
+	//for (int k = 0; k < vJoin.size(); k++)
+	//{
 		stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 		stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
@@ -242,26 +242,26 @@ void Join::playerMove()
 			isMove = true;
 		}
 
-		if (vJoin[k].rc.left > 0 || vJoin[k].rc.right < WINSIZEY ||
-			vJoin[k].rc.top > 0 || vJoin[k].rc.bottom < WINSIZEY)
+		if (join.rc.left > 0 || join.rc.right < WINSIZEY ||
+			join.rc.top > 0 || join.rc.bottom < WINSIZEY)
 		{
 			switch (pDirection)
 			{
 			case PLAYER_LEFT:
 				playerX -= speed;
-				vJoin[k].rc = RectMakeCenter(playerX, playerY, vJoin[k].img->getFrameWidth(), vJoin[k].img->getFrameHeight());
+				join.rc = RectMakeCenter(playerX, playerY, join.img->getFrameWidth(), join.img->getFrameHeight());
 				break;
 			case PLAYER_RIGHT:
 				playerX += speed;
-				vJoin[k].rc = RectMakeCenter(playerX, playerY, vJoin[k].img->getFrameWidth(), vJoin[k].img->getFrameHeight());
+				join.rc = RectMakeCenter(playerX, playerY, join.img->getFrameWidth(), join.img->getFrameHeight());
 				break;
 			case PLAYER_UP:
 				playerY -= speed;
-				vJoin[k].rc = RectMakeCenter(playerX, playerY, vJoin[k].img->getFrameWidth(), vJoin[k].img->getFrameHeight());
+				join.rc = RectMakeCenter(playerX, playerY, join.img->getFrameWidth(), join.img->getFrameHeight());
 				break;
 			case PLAYER_DOWN:
 				playerY += speed;
-				vJoin[k].rc = RectMakeCenter(playerX, playerY, vJoin[k].img->getFrameWidth(), vJoin[k].img->getFrameHeight());
+				join.rc = RectMakeCenter(playerX, playerY, join.img->getFrameWidth(), join.img->getFrameHeight());
 				break;
 			}
 
@@ -271,13 +271,13 @@ void Join::playerMove()
 				optimalPath.pop();
 			}
 		}
-	}
+	//}
 }
 
 void Join::playerAstar()
 {
-	for (int k = 0; k < vJoin.size(); k++)
-	{
+	//for (int k = 0; k < vJoin.size(); k++)
+	//{
 		//목표 타일을 클릭하면 A* 시작
 		if (startAstar && !isFind && !noPath)
 		{
@@ -303,32 +303,32 @@ void Join::playerAstar()
 				//공격범위
 				for (int j = 0; j < 4; j++)
 				{
-					vJoin[k].rcAtk[0] = RectMake(vJoin[k].rc.left - 48, vJoin[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vJoin[k].rcAtk[1] = RectMake(vJoin[k].rc.left + 48, vJoin[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vJoin[k].rcAtk[2] = RectMake(vJoin[k].rc.left, vJoin[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vJoin[k].rcAtk[3] = RectMake(vJoin[k].rc.left, vJoin[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					atkList.push_back(vJoin[k].rcAtk[j]);
+					join.rcAtk[0] = RectMake(join.rc.left - 48, join.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					join.rcAtk[1] = RectMake(join.rc.left + 48, join.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					join.rcAtk[2] = RectMake(join.rc.left, join.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					join.rcAtk[3] = RectMake(join.rc.left, join.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(join.rcAtk[j]);
 				}
 
 				//메뉴선택 렉트
 				for (int j = 0; j < 5; j++)
 				{
-					rcMenu[0] = RectMake(vJoin[k].rc.left - 97, vJoin[k].rc.top - 30, 82, 20);
-					rcMenu[1] = RectMake(vJoin[k].rc.left - 97, vJoin[k].rc.top - 9, 82, 20);
-					rcMenu[2] = RectMake(vJoin[k].rc.left - 97, vJoin[k].rc.top + 12, 82, 20);
-					rcMenu[3] = RectMake(vJoin[k].rc.left - 97, vJoin[k].rc.top + 38, 82, 20);
-					rcMenu[4] = RectMake(vJoin[k].rc.left - 97, vJoin[k].rc.top + 63, 82, 20);
+					rcMenu[0] = RectMake(join.rc.left - 97, join.rc.top - 30, 82, 20);
+					rcMenu[1] = RectMake(join.rc.left - 97, join.rc.top - 9, 82, 20);
+					rcMenu[2] = RectMake(join.rc.left - 97, join.rc.top + 12, 82, 20);
+					rcMenu[3] = RectMake(join.rc.left - 97, join.rc.top + 38, 82, 20);
+					rcMenu[4] = RectMake(join.rc.left - 97, join.rc.top + 63, 82, 20);
 					menuList.push_back(rcMenu[j]);
 				}
 			}
 		}
-	}
+	//}
 }
 
 void Join::playerMenu()
 {
-	for (int k = 0; k < vJoin.size(); k++)
-	{
+	//for (int k = 0; k < vJoin.size(); k++)
+	//{
 		//메뉴
 		if (isClick)
 		{
@@ -373,10 +373,10 @@ void Join::playerMenu()
 
 					auto& prevTile = mainMap->getMap()[saveTile];
 
-					vJoin[k].rc.left = prevTile.rc.left;
-					vJoin[k].rc.right = prevTile.rc.right;
-					vJoin[k].rc.top = prevTile.rc.top;
-					vJoin[k].rc.bottom = prevTile.rc.bottom;
+					join.rc.left = prevTile.rc.left;
+					join.rc.right = prevTile.rc.right;
+					join.rc.top = prevTile.rc.top;
+					join.rc.bottom = prevTile.rc.bottom;
 					pDirection = sDirection;
 
 					playerX = prevTile.rc.left + TILE_WIDTH * 0.5;
@@ -388,19 +388,19 @@ void Join::playerMenu()
 				}
 			}
 		}
-	}
+	//}
 }
 
 void Join::playerCollision()
 {
-	for (int k = 0; k < vJoin.size(); k++)
-	{
+	//for (int k = 0; k < vJoin.size(); k++)
+	//{
 		RECT temp;
 
-		if (IntersectRect(&temp, &vJoin[k].rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJoin[k].rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJoin[k].rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJoin[k].rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
+		if (IntersectRect(&temp, &join.rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &join.rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &join.rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &join.rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
 		{
 			isTarget = true;
 			frameX = 1;
@@ -425,7 +425,7 @@ void Join::playerCollision()
 		{
 			frameX = 0;
 		}
-	}
+	//}
 }
 
 void Join::playerAnimation()
@@ -517,10 +517,10 @@ void Join::playerState()
 
 void Join::setPosition(RECT rc)
 {
-	for (int k = 0; k < vJoin.size(); k++)
-	{
-		vJoin[k].rc = rc;
-		playerX = vJoin[k].rc.left + (vJoin[k].rc.right - vJoin[k].rc.left) / 2;
-		playerY = vJoin[k].rc.top + (vJoin[k].rc.bottom - vJoin[k].rc.top) / 2;
-	}
+	//for (int k = 0; k < vJoin.size(); k++)
+	//{
+		join.rc = rc;
+		playerX = join.rc.left + (join.rc.right - join.rc.left) / 2;
+		playerY = join.rc.top + (join.rc.bottom - join.rc.top) / 2;
+	//}
 }

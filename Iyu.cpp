@@ -467,7 +467,7 @@ void Iyu::enemyMenu()
 
 void Iyu::enemyCollision()
 {
-	for (int k = 0; k < vIyu.size(); k++)
+	/*for (int k = 0; k < vIyu.size(); k++)
 	{
 		RECT temp;
 
@@ -643,7 +643,7 @@ void Iyu::enemyCollision()
 		{
 			frameX = 0;
 		}
-	}
+	}*/
 }
 
 void Iyu::setPosition(RECT rc)

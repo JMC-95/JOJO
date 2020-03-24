@@ -12,7 +12,7 @@ Johong::~Johong()
 HRESULT Johong::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//구조체 정보 기입
-	PlayerInfo johong;
+	//PlayerInfo johong;
 	//이미지 및 애니메이션
 	johong.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	johong.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -30,7 +30,7 @@ HRESULT Johong::init(const char * moveImg, const char * mAtkImg, const char * aR
 	johong.agi = 41;			//순발력
 	johong.ten = 43;			//사기
 	johong.movingCount = 4;		//이동력
-	vJohong.push_back(johong);
+	//vJohong.push_back(johong);
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -79,60 +79,60 @@ void Johong::update()
 
 void Johong::render(HDC hdc)
 {
-	for (int k = 0; k < vJohong.size(); k++)
-	{
+	//for (int k = 0; k < vJohong.size(); k++)
+	//{
 		if (isTurn)
 		{
 			if (isAtk)
 			{
-				vJohong[k].atkImg->aniRender(hdc, vJohong[k].rc.left - 8, vJohong[k].rc.top - 8, playerAni);
+				johong.atkImg->aniRender(hdc, johong.rc.left - 8, johong.rc.top - 8, playerAni);
 			}
 			else if (isHit)
 			{
-				vJohong[k].blockImg->frameRender(hdc, vJohong[k].rc.left, vJohong[k].rc.top, 0, 4);
+				johong.blockImg->frameRender(hdc, johong.rc.left, johong.rc.top, 0, 4);
 
 				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 				SetTextColor(hdc, RGB(255, 255, 255));
 				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vJohong[k].rc.left, vJohong[k].rc.top, str, strlen(str));
+				TextOut(hdc, johong.rc.left, johong.rc.top, str, strlen(str));
 				SelectObject(hdc, oldFont);
 				DeleteObject(myFont);
 			}
 			else
 			{
-				vJohong[k].img->aniRender(hdc, vJohong[k].rc.left, vJohong[k].rc.top, playerAni);
+				johong.img->aniRender(hdc, johong.rc.left, johong.rc.top, playerAni);
 			}
 		}
 		else
 		{
 			if (isHit)
 			{
-				vJohong[k].blockImg->frameRender(hdc, vJohong[k].rc.left, vJohong[k].rc.top, 0, 4);
+				johong.blockImg->frameRender(hdc, johong.rc.left, johong.rc.top, 0, 4);
 
 				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 				SetTextColor(hdc, RGB(255, 255, 255));
 				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vJohong[k].rc.left, vJohong[k].rc.top, str, strlen(str));
+				TextOut(hdc, johong.rc.left, johong.rc.top, str, strlen(str));
 				SelectObject(hdc, oldFont);
 				DeleteObject(myFont);
 			}
 			else
 			{
-				vJohong[k].img->frameAlphaRender(hdc, vJohong[k].rc.left, vJohong[k].rc.top, 0, frameY, 100);
+				johong.img->frameAlphaRender(hdc, johong.rc.left, johong.rc.top, 0, frameY, 100);
 			}
 		}
-	}
+	//}
 }
 
 void Johong::mouseMove()
 {
-	for (int k = 0; k < vJohong.size(); k++)
-	{
+	//for (int k = 0; k < vJohong.size(); k++)
+	//{
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			if (PtInRect(&vJohong[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+			if (PtInRect(&johong.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
@@ -149,26 +149,26 @@ void Johong::mouseMove()
 					//공격범위
 					for (int j = 0; j < 8; j++)
 					{
-						vJohong[k].rcAtk[0] = RectMake(vJohong[k].rc.left - 48, vJohong[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vJohong[k].rcAtk[1] = RectMake(vJohong[k].rc.left - 48, vJohong[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vJohong[k].rcAtk[2] = RectMake(vJohong[k].rc.left - 48, vJohong[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						vJohong[k].rcAtk[3] = RectMake(vJohong[k].rc.left + 48, vJohong[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vJohong[k].rcAtk[4] = RectMake(vJohong[k].rc.left + 48, vJohong[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vJohong[k].rcAtk[5] = RectMake(vJohong[k].rc.left + 48, vJohong[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						vJohong[k].rcAtk[6] = RectMake(vJohong[k].rc.left, vJohong[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vJohong[k].rcAtk[7] = RectMake(vJohong[k].rc.left, vJohong[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						atkList.push_back(vJohong[k].rcAtk[j]);
+						johong.rcAtk[0] = RectMake(johong.rc.left - 48, johong.rc.top, TILE_WIDTH, TILE_HEIGHT);
+						johong.rcAtk[1] = RectMake(johong.rc.left - 48, johong.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+						johong.rcAtk[2] = RectMake(johong.rc.left - 48, johong.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+						johong.rcAtk[3] = RectMake(johong.rc.left + 48, johong.rc.top, TILE_WIDTH, TILE_HEIGHT);
+						johong.rcAtk[4] = RectMake(johong.rc.left + 48, johong.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+						johong.rcAtk[5] = RectMake(johong.rc.left + 48, johong.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+						johong.rcAtk[6] = RectMake(johong.rc.left, johong.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+						johong.rcAtk[7] = RectMake(johong.rc.left, johong.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+						atkList.push_back(johong.rcAtk[j]);
 					}
 
 					//이동범위
 					if (!isStop)
 					{
-						floodFill(startTile, vJohong[k].movingCount);
+						floodFill(startTile, johong.movingCount);
 					}
 				}
 			}
 
-			if (!PtInRect(&vJohong[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			if (!PtInRect(&johong.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
@@ -210,7 +210,7 @@ void Johong::mouseMove()
 				}
 			}
 		}
-	}
+	//}
 
 	playerAstar();
 	playerMenu();
@@ -219,8 +219,8 @@ void Johong::mouseMove()
 
 void Johong::playerMove()
 {
-	for (int k = 0; k < vJohong.size(); k++)
-	{
+	//for (int k = 0; k < vJohong.size(); k++)
+	//{
 		stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 		stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
@@ -246,26 +246,26 @@ void Johong::playerMove()
 			isMove = true;
 		}
 
-		if (vJohong[k].rc.left > 0 || vJohong[k].rc.right < WINSIZEY ||
-			vJohong[k].rc.top > 0 || vJohong[k].rc.bottom < WINSIZEY)
+		if (johong.rc.left > 0 || johong.rc.right < WINSIZEY ||
+			johong.rc.top > 0 || johong.rc.bottom < WINSIZEY)
 		{
 			switch (pDirection)
 			{
 			case PLAYER_LEFT:
 				playerX -= speed;
-				vJohong[k].rc = RectMakeCenter(playerX, playerY, vJohong[k].img->getFrameWidth(), vJohong[k].img->getFrameHeight());
+				johong.rc = RectMakeCenter(playerX, playerY, johong.img->getFrameWidth(), johong.img->getFrameHeight());
 				break;
 			case PLAYER_RIGHT:
 				playerX += speed;
-				vJohong[k].rc = RectMakeCenter(playerX, playerY, vJohong[k].img->getFrameWidth(), vJohong[k].img->getFrameHeight());
+				johong.rc = RectMakeCenter(playerX, playerY, johong.img->getFrameWidth(), johong.img->getFrameHeight());
 				break;
 			case PLAYER_UP:
 				playerY -= speed;
-				vJohong[k].rc = RectMakeCenter(playerX, playerY, vJohong[k].img->getFrameWidth(), vJohong[k].img->getFrameHeight());
+				johong.rc = RectMakeCenter(playerX, playerY, johong.img->getFrameWidth(), johong.img->getFrameHeight());
 				break;
 			case PLAYER_DOWN:
 				playerY += speed;
-				vJohong[k].rc = RectMakeCenter(playerX, playerY, vJohong[k].img->getFrameWidth(), vJohong[k].img->getFrameHeight());
+				johong.rc = RectMakeCenter(playerX, playerY, johong.img->getFrameWidth(), johong.img->getFrameHeight());
 				break;
 			}
 
@@ -275,13 +275,13 @@ void Johong::playerMove()
 				optimalPath.pop();
 			}
 		}
-	}
+	//}
 }
 
 void Johong::playerAstar()
 {
-	for (int k = 0; k < vJohong.size(); k++)
-	{
+	//for (int k = 0; k < vJohong.size(); k++)
+	//{
 		//목표 타일을 클릭하면 A* 시작
 		if (startAstar && !isFind && !noPath)
 		{
@@ -307,36 +307,36 @@ void Johong::playerAstar()
 				//공격범위
 				for (int j = 0; j < 8; j++)
 				{
-					vJohong[k].rcAtk[0] = RectMake(vJohong[k].rc.left - 48, vJohong[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vJohong[k].rcAtk[1] = RectMake(vJohong[k].rc.left - 48, vJohong[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vJohong[k].rcAtk[2] = RectMake(vJohong[k].rc.left - 48, vJohong[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					vJohong[k].rcAtk[3] = RectMake(vJohong[k].rc.left + 48, vJohong[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vJohong[k].rcAtk[4] = RectMake(vJohong[k].rc.left + 48, vJohong[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vJohong[k].rcAtk[5] = RectMake(vJohong[k].rc.left + 48, vJohong[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					vJohong[k].rcAtk[6] = RectMake(vJohong[k].rc.left, vJohong[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vJohong[k].rcAtk[7] = RectMake(vJohong[k].rc.left, vJohong[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					atkList.push_back(vJohong[k].rcAtk[j]);
+					johong.rcAtk[0] = RectMake(johong.rc.left - 48, johong.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					johong.rcAtk[1] = RectMake(johong.rc.left - 48, johong.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					johong.rcAtk[2] = RectMake(johong.rc.left - 48, johong.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					johong.rcAtk[3] = RectMake(johong.rc.left + 48, johong.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					johong.rcAtk[4] = RectMake(johong.rc.left + 48, johong.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					johong.rcAtk[5] = RectMake(johong.rc.left + 48, johong.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					johong.rcAtk[6] = RectMake(johong.rc.left, johong.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					johong.rcAtk[7] = RectMake(johong.rc.left, johong.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(johong.rcAtk[j]);
 				}
 
 				//메뉴선택 렉트
 				for (int j = 0; j < 5; j++)
 				{
-					rcMenu[0] = RectMake(vJohong[k].rc.left - 97, vJohong[k].rc.top - 30, 82, 20);
-					rcMenu[1] = RectMake(vJohong[k].rc.left - 97, vJohong[k].rc.top - 9, 82, 20);
-					rcMenu[2] = RectMake(vJohong[k].rc.left - 97, vJohong[k].rc.top + 12, 82, 20);
-					rcMenu[3] = RectMake(vJohong[k].rc.left - 97, vJohong[k].rc.top + 38, 82, 20);
-					rcMenu[4] = RectMake(vJohong[k].rc.left - 97, vJohong[k].rc.top + 63, 82, 20);
+					rcMenu[0] = RectMake(johong.rc.left - 97, johong.rc.top - 30, 82, 20);
+					rcMenu[1] = RectMake(johong.rc.left - 97, johong.rc.top - 9, 82, 20);
+					rcMenu[2] = RectMake(johong.rc.left - 97, johong.rc.top + 12, 82, 20);
+					rcMenu[3] = RectMake(johong.rc.left - 97, johong.rc.top + 38, 82, 20);
+					rcMenu[4] = RectMake(johong.rc.left - 97, johong.rc.top + 63, 82, 20);
 					menuList.push_back(rcMenu[j]);
 				}
 			}
 		}
-	}
+	//}
 }
 
 void Johong::playerMenu()
 {
-	for (int k = 0; k < vJohong.size(); k++)
-	{
+	//for (int k = 0; k < vJohong.size(); k++)
+	//{
 		//메뉴
 		if (isClick)
 		{
@@ -381,10 +381,10 @@ void Johong::playerMenu()
 
 					auto& prevTile = mainMap->getMap()[saveTile];
 
-					vJohong[k].rc.left = prevTile.rc.left;
-					vJohong[k].rc.right = prevTile.rc.right;
-					vJohong[k].rc.top = prevTile.rc.top;
-					vJohong[k].rc.bottom = prevTile.rc.bottom;
+					johong.rc.left = prevTile.rc.left;
+					johong.rc.right = prevTile.rc.right;
+					johong.rc.top = prevTile.rc.top;
+					johong.rc.bottom = prevTile.rc.bottom;
 					pDirection = sDirection;
 
 					playerX = prevTile.rc.left + TILE_WIDTH * 0.5;
@@ -396,23 +396,23 @@ void Johong::playerMenu()
 				}
 			}
 		}
-	}
+	//}
 }
 
 void Johong::playerCollision()
 {
-	for (int k = 0; k < vJohong.size(); k++)
-	{
+	//for (int k = 0; k < vJohong.size(); k++)
+	//{
 		RECT temp;
 
-		if (IntersectRect(&temp, &vJohong[k].rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJohong[k].rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJohong[k].rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJohong[k].rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJohong[k].rcAtk[4], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJohong[k].rcAtk[5], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJohong[k].rcAtk[6], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJohong[k].rcAtk[7], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
+		if (IntersectRect(&temp, &johong.rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &johong.rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &johong.rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &johong.rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &johong.rcAtk[4], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &johong.rcAtk[5], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &johong.rcAtk[6], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &johong.rcAtk[7], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
 		{
 			isTarget = true;
 			frameX = 1;
@@ -437,7 +437,7 @@ void Johong::playerCollision()
 		{
 			frameX = 0;
 		}
-	}
+	//}
 }
 
 void Johong::playerAnimation()
@@ -529,10 +529,10 @@ void Johong::playerState()
 
 void Johong::setPosition(RECT rc)
 {
-	for (int k = 0; k < vJohong.size(); k++)
-	{
-		vJohong[k].rc = rc;
-		playerX = vJohong[k].rc.left + (vJohong[k].rc.right - vJohong[k].rc.left) / 2;
-		playerY = vJohong[k].rc.top + (vJohong[k].rc.bottom - vJohong[k].rc.top) / 2;
-	}
+	//for (int k = 0; k < vJohong.size(); k++)
+	//{
+		johong.rc = rc;
+		playerX = johong.rc.left + (johong.rc.right - johong.rc.left) / 2;
+		playerY = johong.rc.top + (johong.rc.bottom - johong.rc.top) / 2;
+	//}
 }

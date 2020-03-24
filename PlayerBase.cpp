@@ -26,6 +26,38 @@ void PlayerBase::render(HDC hdc)
 {
 }
 
+void PlayerBase::mouseMove()
+{
+}
+
+void PlayerBase::playerMove()
+{
+}
+
+void PlayerBase::playerAstar()
+{
+}
+
+void PlayerBase::playerMenu()
+{
+}
+
+void PlayerBase::playerCollision()
+{
+}
+
+void PlayerBase::playerAnimation()
+{
+}
+
+void PlayerBase::playerState()
+{
+}
+
+void PlayerBase::setPosition(RECT rc)
+{
+}
+
 void PlayerBase::aStar()
 {
 	int endX = endTile % TILE_X;

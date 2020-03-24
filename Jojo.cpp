@@ -11,8 +11,6 @@ Jojo::~Jojo()
 
 HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
-	//구조체 정보 기입
-	PlayerInfo jojo;
 	//이미지 및 애니메이션
 	jojo.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	jojo.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -30,7 +28,6 @@ HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	jojo.agi = 58;			//순발력
 	jojo.ten = 60;			//사기
 	jojo.movingCount = 6;	//이동력
-	vJojo.push_back(jojo);
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -86,60 +83,60 @@ void Jojo::update()
 
 void Jojo::render(HDC hdc)
 {
-	for (int k = 0; k < vJojo.size(); k++)
-	{
+	//for (int k = 0; k < vJojo.size(); k++)
+	//{
 		if (isTurn)
 		{
 			if (isAtk)
 			{
-				vJojo[k].atkImg->aniRender(hdc, vJojo[k].rc.left - 8, vJojo[k].rc.top - 8, playerAni);
+				jojo.atkImg->aniRender(hdc, jojo.rc.left - 8, jojo.rc.top - 8, playerAni);
 			}
 			else if (isHit)
 			{
-				vJojo[k].blockImg->frameRender(hdc, vJojo[k].rc.left, vJojo[k].rc.top, 0, 4);
+				jojo.blockImg->frameRender(hdc, jojo.rc.left, jojo.rc.top, 0, 4);
 
 				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 				SetTextColor(hdc, RGB(255, 255, 255));
 				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vJojo[k].rc.left, vJojo[k].rc.top, str, strlen(str));
+				TextOut(hdc, jojo.rc.left, jojo.rc.top, str, strlen(str));
 				SelectObject(hdc, oldFont);
 				DeleteObject(myFont);
 			}
 			else
 			{
-				vJojo[k].img->aniRender(hdc, vJojo[k].rc.left, vJojo[k].rc.top, playerAni);
+				jojo.img->aniRender(hdc, jojo.rc.left, jojo.rc.top, playerAni);
 			}
 		}
 		else
 		{
 			if (isHit)
 			{
-				vJojo[k].blockImg->frameRender(hdc, vJojo[k].rc.left, vJojo[k].rc.top, 0, 4);
+				jojo.blockImg->frameRender(hdc, jojo.rc.left, jojo.rc.top, 0, 4);
 
 				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 				SetTextColor(hdc, RGB(255, 255, 255));
 				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vJojo[k].rc.left, vJojo[k].rc.top, str, strlen(str));
+				TextOut(hdc, jojo.rc.left, jojo.rc.top, str, strlen(str));
 				SelectObject(hdc, oldFont);
 				DeleteObject(myFont);
 			}
 			else
 			{
-				vJojo[k].img->frameAlphaRender(hdc, vJojo[k].rc.left, vJojo[k].rc.top, 0, frameY, 100);
+				jojo.img->frameAlphaRender(hdc, jojo.rc.left, jojo.rc.top, 0, frameY, 100);
 			}
 		}
-	}
+	//}
 }
 
 void Jojo::mouseMove()
 {
-	for (int k = 0; k < vJojo.size(); k++)
-	{
+	//for (int k = 0; k < vJojo.size(); k++)
+	//{
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			if (PtInRect(&vJojo[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+			if (PtInRect(&jojo.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
@@ -156,22 +153,22 @@ void Jojo::mouseMove()
 					//공격범위
 					for (int j = 0; j < 4; j++)
 					{
-						vJojo[k].rcAtk[0] = RectMake(vJojo[k].rc.left - 48, vJojo[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vJojo[k].rcAtk[1] = RectMake(vJojo[k].rc.left + 48, vJojo[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vJojo[k].rcAtk[2] = RectMake(vJojo[k].rc.left, vJojo[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vJojo[k].rcAtk[3] = RectMake(vJojo[k].rc.left, vJojo[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						atkList.push_back(vJojo[k].rcAtk[j]);
+						jojo.rcAtk[0] = RectMake(jojo.rc.left - 48, jojo.rc.top, TILE_WIDTH, TILE_HEIGHT);
+						jojo.rcAtk[1] = RectMake(jojo.rc.left + 48, jojo.rc.top, TILE_WIDTH, TILE_HEIGHT);
+						jojo.rcAtk[2] = RectMake(jojo.rc.left, jojo.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+						jojo.rcAtk[3] = RectMake(jojo.rc.left, jojo.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+						atkList.push_back(jojo.rcAtk[j]);
 					}
 
 					//이동범위
 					if (!isStop)
 					{
-						floodFill(startTile, vJojo[k].movingCount);
+						floodFill(startTile, jojo.movingCount);
 					}
 				}
 			}
 
-			if (!PtInRect(&vJojo[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			if (!PtInRect(&jojo.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
@@ -213,7 +210,7 @@ void Jojo::mouseMove()
 				}
 			}
 		}
-	}
+	//}
 
 	playerAstar();
 	playerMenu();
@@ -222,8 +219,8 @@ void Jojo::mouseMove()
 
 void Jojo::playerMove()
 {
-	for (int k = 0; k < vJojo.size(); k++)
-	{
+	//for (int k = 0; k < vJojo.size(); k++)
+	//{
 		stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 		stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
@@ -249,26 +246,26 @@ void Jojo::playerMove()
 			isMove = true;
 		}
 
-		if (vJojo[k].rc.left > 0 || vJojo[k].rc.right < WINSIZEY ||
-			vJojo[k].rc.top > 0 || vJojo[k].rc.bottom < WINSIZEY)
+		if (jojo.rc.left > 0 || jojo.rc.right < WINSIZEY ||
+			jojo.rc.top > 0 || jojo.rc.bottom < WINSIZEY)
 		{
 			switch (pDirection)
 			{
 			case PLAYER_LEFT:
 				playerX -= speed;
-				vJojo[k].rc = RectMakeCenter(playerX, playerY, vJojo[k].img->getFrameWidth(), vJojo[k].img->getFrameHeight());
+				jojo.rc = RectMakeCenter(playerX, playerY, jojo.img->getFrameWidth(), jojo.img->getFrameHeight());
 				break;
 			case PLAYER_RIGHT:
 				playerX += speed;
-				vJojo[k].rc = RectMakeCenter(playerX, playerY, vJojo[k].img->getFrameWidth(), vJojo[k].img->getFrameHeight());
+				jojo.rc = RectMakeCenter(playerX, playerY, jojo.img->getFrameWidth(), jojo.img->getFrameHeight());
 				break;
 			case PLAYER_UP:
 				playerY -= speed;
-				vJojo[k].rc = RectMakeCenter(playerX, playerY, vJojo[k].img->getFrameWidth(), vJojo[k].img->getFrameHeight());
+				jojo.rc = RectMakeCenter(playerX, playerY, jojo.img->getFrameWidth(), jojo.img->getFrameHeight());
 				break;
 			case PLAYER_DOWN:
 				playerY += speed;
-				vJojo[k].rc = RectMakeCenter(playerX, playerY, vJojo[k].img->getFrameWidth(), vJojo[k].img->getFrameHeight());
+				jojo.rc = RectMakeCenter(playerX, playerY, jojo.img->getFrameWidth(), jojo.img->getFrameHeight());
 				break;
 			}
 
@@ -278,13 +275,13 @@ void Jojo::playerMove()
 				optimalPath.pop();
 			}
 		}
-	}
+	//}
 }
 
 void Jojo::playerAstar()
 {
-	for (int k = 0; k < vJojo.size(); k++)
-	{
+	//for (int k = 0; k < vJojo.size(); k++)
+	//{
 		//목표 타일을 클릭하면 A* 시작
 		if (startAstar && !isFind && !noPath)
 		{
@@ -310,32 +307,32 @@ void Jojo::playerAstar()
 				//공격범위
 				for (int j = 0; j < 4; j++)
 				{
-					vJojo[k].rcAtk[0] = RectMake(vJojo[k].rc.left - 48, vJojo[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vJojo[k].rcAtk[1] = RectMake(vJojo[k].rc.left + 48, vJojo[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vJojo[k].rcAtk[2] = RectMake(vJojo[k].rc.left, vJojo[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vJojo[k].rcAtk[3] = RectMake(vJojo[k].rc.left, vJojo[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					atkList.push_back(vJojo[k].rcAtk[j]);
+					jojo.rcAtk[0] = RectMake(jojo.rc.left - 48, jojo.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					jojo.rcAtk[1] = RectMake(jojo.rc.left + 48, jojo.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					jojo.rcAtk[2] = RectMake(jojo.rc.left, jojo.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					jojo.rcAtk[3] = RectMake(jojo.rc.left, jojo.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(jojo.rcAtk[j]);
 				}
 
 				//메뉴선택 렉트
 				for (int j = 0; j < 5; j++)
 				{
-					rcMenu[0] = RectMake(vJojo[k].rc.left - 97, vJojo[k].rc.top - 30, 82, 20);
-					rcMenu[1] = RectMake(vJojo[k].rc.left - 97, vJojo[k].rc.top - 9, 82, 20);
-					rcMenu[2] = RectMake(vJojo[k].rc.left - 97, vJojo[k].rc.top + 12, 82, 20);
-					rcMenu[3] = RectMake(vJojo[k].rc.left - 97, vJojo[k].rc.top + 38, 82, 20);
-					rcMenu[4] = RectMake(vJojo[k].rc.left - 97, vJojo[k].rc.top + 63, 82, 20);
+					rcMenu[0] = RectMake(jojo.rc.left - 97, jojo.rc.top - 30, 82, 20);
+					rcMenu[1] = RectMake(jojo.rc.left - 97, jojo.rc.top - 9, 82, 20);
+					rcMenu[2] = RectMake(jojo.rc.left - 97, jojo.rc.top + 12, 82, 20);
+					rcMenu[3] = RectMake(jojo.rc.left - 97, jojo.rc.top + 38, 82, 20);
+					rcMenu[4] = RectMake(jojo.rc.left - 97, jojo.rc.top + 63, 82, 20);
 					menuList.push_back(rcMenu[j]);
 				}
 			}
 		}
-	}
+	//}
 }
 
 void Jojo::playerMenu()
 {
-	for (int k = 0; k < vJojo.size(); k++)
-	{
+	//for (int k = 0; k < vJojo.size(); k++)
+	//{
 		//메뉴
 		if (isClick)
 		{
@@ -380,10 +377,10 @@ void Jojo::playerMenu()
 
 					auto& prevTile = mainMap->getMap()[saveTile];
 
-					vJojo[k].rc.left = prevTile.rc.left;
-					vJojo[k].rc.right = prevTile.rc.right;
-					vJojo[k].rc.top = prevTile.rc.top;
-					vJojo[k].rc.bottom = prevTile.rc.bottom;
+					jojo.rc.left = prevTile.rc.left;
+					jojo.rc.right = prevTile.rc.right;
+					jojo.rc.top = prevTile.rc.top;
+					jojo.rc.bottom = prevTile.rc.bottom;
 					pDirection = sDirection;
 
 					playerX = prevTile.rc.left + TILE_WIDTH * 0.5;
@@ -395,19 +392,19 @@ void Jojo::playerMenu()
 				}
 			}
 		}
-	}
+	//}
 }
 
 void Jojo::playerCollision()
 {
-	for (int k = 0; k < vJojo.size(); k++)
-	{
+	//for (int k = 0; k < vJojo.size(); k++)
+	//{
 		RECT temp;
 
-		if (IntersectRect(&temp, &vJojo[k].rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJojo[k].rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJojo[k].rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vJojo[k].rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
+		if (IntersectRect(&temp, &jojo.rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &jojo.rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &jojo.rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &jojo.rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
 		{
 			isTarget = true;
 			frameX = 1;
@@ -432,7 +429,7 @@ void Jojo::playerCollision()
 		{
 			frameX = 0;
 		}
-	}
+	//}
 }
 
 void Jojo::playerAnimation()
@@ -524,10 +521,10 @@ void Jojo::playerState()
 
 void Jojo::setPosition(RECT rc)
 {
-	for (int k = 0; k < vJojo.size(); k++)
-	{
-		vJojo[k].rc = rc;
-		playerX = vJojo[k].rc.left + (vJojo[k].rc.right - vJojo[k].rc.left) / 2;
-		playerY = vJojo[k].rc.top + (vJojo[k].rc.bottom - vJojo[k].rc.top) / 2;
-	}
+	//for (int k = 0; k < vJojo.size(); k++)
+	//{
+		jojo.rc = rc;
+		playerX = jojo.rc.left + (jojo.rc.right - jojo.rc.left) / 2;
+		playerY = jojo.rc.top + (jojo.rc.bottom - jojo.rc.top) / 2;
+	//}
 }

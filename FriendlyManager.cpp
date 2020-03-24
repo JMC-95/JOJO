@@ -11,7 +11,6 @@ FriendlyManager::~FriendlyManager()
 
 HRESULT FriendlyManager::init()
 {
-	
 	m_Dogyeom = new Dogyeom;
 	m_Dogyeom->init("eMoveRange", "attackRange", "atkRange", "µµ∞‚", "µµ∞‚ATK", "µµ∞‚BH");
 

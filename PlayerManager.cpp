@@ -11,9 +11,24 @@ PlayerManager::~PlayerManager()
 
 HRESULT PlayerManager::init()
 {
-	m_Agjin = new Agjin;
+	vPlayer.push_back(new Agjin);
+	vPlayer[0]->init("pMoveRange", "attackRange", "atkRange", "악진", "악진ATK", "악진BH");
+	//vPlayer.push_back(new Hahudon);
+	//vPlayer[1]->init("pMoveRange", "attackRange", "atkRange", "하후돈", "하후돈ATK", "하후돈BH");
+	//vPlayer.push_back(new Hahudon);
+	//vPlayer[2]->init("pMoveRange", "attackRange", "atkRange", "하후연", "하후연ATK", "하후연BH");
+	//vPlayer.push_back(new Ijeon);
+	//vPlayer[3]->init("pMoveRange", "attackRange", "atkRange", "이전", "이전ATK", "이전BH");
+	//vPlayer.push_back(new Johong);
+	//vPlayer[4]->init("pMoveRange", "attackRange", "atkRange", "조홍", "조홍ATK", "조홍BH");
+	//vPlayer.push_back(new Join);
+	//vPlayer[5]->init("pMoveRange", "attackRange", "atkRange", "조인", "조인ATK", "조인BH");
+	//vPlayer.push_back(new Jojo);
+	//vPlayer[6]->init("pMoveRange", "attackRange", "atkRange", "조조", "조조ATK", "조조BH");
+
+	/*m_Agjin = new Agjin;
 	m_Agjin->init("pMoveRange", "attackRange", "atkRange", "악진", "악진ATK", "악진BH");
-	
+
 	m_Hahudon = new Hahudon;
 	m_Hahudon->init("pMoveRange", "attackRange", "atkRange", "하후돈", "하후돈ATK", "하후돈BH");
 
@@ -30,40 +45,48 @@ HRESULT PlayerManager::init()
 	m_Join->init("pMoveRange", "attackRange", "atkRange", "조인", "조인ATK", "조인BH");
 
 	m_Jojo = new Jojo;
-	m_Jojo->init("pMoveRange", "attackRange", "atkRange", "조조", "조조ATK", "조조BH");
+	m_Jojo->init("pMoveRange", "attackRange", "atkRange", "조조", "조조ATK", "조조BH");*/
 
 	return S_OK;
 }
 
 void PlayerManager::release()
 {
-	SAFE_DELETE(m_Agjin);
+	/*SAFE_DELETE(m_Agjin);
 	SAFE_DELETE(m_Hahudon);
 	SAFE_DELETE(m_Hahuyeon);
 	SAFE_DELETE(m_Ijeon);
 	SAFE_DELETE(m_Johong);
 	SAFE_DELETE(m_Join);
-	SAFE_DELETE(m_Jojo);
+	SAFE_DELETE(m_Jojo);*/
 }
 
 void PlayerManager::update()
 {
-	m_Agjin->update();
+	/*m_Agjin->update();
 	m_Hahudon->update();
 	m_Hahuyeon->update();
 	m_Ijeon->update();
 	m_Johong->update();
 	m_Join->update();
-	m_Jojo->update();
+	m_Jojo->update();*/
+	for (int i = 0; i < vPlayer.size(); i++)
+	{
+		vPlayer[i]->update();
+	}
 }
 
 void PlayerManager::render(HDC hdc)
 {
-	m_Agjin->render(hdc);
+	/*m_Agjin->render(hdc);
 	m_Hahudon->render(hdc);
 	m_Hahuyeon->render(hdc);
 	m_Ijeon->render(hdc);
 	m_Johong->render(hdc);
 	m_Join->render(hdc);
-	m_Jojo->render(hdc);
+	m_Jojo->render(hdc);*/
+	for (int i = 0; i < vPlayer.size(); i++)
+	{
+		vPlayer[i]->render(hdc);
+	}
 }

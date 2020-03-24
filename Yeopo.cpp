@@ -472,7 +472,7 @@ void Yeopo::enemyMenu()
 
 void Yeopo::enemyCollision()
 {
-	for (int k = 0; k < vYeopo.size(); k++)
+	/*for (int k = 0; k < vYeopo.size(); k++)
 	{
 		if (IntersectRect(&temp, &vYeopo[k].rcAtk[0], &PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc) ||
 			IntersectRect(&temp, &vYeopo[k].rcAtk[1], &PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc) ||
@@ -766,7 +766,7 @@ void Yeopo::enemyCollision()
 		{
 			frameX = 0;
 		}
-	}
+	}*/
 }
 
 void Yeopo::setPosition(RECT rc)

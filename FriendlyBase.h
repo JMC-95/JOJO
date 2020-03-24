@@ -34,7 +34,6 @@ struct FriendInfo
 class FriendlyBase
 {
 protected:
-	//vector<FriendInfo> vBase;
 	vector<RECT> atkList;		//공격용 렉트를 담는 벡터
 	vector<RECT> menuList;		//메뉴 렉트를 담는 벡터
 	vector<int> openList;		//오픈리스트 벡터

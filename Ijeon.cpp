@@ -11,8 +11,6 @@ Ijeon::~Ijeon()
 
 HRESULT Ijeon::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
-	//구조체 정보 기입
-	PlayerInfo ijeon;
 	//이미지 및 애니메이션
 	ijeon.moveRngImg = IMAGEMANAGER->findImage(moveImg);	//캐릭터 클릭시 이동범위 이미지
 	ijeon.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -30,7 +28,6 @@ HRESULT Ijeon::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	ijeon.agi = 45;			//순발력
 	ijeon.ten = 36;			//사기
 	ijeon.movingCount = 4;	//이동력
-	vIjeon.push_back(ijeon);
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -79,60 +76,60 @@ void Ijeon::update()
 
 void Ijeon::render(HDC hdc)
 {
-	for (int k = 0; k < vIjeon.size(); k++)
-	{
+	//for (int k = 0; k < vIjeon.size(); k++)
+	//{
 		if (isTurn)
 		{
 			if (isAtk)
 			{
-				vIjeon[k].atkImg->aniRender(hdc, vIjeon[k].rc.left - 8, vIjeon[k].rc.top - 8, playerAni);
+				ijeon.atkImg->aniRender(hdc, ijeon.rc.left - 8, ijeon.rc.top - 8, playerAni);
 			}
 			else if (isHit)
 			{
-				vIjeon[k].blockImg->frameRender(hdc, vIjeon[k].rc.left, vIjeon[k].rc.top, 0, 4);
+				ijeon.blockImg->frameRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, 4);
 
 				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 				SetTextColor(hdc, RGB(255, 255, 255));
 				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vIjeon[k].rc.left, vIjeon[k].rc.top, str, strlen(str));
+				TextOut(hdc, ijeon.rc.left, ijeon.rc.top, str, strlen(str));
 				SelectObject(hdc, oldFont);
 				DeleteObject(myFont);
 			}
 			else
 			{
-				vIjeon[k].img->aniRender(hdc, vIjeon[k].rc.left, vIjeon[k].rc.top, playerAni);
+				ijeon.img->aniRender(hdc, ijeon.rc.left, ijeon.rc.top, playerAni);
 			}
 		}
 		else
 		{
 			if (isHit)
 			{
-				vIjeon[k].blockImg->frameRender(hdc, vIjeon[k].rc.left, vIjeon[k].rc.top, 0, 4);
+				ijeon.blockImg->frameRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, 4);
 
 				HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 				HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 				SetTextColor(hdc, RGB(255, 255, 255));
 				sprintf_s(str, "%d", COLLISIONMANAGER->getDamage());
-				TextOut(hdc, vIjeon[k].rc.left, vIjeon[k].rc.top, str, strlen(str));
+				TextOut(hdc, ijeon.rc.left, ijeon.rc.top, str, strlen(str));
 				SelectObject(hdc, oldFont);
 				DeleteObject(myFont);
 			}
 			else
 			{
-				vIjeon[k].img->frameAlphaRender(hdc, vIjeon[k].rc.left, vIjeon[k].rc.top, 0, frameY, 100);
+				ijeon.img->frameAlphaRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, frameY, 100);
 			}
 		}
-	}
+	//}
 }
 
 void Ijeon::mouseMove()
 {
-	for (int k = 0; k < vIjeon.size(); k++)
-	{
+	//for (int k = 0; k < vIjeon.size(); k++)
+	//{
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			if (PtInRect(&vIjeon[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+			if (PtInRect(&ijeon.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
@@ -149,26 +146,26 @@ void Ijeon::mouseMove()
 					//공격범위
 					for (int j = 0; j < 8; j++)
 					{
-						vIjeon[k].rcAtk[0] = RectMake(vIjeon[k].rc.left - 48, vIjeon[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vIjeon[k].rcAtk[1] = RectMake(vIjeon[k].rc.left - 48, vIjeon[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vIjeon[k].rcAtk[2] = RectMake(vIjeon[k].rc.left - 48, vIjeon[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						vIjeon[k].rcAtk[3] = RectMake(vIjeon[k].rc.left + 48, vIjeon[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-						vIjeon[k].rcAtk[4] = RectMake(vIjeon[k].rc.left + 48, vIjeon[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vIjeon[k].rcAtk[5] = RectMake(vIjeon[k].rc.left + 48, vIjeon[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						vIjeon[k].rcAtk[6] = RectMake(vIjeon[k].rc.left, vIjeon[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-						vIjeon[k].rcAtk[7] = RectMake(vIjeon[k].rc.left, vIjeon[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-						atkList.push_back(vIjeon[k].rcAtk[j]);
+						ijeon.rcAtk[0] = RectMake(ijeon.rc.left - 48, ijeon.rc.top, TILE_WIDTH, TILE_HEIGHT);
+						ijeon.rcAtk[1] = RectMake(ijeon.rc.left - 48, ijeon.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+						ijeon.rcAtk[2] = RectMake(ijeon.rc.left - 48, ijeon.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+						ijeon.rcAtk[3] = RectMake(ijeon.rc.left + 48, ijeon.rc.top, TILE_WIDTH, TILE_HEIGHT);
+						ijeon.rcAtk[4] = RectMake(ijeon.rc.left + 48, ijeon.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+						ijeon.rcAtk[5] = RectMake(ijeon.rc.left + 48, ijeon.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+						ijeon.rcAtk[6] = RectMake(ijeon.rc.left, ijeon.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+						ijeon.rcAtk[7] = RectMake(ijeon.rc.left, ijeon.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+						atkList.push_back(ijeon.rcAtk[j]);
 					}
 
 					//이동범위
 					if (!isStop)
 					{
-						floodFill(startTile, vIjeon[k].movingCount);
+						floodFill(startTile, ijeon.movingCount);
 					}
 				}
 			}
 
-			if (!PtInRect(&vIjeon[k].rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+			if (!PtInRect(&ijeon.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
@@ -210,7 +207,7 @@ void Ijeon::mouseMove()
 				}
 			}
 		}
-	}
+	//}
 
 	playerAstar();
 	playerMenu();
@@ -219,8 +216,8 @@ void Ijeon::mouseMove()
 
 void Ijeon::playerMove()
 {
-	for (int k = 0; k < vIjeon.size(); k++)
-	{
+	//for (int k = 0; k < vIjeon.size(); k++)
+	//{
 		stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 		stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
@@ -246,26 +243,26 @@ void Ijeon::playerMove()
 			isMove = true;
 		}
 
-		if (vIjeon[k].rc.left > 0 || vIjeon[k].rc.right < WINSIZEY ||
-			vIjeon[k].rc.top > 0 || vIjeon[k].rc.bottom < WINSIZEY)
+		if (ijeon.rc.left > 0 || ijeon.rc.right < WINSIZEY ||
+			ijeon.rc.top > 0 || ijeon.rc.bottom < WINSIZEY)
 		{
 			switch (pDirection)
 			{
 			case PLAYER_LEFT:
 				playerX -= speed;
-				vIjeon[k].rc = RectMakeCenter(playerX, playerY, vIjeon[k].img->getFrameWidth(), vIjeon[k].img->getFrameHeight());
+				ijeon.rc = RectMakeCenter(playerX, playerY, ijeon.img->getFrameWidth(), ijeon.img->getFrameHeight());
 				break;
 			case PLAYER_RIGHT:
 				playerX += speed;
-				vIjeon[k].rc = RectMakeCenter(playerX, playerY, vIjeon[k].img->getFrameWidth(), vIjeon[k].img->getFrameHeight());
+				ijeon.rc = RectMakeCenter(playerX, playerY, ijeon.img->getFrameWidth(), ijeon.img->getFrameHeight());
 				break;
 			case PLAYER_UP:
 				playerY -= speed;
-				vIjeon[k].rc = RectMakeCenter(playerX, playerY, vIjeon[k].img->getFrameWidth(), vIjeon[k].img->getFrameHeight());
+				ijeon.rc = RectMakeCenter(playerX, playerY, ijeon.img->getFrameWidth(), ijeon.img->getFrameHeight());
 				break;
 			case PLAYER_DOWN:
 				playerY += speed;
-				vIjeon[k].rc = RectMakeCenter(playerX, playerY, vIjeon[k].img->getFrameWidth(), vIjeon[k].img->getFrameHeight());
+				ijeon.rc = RectMakeCenter(playerX, playerY, ijeon.img->getFrameWidth(), ijeon.img->getFrameHeight());
 				break;
 			}
 
@@ -275,13 +272,13 @@ void Ijeon::playerMove()
 				optimalPath.pop();
 			}
 		}
-	}
+	//}
 }
 
 void Ijeon::playerAstar()
 {
-	for (int k = 0; k < vIjeon.size(); k++)
-	{
+	//for (int k = 0; k < vIjeon.size(); k++)
+	//{
 		//목표 타일을 클릭하면 A* 시작
 		if (startAstar && !isFind && !noPath)
 		{
@@ -307,36 +304,36 @@ void Ijeon::playerAstar()
 				//공격범위
 				for (int j = 0; j < 8; j++)
 				{
-					vIjeon[k].rcAtk[0] = RectMake(vIjeon[k].rc.left - 48, vIjeon[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vIjeon[k].rcAtk[1] = RectMake(vIjeon[k].rc.left - 48, vIjeon[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vIjeon[k].rcAtk[2] = RectMake(vIjeon[k].rc.left - 48, vIjeon[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					vIjeon[k].rcAtk[3] = RectMake(vIjeon[k].rc.left + 48, vIjeon[k].rc.top, TILE_WIDTH, TILE_HEIGHT);
-					vIjeon[k].rcAtk[4] = RectMake(vIjeon[k].rc.left + 48, vIjeon[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vIjeon[k].rcAtk[5] = RectMake(vIjeon[k].rc.left + 48, vIjeon[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					vIjeon[k].rcAtk[6] = RectMake(vIjeon[k].rc.left, vIjeon[k].rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					vIjeon[k].rcAtk[7] = RectMake(vIjeon[k].rc.left, vIjeon[k].rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					atkList.push_back(vIjeon[k].rcAtk[j]);
+					ijeon.rcAtk[0] = RectMake(ijeon.rc.left - 48, ijeon.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					ijeon.rcAtk[1] = RectMake(ijeon.rc.left - 48, ijeon.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					ijeon.rcAtk[2] = RectMake(ijeon.rc.left - 48, ijeon.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					ijeon.rcAtk[3] = RectMake(ijeon.rc.left + 48, ijeon.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					ijeon.rcAtk[4] = RectMake(ijeon.rc.left + 48, ijeon.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					ijeon.rcAtk[5] = RectMake(ijeon.rc.left + 48, ijeon.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					ijeon.rcAtk[6] = RectMake(ijeon.rc.left, ijeon.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					ijeon.rcAtk[7] = RectMake(ijeon.rc.left, ijeon.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(ijeon.rcAtk[j]);
 				}
 
 				//메뉴선택 렉트
 				for (int j = 0; j < 5; j++)
 				{
-					rcMenu[0] = RectMake(vIjeon[k].rc.left - 97, vIjeon[k].rc.top - 30, 82, 20);
-					rcMenu[1] = RectMake(vIjeon[k].rc.left - 97, vIjeon[k].rc.top - 9, 82, 20);
-					rcMenu[2] = RectMake(vIjeon[k].rc.left - 97, vIjeon[k].rc.top + 12, 82, 20);
-					rcMenu[3] = RectMake(vIjeon[k].rc.left - 97, vIjeon[k].rc.top + 38, 82, 20);
-					rcMenu[4] = RectMake(vIjeon[k].rc.left - 97, vIjeon[k].rc.top + 63, 82, 20);
+					rcMenu[0] = RectMake(ijeon.rc.left - 97, ijeon.rc.top - 30, 82, 20);
+					rcMenu[1] = RectMake(ijeon.rc.left - 97, ijeon.rc.top - 9, 82, 20);
+					rcMenu[2] = RectMake(ijeon.rc.left - 97, ijeon.rc.top + 12, 82, 20);
+					rcMenu[3] = RectMake(ijeon.rc.left - 97, ijeon.rc.top + 38, 82, 20);
+					rcMenu[4] = RectMake(ijeon.rc.left - 97, ijeon.rc.top + 63, 82, 20);
 					menuList.push_back(rcMenu[j]);
 				}
 			}
 		}
-	}
+	//}
 }
 
 void Ijeon::playerMenu()
 {
-	for (int k = 0; k < vIjeon.size(); k++)
-	{
+	//for (int k = 0; k < vIjeon.size(); k++)
+	//{
 		//메뉴
 		if (isClick)
 		{
@@ -381,10 +378,10 @@ void Ijeon::playerMenu()
 
 					auto& prevTile = mainMap->getMap()[saveTile];
 
-					vIjeon[k].rc.left = prevTile.rc.left;
-					vIjeon[k].rc.right = prevTile.rc.right;
-					vIjeon[k].rc.top = prevTile.rc.top;
-					vIjeon[k].rc.bottom = prevTile.rc.bottom;
+					ijeon.rc.left = prevTile.rc.left;
+					ijeon.rc.right = prevTile.rc.right;
+					ijeon.rc.top = prevTile.rc.top;
+					ijeon.rc.bottom = prevTile.rc.bottom;
 					pDirection = sDirection;
 
 					playerX = prevTile.rc.left + TILE_WIDTH * 0.5;
@@ -396,23 +393,23 @@ void Ijeon::playerMenu()
 				}
 			}
 		}
-	}
+	//}
 }
 
 void Ijeon::playerCollision()
 {
-	for (int k = 0; k < vIjeon.size(); k++)
-	{
+	//for (int k = 0; k < vIjeon.size(); k++)
+	//{
 		RECT temp;
 
-		if (IntersectRect(&temp, &vIjeon[k].rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vIjeon[k].rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vIjeon[k].rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vIjeon[k].rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vIjeon[k].rcAtk[4], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vIjeon[k].rcAtk[5], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vIjeon[k].rcAtk[6], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
-			IntersectRect(&temp, &vIjeon[k].rcAtk[7], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
+		if (IntersectRect(&temp, &ijeon.rcAtk[0], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &ijeon.rcAtk[1], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &ijeon.rcAtk[2], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &ijeon.rcAtk[3], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &ijeon.rcAtk[4], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &ijeon.rcAtk[5], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &ijeon.rcAtk[6], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc) ||
+			IntersectRect(&temp, &ijeon.rcAtk[7], &ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc))
 		{
 			isTarget = true;
 			frameX = 1;
@@ -437,7 +434,7 @@ void Ijeon::playerCollision()
 		{
 			frameX = 0;
 		}
-	}
+	//}
 }
 
 void Ijeon::playerAnimation()
@@ -529,10 +526,10 @@ void Ijeon::playerState()
 
 void Ijeon::setPosition(RECT rc)
 {
-	for (int k = 0; k < vIjeon.size(); k++)
-	{
-		vIjeon[k].rc = rc;
-		playerX = vIjeon[k].rc.left + (vIjeon[k].rc.right - vIjeon[k].rc.left) / 2;
-		playerY = vIjeon[k].rc.top + (vIjeon[k].rc.bottom - vIjeon[k].rc.top) / 2;
-	}
+	//for (int k = 0; k < vIjeon.size(); k++)
+	//{
+		ijeon.rc = rc;
+		playerX = ijeon.rc.left + (ijeon.rc.right - ijeon.rc.left) / 2;
+		playerY = ijeon.rc.top + (ijeon.rc.bottom - ijeon.rc.top) / 2;
+	//}
 }

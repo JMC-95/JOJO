@@ -467,7 +467,7 @@ void Jangje::enemyMenu()
 
 void Jangje::enemyCollision()
 {
-	for (int k = 0; k < vJangje.size(); k++)
+	/*for (int k = 0; k < vJangje.size(); k++)
 	{
 		RECT temp;
 
@@ -643,7 +643,7 @@ void Jangje::enemyCollision()
 		{
 			frameX = 0;
 		}
-	}
+	}*/
 }
 
 void Jangje::setPosition(RECT rc)

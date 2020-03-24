@@ -467,7 +467,7 @@ void Dongtak::enemyMenu()
 
 void Dongtak::enemyCollision()
 {
-	for (int k = 0; k < vDongtak.size(); k++)
+	/*for (int k = 0; k < vDongtak.size(); k++)
 	{
 		RECT temp;
 
@@ -643,7 +643,7 @@ void Dongtak::enemyCollision()
 		{
 			frameX = 0;
 		}
-	}
+	}*/
 }
 
 void Dongtak::setPosition(RECT rc)

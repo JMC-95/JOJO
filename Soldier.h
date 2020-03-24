@@ -1,6 +1,6 @@
 #pragma once
 #include "FriendlyBase.h"
-#include <array>
+
 class Soldier : public FriendlyBase
 {
 private:

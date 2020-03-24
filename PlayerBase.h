@@ -95,6 +95,16 @@ public:
 	virtual void update();
 	virtual void render(HDC hdc);
 
+	virtual void mouseMove();
+	virtual void playerMove();
+	virtual void playerAstar();
+	virtual void playerMenu();
+	virtual void playerCollision();
+	virtual void playerAnimation();
+	virtual void playerState();
+
+	virtual void setPosition(RECT rc);
+
 	//A* นื FloodFill
 	void aStar();
 	void floodFill(int tile, int moveCount);
@@ -135,4 +145,6 @@ public:
 	progressBar* getProgressBarHp() { return _Hp; }
 	progressBar* getProgressBarMp() { return _Mp; }
 	progressBar* getProgressBarExp() { return _Exp; }
+
+	virtual PlayerInfo getPlayerInfo() = 0;
 };

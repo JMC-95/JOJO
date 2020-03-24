@@ -467,7 +467,7 @@ void Beonju::enemyMenu()
 
 void Beonju::enemyCollision()
 {
-	for (int k = 0; k < vBeonju.size(); k++)
+	/*for (int k = 0; k < vBeonju.size(); k++)
 	{
 		RECT temp;
 
@@ -643,7 +643,7 @@ void Beonju::enemyCollision()
 		{
 			frameX = 0;
 		}
-	}
+	}*/
 }
 
 void Beonju::setPosition(RECT rc)
