@@ -33,7 +33,6 @@ struct EnemyInfo
 
 class EnemyBase
 {
-
 protected:
 	vector<RECT> atkList;		//공격용 렉트를 담는 벡터
 	vector<RECT> menuList;		//메뉴 렉트를 담는 벡터
@@ -43,19 +42,19 @@ protected:
 	stack<tagTile> optimalPath;	//찾은 길을 저장해두는 스택
 
 	EnemyDirection eDirection;	//캐릭터 방향
-	MainMap* mainMap;		//맵을 불러옴
-	animation* enemyAni;	//캐릭터 애니메이션
-	progressBar* _Hp;		//HP Bar
-	progressBar* _Mp;		//MP Bar
-	progressBar* _Exp;		//EXP Bar
+	MainMap* mainMap;			//맵을 불러옴
+	animation* enemyAni;		//캐릭터 애니메이션
+	progressBar* _Hp;			//HP Bar
+	progressBar* _Mp;			//MP Bar
+	progressBar* _Exp;			//EXP Bar
 
-	RECT rcMenu[5];			//메뉴 렉트
+	RECT rcMenu[5];				//메뉴 렉트
+	RECT temp;
 
 protected:	//일반 변수
 	int currentHp, maxHp;	//체력
 	int currentMp, maxMp;	//마력
 	int currentExp, maxExp;	//경험치
-	int damage;				//데미지
 	int speed;				//스피드
 	int frameX;				//캐릭터의 프레임을 돌리기위한 변수
 	int frameY;				//캐릭터의 프레임을 돌리기위한 변수
@@ -63,13 +62,17 @@ protected:	//일반 변수
 	int mapX, mapY;			//클릭한 맵의 중점 좌표
 	int stackX, stackY;		//스택에 쌓아둔 타일의 중점 좌표 (길을 찾을 때 필요하다.)
 
+	char str[128];
+
 	bool isTurn;			//현재 캐릭터의 턴인지 확인하는 변수
 	bool isSelect;			//캐릭터를 선택했는지 확인하는 변수
 	bool isMove;			//캐릭터의 이동을 체크해주는 변수
-	bool isStop;			//캐릭터의 이동을 취소해주는 변수
+	bool isStop;			//캐릭터의 이동을 막아주는 변수
+	bool isClick;			//캐릭터의 메뉴 클릭
 	bool isTarget;			//공격 범위에 적이 있는지 체크해주는 변수
 	bool isAtkRng;			//적이 있다면 공격 버튼을 활성화해주는 변수
-	bool isClick;			//캐릭터의 메뉴 클릭
+	bool isAtk;				//적을 공격할 때 체크해주는 변수
+	bool isHit;
 
 protected:	//A*용 변수
 	int startTile;			//A* 시작위치
@@ -98,7 +101,7 @@ public:
 	//맵의 주소
 	void setMapMemoryAdress(MainMap* map) { mainMap = map; }
 
-	//GetSet
+	//Getter
 	int getEnemyX() { return enemyX; }
 	int getEnemyY() { return enemyY; }
 	int getFrameX() { return frameX; }
@@ -109,14 +112,25 @@ public:
 	int getCurrentExp() { return currentExp; }
 	int getMaxExp() { return maxExp; }
 
+	bool getIsTurn() { return isTurn; }
 	bool getIsSelect() { return isSelect; }
+	bool getIsCancel() { return isStop; }
 	bool getIsAtkRng() { return isAtkRng; }
-	bool getIsAtk() { return isTarget; }
+	bool getIsTarget() { return isTarget; }
+	bool getIsAtk() { return isAtk; }
+	bool getIsHit() { return isHit; }
 	bool getIsClick() { return isClick; }
+
+	//Setter
+	void setIsTurn(bool turn) { isTurn = turn; }
+	void setIsSelect(bool select) { isSelect = select; }
+	void setIsCancel(bool cancel) { isStop = cancel; }
+	void setIsTarget(bool target) { isTarget = target; }
+	void setIsAtk(bool atk) { isAtk = atk; }
+	void setIsHit(bool hit) { isHit = hit; }
 
 	//프로그레스바
 	progressBar* getProgressBarHp() { return _Hp; }
 	progressBar* getProgressBarMp() { return _Mp; }
 	progressBar* getProgressBarExp() { return _Exp; }
 };
-

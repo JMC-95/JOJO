@@ -18,6 +18,9 @@ public:
 
 	void mouseMove();
 	void playerMove();
+	void playerAstar();
+	void playerMenu();
+	void playerCollision();
 	void playerAnimation();
 	void playerState();
 

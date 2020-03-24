@@ -73,6 +73,12 @@
     <Filter Include="mainGame\Enemy\Base">
       <UniqueIdentifier>{9a6456a3-daf3-4f89-bfc0-a32fe15f0c1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mainGame\Friendly">
+      <UniqueIdentifier>{3ecf1c9a-5eb8-4867-b761-dbed0c4bbbcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mainGame\Friendly\Base">
+      <UniqueIdentifier>{4f0ce1cc-cf75-47a1-9d2c-9a3a62b9b537}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -204,6 +210,51 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>Manager\addManager</Filter>
     </ClInclude>
+    <ClInclude Include="Dongtak.h">
+      <Filter>mainGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Iyu.h">
+      <Filter>mainGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Jangje.h">
+      <Filter>mainGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Beonju.h">
+      <Filter>mainGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Archer.h">
+      <Filter>mainGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Cavalry.h">
+      <Filter>mainGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Infantry.h">
+      <Filter>mainGame\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="FriendlyBase.h">
+      <Filter>mainGame\Friendly\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="FriendlyManager.h">
+      <Filter>Manager\addManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Dogyeom.h">
+      <Filter>mainGame\Friendly</Filter>
+    </ClInclude>
+    <ClInclude Include="Gwanu.h">
+      <Filter>mainGame\Friendly</Filter>
+    </ClInclude>
+    <ClInclude Include="Jangbi.h">
+      <Filter>mainGame\Friendly</Filter>
+    </ClInclude>
+    <ClInclude Include="Soldier.h">
+      <Filter>mainGame\Friendly</Filter>
+    </ClInclude>
+    <ClInclude Include="Wonso.h">
+      <Filter>mainGame\Friendly</Filter>
+    </ClInclude>
+    <ClInclude Include="Yubi.h">
+      <Filter>mainGame\Friendly</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -316,6 +367,51 @@
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Manager\addManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Beonju.cpp">
+      <Filter>mainGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Dongtak.cpp">
+      <Filter>mainGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Iyu.cpp">
+      <Filter>mainGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Jangje.cpp">
+      <Filter>mainGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Archer.cpp">
+      <Filter>mainGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Cavalry.cpp">
+      <Filter>mainGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Infantry.cpp">
+      <Filter>mainGame\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="FriendlyBase.cpp">
+      <Filter>mainGame\Friendly\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="FriendlyManager.cpp">
+      <Filter>Manager\addManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Dogyeom.cpp">
+      <Filter>mainGame\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="Gwanu.cpp">
+      <Filter>mainGame\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="Jangbi.cpp">
+      <Filter>mainGame\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="Soldier.cpp">
+      <Filter>mainGame\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="Wonso.cpp">
+      <Filter>mainGame\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="Yubi.cpp">
+      <Filter>mainGame\Friendly</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

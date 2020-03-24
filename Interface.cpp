@@ -13,6 +13,7 @@ void Interface::render(HDC hdc)
 {
 	playerMenu(hdc);
 	playerInformation(hdc);
+	friendInformation(hdc);
 	enemyInformation(hdc);
 }
 
@@ -57,7 +58,7 @@ void Interface::playerMenu(HDC hdc)
 	//조조
 	if (PLAYERMANAGER->getJojo()->getIsClick())
 	{
-		IMAGEMANAGER->frameRender("메뉴", hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.left - 100, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.top - 35, PLAYERMANAGER->getJojo()->getFrameX(), 0);
+		IMAGEMANAGER->frameRender("메뉴", hdc, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.left - 100, PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc.top - 35, PLAYERMANAGER->getJojo()->getFrameX(), 1);
 	}
 }
 
@@ -344,6 +345,209 @@ void Interface::playerInformation(HDC hdc)
 	}
 }
 
+void Interface::friendInformation(HDC hdc)
+{
+	//도겸
+	if (PtInRect(&FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rc, m_ptMouse))
+	{
+		IMAGEMANAGER->render("정보창", hdc, 960, 200);
+		IMAGEMANAGER->render("도겸Face", hdc, 960, 218);
+		FRIENDMANAGER->getDogyeom()->getProgressBarHp()->render(hdc);
+		FRIENDMANAGER->getDogyeom()->getProgressBarMp()->render(hdc);
+		FRIENDMANAGER->getDogyeom()->getProgressBarExp()->render(hdc);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+		SetTextColor(hdc, RGB(0, 0, 0));
+		sprintf_s(str, "도겸");
+		TextOut(hdc, 970, 305, str, strlen(str));
+		sprintf_s(str, "군웅");
+		TextOut(hdc, 1040, 220, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getDogyeom()->getFriendVector()[0].level);
+		TextOut(hdc, 1057, 243, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getDogyeom()->getFriendVector()[0].atk);
+		TextOut(hdc, 1005, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getDogyeom()->getFriendVector()[0].def);
+		TextOut(hdc, 1097, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getDogyeom()->getFriendVector()[0].ten);
+		TextOut(hdc, 1170, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getDogyeom()->getFriendVector()[0].will);
+		TextOut(hdc, 1005, 378, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getDogyeom()->getFriendVector()[0].agi);
+		TextOut(hdc, 1097, 378, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getDogyeom()->getFriendVector()[0].movingCount);
+		TextOut(hdc, 1177, 378, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getDogyeom()->getCurrentHp(), FRIENDMANAGER->getDogyeom()->getMaxHp());
+		TextOut(hdc, 1088, 289, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getDogyeom()->getCurrentMp(), FRIENDMANAGER->getDogyeom()->getMaxMp());
+		TextOut(hdc, 1095, 307, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getDogyeom()->getCurrentExp(), FRIENDMANAGER->getDogyeom()->getMaxExp());
+		TextOut(hdc, 1095, 243, str, strlen(str));
+		SelectObject(hdc, oldFont);
+		DeleteObject(myFont);
+	}
+
+	//관우
+	if (PtInRect(&FRIENDMANAGER->getGwanu()->getFriendVector()[0].rc, m_ptMouse))
+	{
+		IMAGEMANAGER->render("정보창", hdc, 960, 200);
+		IMAGEMANAGER->render("관우Face", hdc, 960, 218);
+		FRIENDMANAGER->getGwanu()->getProgressBarHp()->render(hdc);
+		FRIENDMANAGER->getGwanu()->getProgressBarMp()->render(hdc);
+		FRIENDMANAGER->getGwanu()->getProgressBarExp()->render(hdc);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+		SetTextColor(hdc, RGB(0, 0, 0));
+		sprintf_s(str, "관우");
+		TextOut(hdc, 970, 305, str, strlen(str));
+		sprintf_s(str, "경기병");
+		TextOut(hdc, 1040, 220, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getGwanu()->getFriendVector()[0].level);
+		TextOut(hdc, 1057, 243, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getGwanu()->getFriendVector()[0].atk);
+		TextOut(hdc, 1005, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getGwanu()->getFriendVector()[0].def);
+		TextOut(hdc, 1097, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getGwanu()->getFriendVector()[0].ten);
+		TextOut(hdc, 1170, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getGwanu()->getFriendVector()[0].will);
+		TextOut(hdc, 1005, 378, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getGwanu()->getFriendVector()[0].agi);
+		TextOut(hdc, 1097, 378, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getGwanu()->getFriendVector()[0].movingCount);
+		TextOut(hdc, 1177, 378, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getGwanu()->getCurrentHp(), FRIENDMANAGER->getGwanu()->getMaxHp());
+		TextOut(hdc, 1088, 289, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getGwanu()->getCurrentMp(), FRIENDMANAGER->getGwanu()->getMaxMp());
+		TextOut(hdc, 1095, 307, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getGwanu()->getCurrentExp(), FRIENDMANAGER->getGwanu()->getMaxExp());
+		TextOut(hdc, 1095, 243, str, strlen(str));
+		SelectObject(hdc, oldFont);
+		DeleteObject(myFont);
+	}
+
+	//장비
+	if (PtInRect(&FRIENDMANAGER->getJangbi()->getFriendVector()[0].rc, m_ptMouse))
+	{
+		IMAGEMANAGER->render("정보창", hdc, 960, 200);
+		IMAGEMANAGER->render("장비Face", hdc, 960, 218);
+		FRIENDMANAGER->getJangbi()->getProgressBarHp()->render(hdc);
+		FRIENDMANAGER->getJangbi()->getProgressBarMp()->render(hdc);
+		FRIENDMANAGER->getJangbi()->getProgressBarExp()->render(hdc);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+		SetTextColor(hdc, RGB(0, 0, 0));
+		sprintf_s(str, "장비");
+		TextOut(hdc, 970, 305, str, strlen(str));
+		sprintf_s(str, "경기병");
+		TextOut(hdc, 1040, 220, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getJangbi()->getFriendVector()[0].level);
+		TextOut(hdc, 1057, 243, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getJangbi()->getFriendVector()[0].atk);
+		TextOut(hdc, 1005, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getJangbi()->getFriendVector()[0].def);
+		TextOut(hdc, 1097, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getJangbi()->getFriendVector()[0].ten);
+		TextOut(hdc, 1170, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getJangbi()->getFriendVector()[0].will);
+		TextOut(hdc, 1005, 378, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getJangbi()->getFriendVector()[0].agi);
+		TextOut(hdc, 1097, 378, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getJangbi()->getFriendVector()[0].movingCount);
+		TextOut(hdc, 1177, 378, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getJangbi()->getCurrentHp(), FRIENDMANAGER->getJangbi()->getMaxHp());
+		TextOut(hdc, 1088, 289, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getJangbi()->getCurrentMp(), FRIENDMANAGER->getJangbi()->getMaxMp());
+		TextOut(hdc, 1095, 307, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getJangbi()->getCurrentExp(), FRIENDMANAGER->getJangbi()->getMaxExp());
+		TextOut(hdc, 1095, 243, str, strlen(str));
+		SelectObject(hdc, oldFont);
+		DeleteObject(myFont);
+	}
+
+	//원소
+	if (PtInRect(&FRIENDMANAGER->getWonso()->getFriendVector()[0].rc, m_ptMouse))
+	{
+		IMAGEMANAGER->render("정보창", hdc, 960, 200);
+		IMAGEMANAGER->render("원소Face", hdc, 960, 218);
+		FRIENDMANAGER->getWonso()->getProgressBarHp()->render(hdc);
+		FRIENDMANAGER->getWonso()->getProgressBarMp()->render(hdc);
+		FRIENDMANAGER->getWonso()->getProgressBarExp()->render(hdc);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+		SetTextColor(hdc, RGB(0, 0, 0));
+		sprintf_s(str, "원소");
+		TextOut(hdc, 970, 305, str, strlen(str));
+		sprintf_s(str, "군웅");
+		TextOut(hdc, 1040, 220, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getWonso()->getFriendVector()[0].level);
+		TextOut(hdc, 1057, 243, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getWonso()->getFriendVector()[0].atk);
+		TextOut(hdc, 1005, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getWonso()->getFriendVector()[0].def);
+		TextOut(hdc, 1097, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getWonso()->getFriendVector()[0].ten);
+		TextOut(hdc, 1170, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getWonso()->getFriendVector()[0].will);
+		TextOut(hdc, 1005, 378, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getWonso()->getFriendVector()[0].agi);
+		TextOut(hdc, 1097, 378, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getWonso()->getFriendVector()[0].movingCount);
+		TextOut(hdc, 1177, 378, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getWonso()->getCurrentHp(), FRIENDMANAGER->getWonso()->getMaxHp());
+		TextOut(hdc, 1088, 289, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getWonso()->getCurrentMp(), FRIENDMANAGER->getWonso()->getMaxMp());
+		TextOut(hdc, 1095, 307, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getWonso()->getCurrentExp(), FRIENDMANAGER->getWonso()->getMaxExp());
+		TextOut(hdc, 1095, 243, str, strlen(str));
+		SelectObject(hdc, oldFont);
+		DeleteObject(myFont);
+	}
+
+	//유비
+	if (PtInRect(&FRIENDMANAGER->getYubi()->getFriendVector()[0].rc, m_ptMouse))
+	{
+		IMAGEMANAGER->render("정보창", hdc, 960, 200);
+		IMAGEMANAGER->render("유비Face", hdc, 960, 218);
+		FRIENDMANAGER->getYubi()->getProgressBarHp()->render(hdc);
+		FRIENDMANAGER->getYubi()->getProgressBarMp()->render(hdc);
+		FRIENDMANAGER->getYubi()->getProgressBarExp()->render(hdc);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+		SetTextColor(hdc, RGB(0, 0, 0));
+		sprintf_s(str, "유비");
+		TextOut(hdc, 970, 305, str, strlen(str));
+		sprintf_s(str, "군웅");
+		TextOut(hdc, 1040, 220, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getYubi()->getFriendVector()[0].level);
+		TextOut(hdc, 1057, 243, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getYubi()->getFriendVector()[0].atk);
+		TextOut(hdc, 1005, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getYubi()->getFriendVector()[0].def);
+		TextOut(hdc, 1097, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getYubi()->getFriendVector()[0].ten);
+		TextOut(hdc, 1170, 343, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getYubi()->getFriendVector()[0].will);
+		TextOut(hdc, 1005, 378, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getYubi()->getFriendVector()[0].agi);
+		TextOut(hdc, 1097, 378, str, strlen(str));
+		sprintf_s(str, "%d", FRIENDMANAGER->getYubi()->getFriendVector()[0].movingCount);
+		TextOut(hdc, 1177, 378, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getYubi()->getCurrentHp(), FRIENDMANAGER->getYubi()->getMaxHp());
+		TextOut(hdc, 1088, 289, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getYubi()->getCurrentMp(), FRIENDMANAGER->getYubi()->getMaxMp());
+		TextOut(hdc, 1095, 307, str, strlen(str));
+		sprintf_s(str, "%d/%d", FRIENDMANAGER->getYubi()->getCurrentExp(), FRIENDMANAGER->getYubi()->getMaxExp());
+		TextOut(hdc, 1095, 243, str, strlen(str));
+		SelectObject(hdc, oldFont);
+		DeleteObject(myFont);
+	}
+}
+
 void Interface::enemyInformation(HDC hdc)
 {
 	//여포
@@ -352,6 +556,167 @@ void Interface::enemyInformation(HDC hdc)
 		IMAGEMANAGER->frameRender("메뉴", hdc, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc.left - 100, ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc.top - 35, ENEMYMANAGER->getYeopo()->getFrameX(), 0);
 	}
 
+	//번주
+	if (PtInRect(&ENEMYMANAGER->getBeonju()->getEnemyVector()[0].rc, m_ptMouse))
+	{
+		IMAGEMANAGER->render("정보창", hdc, 960, 200);
+		IMAGEMANAGER->render("번주Face", hdc, 960, 218);
+		ENEMYMANAGER->getBeonju()->getProgressBarHp()->render(hdc);
+		ENEMYMANAGER->getBeonju()->getProgressBarMp()->render(hdc);
+		ENEMYMANAGER->getBeonju()->getProgressBarExp()->render(hdc);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+		SetTextColor(hdc, RGB(0, 0, 0));
+		sprintf_s(str, "번주");
+		TextOut(hdc, 970, 305, str, strlen(str));
+		sprintf_s(str, "경기병");
+		TextOut(hdc, 1040, 220, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getBeonju()->getEnemyVector()[0].level);
+		TextOut(hdc, 1057, 243, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getBeonju()->getEnemyVector()[0].atk);
+		TextOut(hdc, 1005, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getBeonju()->getEnemyVector()[0].def);
+		TextOut(hdc, 1097, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getBeonju()->getEnemyVector()[0].ten);
+		TextOut(hdc, 1170, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getBeonju()->getEnemyVector()[0].will);
+		TextOut(hdc, 1005, 378, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getBeonju()->getEnemyVector()[0].agi);
+		TextOut(hdc, 1097, 378, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getBeonju()->getEnemyVector()[0].movingCount);
+		TextOut(hdc, 1177, 378, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getBeonju()->getCurrentHp(), ENEMYMANAGER->getBeonju()->getMaxHp());
+		TextOut(hdc, 1088, 289, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getBeonju()->getCurrentMp(), ENEMYMANAGER->getBeonju()->getMaxMp());
+		TextOut(hdc, 1095, 307, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getBeonju()->getCurrentExp(), ENEMYMANAGER->getBeonju()->getMaxExp());
+		TextOut(hdc, 1095, 243, str, strlen(str));
+		SelectObject(hdc, oldFont);
+		DeleteObject(myFont);
+	}
+
+	//동탁
+	if (PtInRect(&ENEMYMANAGER->getDongtak()->getEnemyVector()[0].rc, m_ptMouse))
+	{
+		IMAGEMANAGER->render("정보창", hdc, 960, 200);
+		IMAGEMANAGER->render("동탁Face", hdc, 960, 218);
+		ENEMYMANAGER->getDongtak()->getProgressBarHp()->render(hdc);
+		ENEMYMANAGER->getDongtak()->getProgressBarMp()->render(hdc);
+		ENEMYMANAGER->getDongtak()->getProgressBarExp()->render(hdc);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+		SetTextColor(hdc, RGB(0, 0, 0));
+		sprintf_s(str, "동탁");
+		TextOut(hdc, 970, 305, str, strlen(str));
+		sprintf_s(str, "군웅");
+		TextOut(hdc, 1040, 220, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getDongtak()->getEnemyVector()[0].level);
+		TextOut(hdc, 1057, 243, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getDongtak()->getEnemyVector()[0].atk);
+		TextOut(hdc, 1005, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getDongtak()->getEnemyVector()[0].def);
+		TextOut(hdc, 1097, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getDongtak()->getEnemyVector()[0].ten);
+		TextOut(hdc, 1170, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getDongtak()->getEnemyVector()[0].will);
+		TextOut(hdc, 1005, 378, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getDongtak()->getEnemyVector()[0].agi);
+		TextOut(hdc, 1097, 378, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getDongtak()->getEnemyVector()[0].movingCount);
+		TextOut(hdc, 1177, 378, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getDongtak()->getCurrentHp(), ENEMYMANAGER->getDongtak()->getMaxHp());
+		TextOut(hdc, 1088, 289, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getDongtak()->getCurrentMp(), ENEMYMANAGER->getDongtak()->getMaxMp());
+		TextOut(hdc, 1095, 307, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getDongtak()->getCurrentExp(), ENEMYMANAGER->getDongtak()->getMaxExp());
+		TextOut(hdc, 1095, 243, str, strlen(str));
+		SelectObject(hdc, oldFont);
+		DeleteObject(myFont);
+	}
+
+	//이유
+	if (PtInRect(&ENEMYMANAGER->getIyu()->getEnemyVector()[0].rc, m_ptMouse))
+	{
+		IMAGEMANAGER->render("정보창", hdc, 960, 200);
+		IMAGEMANAGER->render("이유Face", hdc, 960, 218);
+		ENEMYMANAGER->getIyu()->getProgressBarHp()->render(hdc);
+		ENEMYMANAGER->getIyu()->getProgressBarMp()->render(hdc);
+		ENEMYMANAGER->getIyu()->getProgressBarExp()->render(hdc);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+		SetTextColor(hdc, RGB(0, 0, 0));
+		sprintf_s(str, "이유");
+		TextOut(hdc, 970, 305, str, strlen(str));
+		sprintf_s(str, "책사");
+		TextOut(hdc, 1040, 220, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getIyu()->getEnemyVector()[0].level);
+		TextOut(hdc, 1057, 243, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getIyu()->getEnemyVector()[0].atk);
+		TextOut(hdc, 1005, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getIyu()->getEnemyVector()[0].def);
+		TextOut(hdc, 1097, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getIyu()->getEnemyVector()[0].ten);
+		TextOut(hdc, 1170, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getIyu()->getEnemyVector()[0].will);
+		TextOut(hdc, 1005, 378, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getIyu()->getEnemyVector()[0].agi);
+		TextOut(hdc, 1097, 378, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getIyu()->getEnemyVector()[0].movingCount);
+		TextOut(hdc, 1177, 378, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getIyu()->getCurrentHp(), ENEMYMANAGER->getIyu()->getMaxHp());
+		TextOut(hdc, 1088, 289, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getIyu()->getCurrentMp(), ENEMYMANAGER->getIyu()->getMaxMp());
+		TextOut(hdc, 1095, 307, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getIyu()->getCurrentExp(), ENEMYMANAGER->getIyu()->getMaxExp());
+		TextOut(hdc, 1095, 243, str, strlen(str));
+		SelectObject(hdc, oldFont);
+		DeleteObject(myFont);
+	}
+
+	//장제
+	if (PtInRect(&ENEMYMANAGER->getJangje()->getEnemyVector()[0].rc, m_ptMouse))
+	{
+		IMAGEMANAGER->render("정보창", hdc, 960, 200);
+		IMAGEMANAGER->render("장제Face", hdc, 960, 218);
+		ENEMYMANAGER->getJangje()->getProgressBarHp()->render(hdc);
+		ENEMYMANAGER->getJangje()->getProgressBarMp()->render(hdc);
+		ENEMYMANAGER->getJangje()->getProgressBarExp()->render(hdc);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+		SetTextColor(hdc, RGB(0, 0, 0));
+		sprintf_s(str, "장제");
+		TextOut(hdc, 970, 305, str, strlen(str));
+		sprintf_s(str, "경기병");
+		TextOut(hdc, 1040, 220, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getJangje()->getEnemyVector()[0].level);
+		TextOut(hdc, 1057, 243, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getJangje()->getEnemyVector()[0].atk);
+		TextOut(hdc, 1005, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getJangje()->getEnemyVector()[0].def);
+		TextOut(hdc, 1097, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getJangje()->getEnemyVector()[0].ten);
+		TextOut(hdc, 1170, 343, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getJangje()->getEnemyVector()[0].will);
+		TextOut(hdc, 1005, 378, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getJangje()->getEnemyVector()[0].agi);
+		TextOut(hdc, 1097, 378, str, strlen(str));
+		sprintf_s(str, "%d", ENEMYMANAGER->getJangje()->getEnemyVector()[0].movingCount);
+		TextOut(hdc, 1177, 378, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getJangje()->getCurrentHp(), ENEMYMANAGER->getJangje()->getMaxHp());
+		TextOut(hdc, 1088, 289, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getJangje()->getCurrentMp(), ENEMYMANAGER->getJangje()->getMaxMp());
+		TextOut(hdc, 1095, 307, str, strlen(str));
+		sprintf_s(str, "%d/%d", ENEMYMANAGER->getJangje()->getCurrentExp(), ENEMYMANAGER->getJangje()->getMaxExp());
+		TextOut(hdc, 1095, 243, str, strlen(str));
+		SelectObject(hdc, oldFont);
+		DeleteObject(myFont);
+	}
+
+	//여포
 	if (PtInRect(&ENEMYMANAGER->getYeopo()->getEnemyVector()[0].rc, m_ptMouse))
 	{
 		IMAGEMANAGER->render("정보창", hdc, 960, 200);

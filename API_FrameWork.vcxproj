@@ -152,20 +152,32 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="animationManager.h" />
     <ClInclude Include="API_FrameWork.h" />
+    <ClInclude Include="Archer.h" />
+    <ClInclude Include="Beonju.h" />
+    <ClInclude Include="Cavalry.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="Dogyeom.h" />
+    <ClInclude Include="Dongtak.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="FriendlyBase.h" />
+    <ClInclude Include="FriendlyManager.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Gwanu.h" />
     <ClInclude Include="Hahudon.h" />
     <ClInclude Include="Hahuyeon.h" />
     <ClInclude Include="Ijeon.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
+    <ClInclude Include="Infantry.h" />
     <ClInclude Include="Interface.h" />
+    <ClInclude Include="Iyu.h" />
+    <ClInclude Include="Jangbi.h" />
+    <ClInclude Include="Jangje.h" />
     <ClInclude Include="Johong.h" />
     <ClInclude Include="Join.h" />
     <ClInclude Include="Jojo.h" />
@@ -181,6 +193,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="singletonBase.h" />
+    <ClInclude Include="Soldier.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="tank.h" />
@@ -190,25 +203,39 @@
     <ClInclude Include="timer.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="Wonso.h" />
     <ClInclude Include="Yeopo.h" />
+    <ClInclude Include="Yubi.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Agjin.cpp" />
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="animationManager.cpp" />
+    <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="Beonju.cpp" />
+    <ClCompile Include="Cavalry.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Dogyeom.cpp" />
+    <ClCompile Include="Dongtak.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="FriendlyBase.cpp" />
+    <ClCompile Include="FriendlyManager.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Gwanu.cpp" />
     <ClCompile Include="Hahudon.cpp" />
     <ClCompile Include="Hahuyeon.cpp" />
     <ClCompile Include="Ijeon.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
+    <ClCompile Include="Infantry.cpp" />
     <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="Iyu.cpp" />
+    <ClCompile Include="Jangbi.cpp" />
+    <ClCompile Include="Jangje.cpp" />
     <ClCompile Include="Johong.cpp" />
     <ClCompile Include="Join.cpp" />
     <ClCompile Include="Jojo.cpp" />
@@ -220,6 +247,7 @@
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="Soldier.cpp" />
     <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="tank.cpp" />
     <ClCompile Include="testMap.cpp" />
@@ -234,7 +262,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Wonso.cpp" />
     <ClCompile Include="Yeopo.cpp" />
+    <ClCompile Include="Yubi.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

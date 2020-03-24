@@ -18,9 +18,11 @@ public:
 
 	void mouseMove();
 	void playerMove();
+	void playerAstar();
+	void playerMenu();
+	void playerCollision();
 	void playerAnimation();
 	void playerState();
-	void collision();
 
 	void setPosition(RECT rc);
 

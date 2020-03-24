@@ -13,6 +13,7 @@ public:
 
 	void playerMenu(HDC hdc);
 	void playerInformation(HDC hdc);
+	void friendInformation(HDC hdc);
 	void enemyInformation(HDC hdc);
 };
 

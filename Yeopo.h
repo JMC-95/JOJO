@@ -18,6 +18,9 @@ public:
 
 	void mouseMove();
 	void enemyMove();
+	void enemyAstar();
+	void enemyMenu();
+	void enemyCollision();
 	void enemyAnimation();
 	void enemyState();
 

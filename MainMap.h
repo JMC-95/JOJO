@@ -30,6 +30,7 @@ public:
 
 	void load();
 	void playerDraw(HDC hdc);
+	void friendDraw(HDC hdc);
 	void enemyDraw(HDC hdc);
 
 	DWORD* getAttribute() { return attribute; }

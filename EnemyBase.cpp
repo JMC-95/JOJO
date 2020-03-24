@@ -196,5 +196,5 @@ void EnemyBase::floodFill(int tile, int moveCount)
 
 void EnemyBase::hitDamage(int _damage)
 {
-	damage -= _damage;
+	currentHp -= _damage;
 }
