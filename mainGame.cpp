@@ -50,6 +50,8 @@ void mainGame::render(/*HDC hdc*/)
 
 	TIMEMANAGER->render(getMemDC());
 
+	IMAGEMANAGER->render("cursor", getMemDC(), m_ptMouse.x, m_ptMouse.y);
+
 	//========================================================
 	//백버퍼의 내용을 HDC에 그린다.(건드리지말것.)
 	this->getBackBuffer()->render(getHDC(), 0, 0);
@@ -83,6 +85,7 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("eMoveRange", "images/UI/InGame/eMovingRange.bmp", 48, 48, true, RGB(247, 0, 255));	//플레이어 외 이동범위 (아군, 적)
 	IMAGEMANAGER->addImage("attackRange", "images/UI/InGame/AttackRange.bmp", 48, 48, true, RGB(247, 0, 255));	//이동시의 공격범위
 	IMAGEMANAGER->addImage("atkRange", "images/UI/InGame/AtkRange.bmp", 48, 48, true, RGB(247, 0, 255));		//실제 공격범위
+	IMAGEMANAGER->addImage("cursor", "images/UI/InGame/Cursor.bmp", 26, 26, true, RGB(255, 0, 255));			//마우스 커서
 
 	//날씨 이미지
 	IMAGEMANAGER->addFrameImage("맑음", "images/UI/Weather/Sunny.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));

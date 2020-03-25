@@ -12,6 +12,10 @@ Soldier::~Soldier()
 
 HRESULT Soldier::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * friendImg, const char * atkImg, const char * blockImg)
 {
+	//이름 및 얼굴
+	soldier.name = "보병";
+	soldier.face = "우군보병Face";
+	soldier.className = "경보병";
 	//이미지 및 애니메이션
 	soldier.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	soldier.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -21,26 +25,26 @@ HRESULT Soldier::init(const char * moveImg, const char * mAtkImg, const char * a
 	soldier.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
 	//스테이터스
 	soldier.level = 2;			//레벨
-	soldier.hp = 125;			//체력
-	soldier.mp = 35;			//마력
-	soldier.atk = 54;			//공격력
-	soldier.will = 56;			//정신력
-	soldier.def = 56;			//방어력
-	soldier.agi = 51;			//순발력
-	soldier.ten = 65;			//사기
+	soldier.hp = 116;			//체력
+	soldier.mp = 11;			//마력
+	soldier.atk = 36;			//공격력
+	soldier.will = 38;			//정신력
+	soldier.def = 43;			//방어력
+	soldier.agi = 32;			//순발력
+	soldier.ten = 32;			//사기
 	soldier.movingCount = 4;	//이동력
 
 	//HP ProgressBar
 	_Hp = new progressBar;
 	_Hp->init("images/UI/Info/HP.bmp", "images/UI/Info/Back_P.bmp", 1056, 289, 84, 12);
 	_Hp->setGauge(currentHp, maxHp);
-	currentHp = maxHp = 125;
+	currentHp = maxHp = 116;
 
 	//MP ProgressBar
 	_Mp = new progressBar;
 	_Mp->init("images/UI/Info/MP.bmp", "images/UI/Info/Back_P.bmp", 1056, 307, 84, 12);
 	_Mp->setGauge(currentMp, maxMp);
-	currentMp = maxMp = 35;
+	currentMp = maxMp = 11;
 
 	//EXP ProgressBar
 	_Exp = new progressBar;
@@ -130,7 +134,7 @@ void Soldier::mouseMove()
 	{
 		if (PtInRect(&soldier.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 			{
 				//선택한 타일 (캐릭터)
 				startTile = i;
@@ -282,7 +286,9 @@ void Soldier::friendAstar()
 	if (!optimalPath.empty())
 	{
 		if (!isStop)
+		{
 			friendMove();
+		}
 
 		if (friendX == mapX && friendY == mapY)
 		{
@@ -372,34 +378,42 @@ void Soldier::friendMenu()
 void Soldier::friendCollision()
 {
 	RECT temp;
+	frameX = 0;
 
-	if (IntersectRect(&temp, &soldier.rcAtk[0], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &soldier.rcAtk[1], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &soldier.rcAtk[2], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &soldier.rcAtk[3], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc))
+	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
 	{
-		isTarget = true;
-		frameX = 1;
+		auto enemyX = ENEMYMANAGER->getEnemy()[j]->getEnemyX();
+		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
+		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
-		if (PtInRect(&ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc, m_ptMouse) &&
-			KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
+		bool isInterSect = false;
+
+		for (int k = 0; k < 8; k++)
 		{
-			isAtkRng = false;
-			isAtk = true;
-
-			if (friendX > ENEMYMANAGER->getEnemy()[4]->getEnemyX())
-				fDirection = FRIEND_LEFT;
-			else if (friendX < ENEMYMANAGER->getEnemy()[4]->getEnemyX())
-				fDirection = FRIEND_RIGHT;
-			else if (friendY > ENEMYMANAGER->getEnemy()[4]->getEnemyY())
-				fDirection = FRIEND_UP;
-			else if (friendY < ENEMYMANAGER->getEnemy()[4]->getEnemyY())
-				fDirection = FRIEND_DOWN;
+			if (IntersectRect(&temp, &soldier.rcAtk[k], &enemyRect))
+			{
+				isInterSect = true;
+				break;
+			}
 		}
-	}
-	else
-	{
-		frameX = 0;
+
+		if (isInterSect)
+		{
+			isTarget = true;
+			frameX = 1;
+
+			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && isAtkRng)
+			{
+				isAtkRng = false;
+				isAtk = true;
+				isDamage = true;
+
+				if (friendX > enemyX) fDirection = FRIEND_LEFT;
+				else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
+				else if (friendY > enemyY) fDirection = FRIEND_UP;
+				else if (friendY < enemyY) fDirection = FRIEND_DOWN;
+			}
+		}
 	}
 }
 

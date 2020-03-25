@@ -18,8 +18,10 @@ struct FriendInfo
 	image* img;				//캐릭터 이미지
 	image* atkImg;			//공격 이미지
 	image* blockImg;		//방어 및 피격 이미지
+
 	RECT rc;				//캐릭터 렉트
 	RECT rcAtk[8];			//공격용 렉트
+
 	int level;				//레벨
 	int hp;					//체력
 	int mp;					//마력
@@ -29,6 +31,10 @@ struct FriendInfo
 	int agi;				//순발력
 	int ten;				//사기
 	int movingCount;		//이동력
+
+	const char* name;		//이름
+	const char* face;		//얼굴
+	const char* className;	//병과
 };
 
 class FriendlyBase
@@ -73,6 +79,7 @@ protected:	//일반 변수
 	bool isAtkRng;			//적이 있다면 공격 버튼을 활성화해주는 변수
 	bool isAtk;				//적을 공격할 때 체크해주는 변수
 	bool isHit;
+	bool isDamage;
 
 protected:	//A*용 변수
 	int startTile;			//A* 시작위치
@@ -129,6 +136,7 @@ public:
 	bool getIsTarget() { return isTarget; }
 	bool getIsAtk() { return isAtk; }
 	bool getIsHit() { return isHit; }
+	bool getIsDamage() { return isDamage; }
 	bool getIsClick() { return isClick; }
 
 	//Setter
@@ -138,6 +146,7 @@ public:
 	void setIsTarget(bool target) { isTarget = target; }
 	void setIsAtk(bool atk) { isAtk = atk; }
 	void setIsHit(bool hit) { isHit = hit; }
+	void setIsDamage(bool damage) { isDamage = damage; }
 
 	//프로그레스바
 	progressBar* getProgressBarHp() { return _Hp; }

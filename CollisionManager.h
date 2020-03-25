@@ -6,8 +6,6 @@ class CollisionManager : public singletonBase<CollisionManager>
 private:
 	RECT temp;
 
-	int pHitCount;
-	int eHitCount;
 	int damage;
 
 public:

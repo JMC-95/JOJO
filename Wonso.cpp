@@ -11,6 +11,10 @@ Wonso::~Wonso()
 
 HRESULT Wonso::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * friendImg, const char * atkImg, const char * blockImg)
 {
+	//이름 및 얼굴
+	wonso.name = "원소";
+	wonso.face = "원소Face";
+	wonso.className = "군웅";
 	//이미지 및 애니메이션
 	wonso.moveRngImg = IMAGEMANAGER->findImage(moveImg);	//캐릭터 클릭시 이동범위 이미지
 	wonso.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -129,7 +133,7 @@ void Wonso::mouseMove()
 	{
 		if (PtInRect(&wonso.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 			{
 				//선택한 타일 (캐릭터)
 				startTile = i;
@@ -277,7 +281,9 @@ void Wonso::friendAstar()
 	if (!optimalPath.empty())
 	{
 		if (!isStop)
+		{
 			friendMove();
+		}
 
 		if (friendX == mapX && friendY == mapY)
 		{
@@ -363,34 +369,42 @@ void Wonso::friendMenu()
 void Wonso::friendCollision()
 {
 	RECT temp;
+	frameX = 0;
 
-	if (IntersectRect(&temp, &wonso.rcAtk[0], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &wonso.rcAtk[1], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &wonso.rcAtk[2], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &wonso.rcAtk[3], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc))
+	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
 	{
-		isTarget = true;
-		frameX = 1;
+		auto enemyX = ENEMYMANAGER->getEnemy()[j]->getEnemyX();
+		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
+		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
-		if (PtInRect(&ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc, m_ptMouse) &&
-			KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
+		bool isInterSect = false;
+
+		for (int k = 0; k < 8; k++)
 		{
-			isAtkRng = false;
-			isAtk = true;
-
-			if (friendX > ENEMYMANAGER->getEnemy()[4]->getEnemyX())
-				fDirection = FRIEND_LEFT;
-			else if (friendX < ENEMYMANAGER->getEnemy()[4]->getEnemyX())
-				fDirection = FRIEND_RIGHT;
-			else if (friendY > ENEMYMANAGER->getEnemy()[4]->getEnemyY())
-				fDirection = FRIEND_UP;
-			else if (friendY < ENEMYMANAGER->getEnemy()[4]->getEnemyY())
-				fDirection = FRIEND_DOWN;
+			if (IntersectRect(&temp, &wonso.rcAtk[k], &enemyRect))
+			{
+				isInterSect = true;
+				break;
+			}
 		}
-	}
-	else
-	{
-		frameX = 0;
+
+		if (isInterSect)
+		{
+			isTarget = true;
+			frameX = 1;
+
+			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && isAtkRng)
+			{
+				isAtkRng = false;
+				isAtk = true;
+				isDamage = true;
+
+				if (friendX > enemyX) fDirection = FRIEND_LEFT;
+				else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
+				else if (friendY > enemyY) fDirection = FRIEND_UP;
+				else if (friendY < enemyY) fDirection = FRIEND_DOWN;
+			}
+		}
 	}
 }
 

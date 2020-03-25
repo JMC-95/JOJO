@@ -11,6 +11,10 @@ Johong::~Johong()
 
 HRESULT Johong::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
+	//이름 및 얼굴
+	johong.name = "조홍";
+	johong.face = "조홍Face";
+	johong.className = "경보병";
 	//이미지 및 애니메이션
 	johong.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	johong.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -67,7 +71,15 @@ void Johong::update()
 {
 	if (isTurn)
 	{
-		mouseMove();
+		if (!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[1]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[5]->getIsSelect())
+		{
+			mouseMove();
+		}
 	}
 
 	playerAnimation();
@@ -203,6 +215,12 @@ void Johong::mouseMove()
 		}
 	}
 
+	if (isSelect && KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+	{
+		isStop = true;
+		isClick = true;
+	}
+
 	playerAstar();
 	playerMenu();
 	playerCollision();
@@ -303,7 +321,10 @@ void Johong::playerAstar()
 				johong.rcAtk[7] = RectMake(johong.rc.left, johong.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
 				atkList.push_back(johong.rcAtk[j]);
 			}
+		}
 
+		if (isClick)
+		{
 			//메뉴선택 렉트
 			for (int j = 0; j < 5; j++)
 			{
@@ -384,38 +405,42 @@ void Johong::playerMenu()
 void Johong::playerCollision()
 {
 	RECT temp;
+	frameX = 0;
 
-	if (IntersectRect(&temp, &johong.rcAtk[0], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &johong.rcAtk[1], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &johong.rcAtk[2], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &johong.rcAtk[3], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &johong.rcAtk[4], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &johong.rcAtk[5], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &johong.rcAtk[6], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &johong.rcAtk[7], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc))
+	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
 	{
-		isTarget = true;
-		frameX = 1;
+		auto enemyX = ENEMYMANAGER->getEnemy()[j]->getEnemyX();
+		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
+		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
-		if (PtInRect(&ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc, m_ptMouse) &&
-			KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
+		bool isInterSect = false;
+
+		for (int k = 0; k < 8; k++)
 		{
-			isAtkRng = false;
-			isAtk = true;
-
-			if (playerX > ENEMYMANAGER->getEnemy()[4]->getEnemyX())
-				pDirection = PLAYER_LEFT;
-			else if (playerX < ENEMYMANAGER->getEnemy()[4]->getEnemyX())
-				pDirection = PLAYER_RIGHT;
-			else if (playerY > ENEMYMANAGER->getEnemy()[4]->getEnemyY())
-				pDirection = PLAYER_UP;
-			else if (playerY < ENEMYMANAGER->getEnemy()[4]->getEnemyY())
-				pDirection = PLAYER_DOWN;
+			if (IntersectRect(&temp, &johong.rcAtk[k], &enemyRect))
+			{
+				isInterSect = true;
+				break;
+			}
 		}
-	}
-	else
-	{
-		frameX = 0;
+
+		if (isInterSect)
+		{
+			isTarget = true;
+			frameX = 1;
+
+			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && isAtkRng)
+			{
+				isAtkRng = false;
+				isAtk = true;
+				isDamage = true;
+
+				if (playerX > enemyX) pDirection = PLAYER_LEFT;
+				else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
+				else if (playerY > enemyY) pDirection = PLAYER_UP;
+				else if (playerY < enemyY) pDirection = PLAYER_DOWN;
+			}
+		}
 	}
 }
 

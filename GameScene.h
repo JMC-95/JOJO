@@ -10,6 +10,8 @@ private:
 	MainMap* _mainMap;
 	Interface* _interface;
 
+private:
+
 public:
 	GameScene();
 	~GameScene();
@@ -18,4 +20,6 @@ public:
 	void release();
 	void update();
 	void render();
+
+	void gameTurn();
 };

@@ -11,6 +11,10 @@ Iyu::~Iyu()
 
 HRESULT Iyu::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * enemyImg, const char * atkImg, const char * blockImg)
 {
+	//이름 및 얼굴
+	iyu.name = "이유";
+	iyu.face = "이유Face";
+	iyu.className = "책사";
 	//이미지 및 애니메이션
 	iyu.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	iyu.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -129,7 +133,7 @@ void Iyu::mouseMove()
 	{
 		if (PtInRect(&iyu.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 			{
 				//선택한 타일 (캐릭터)
 				startTile = i;
@@ -166,6 +170,7 @@ void Iyu::mouseMove()
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
 					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
+
 					//선택한 타일 (목표)
 					endTile = i;
 
@@ -277,7 +282,9 @@ void Iyu::enemyAstar()
 	if (!optimalPath.empty())
 	{
 		if (!isStop)
+		{
 			enemyMove();
+		}
 
 		if (enemyX == mapX && enemyY == mapY)
 		{

@@ -11,6 +11,10 @@ Hahuyeon::~Hahuyeon()
 
 HRESULT Hahuyeon::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
+	//이름 및 얼굴
+	hahuyeon.name = "하후연";
+	hahuyeon.face = "하후연Face";
+	hahuyeon.className = "궁기병";
 	//이미지 및 애니메이션
 	hahuyeon.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	hahuyeon.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -67,7 +71,15 @@ void Hahuyeon::update()
 {
 	if (isTurn)
 	{
-		mouseMove();
+		if (!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[6]->getIsSelect())
+		{
+			mouseMove();
+		}
 	}
 
 	playerAnimation();
@@ -199,6 +211,12 @@ void Hahuyeon::mouseMove()
 		}
 	}
 
+	if (isSelect && KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+	{
+		isStop = true;
+		isClick = true;
+	}
+
 	playerAstar();
 	playerMenu();
 	playerCollision();
@@ -295,7 +313,10 @@ void Hahuyeon::playerAstar()
 				hahuyeon.rcAtk[3] = RectMake(hahuyeon.rc.left, hahuyeon.rc.top + 96, TILE_WIDTH, TILE_HEIGHT);
 				atkList.push_back(hahuyeon.rcAtk[j]);
 			}
+		}
 
+		if (isClick)
+		{
 			//메뉴선택 렉트
 			for (int j = 0; j < 5; j++)
 			{
@@ -376,34 +397,42 @@ void Hahuyeon::playerMenu()
 void Hahuyeon::playerCollision()
 {
 	RECT temp;
+	frameX = 0;
 
-	if (IntersectRect(&temp, &hahuyeon.rcAtk[0], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &hahuyeon.rcAtk[1], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &hahuyeon.rcAtk[2], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &hahuyeon.rcAtk[3], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc))
+	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
 	{
-		isTarget = true;
-		frameX = 1;
+		auto enemyX = ENEMYMANAGER->getEnemy()[j]->getEnemyX();
+		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
+		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
-		if (PtInRect(&ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc, m_ptMouse) &&
-			KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
+		bool isInterSect = false;
+
+		for (int k = 0; k < 8; k++)
 		{
-			isAtkRng = false;
-			isAtk = true;
-
-			if (playerX > ENEMYMANAGER->getEnemy()[4]->getEnemyX())
-				pDirection = PLAYER_LEFT;
-			else if (playerX < ENEMYMANAGER->getEnemy()[4]->getEnemyX())
-				pDirection = PLAYER_RIGHT;
-			else if (playerY > ENEMYMANAGER->getEnemy()[4]->getEnemyY())
-				pDirection = PLAYER_UP;
-			else if (playerY < ENEMYMANAGER->getEnemy()[4]->getEnemyY())
-				pDirection = PLAYER_DOWN;
+			if (IntersectRect(&temp, &hahuyeon.rcAtk[k], &enemyRect))
+			{
+				isInterSect = true;
+				break;
+			}
 		}
-	}
-	else
-	{
-		frameX = 0;
+
+		if (isInterSect)
+		{
+			isTarget = true;
+			frameX = 1;
+
+			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && isAtkRng)
+			{
+				isAtkRng = false;
+				isAtk = true;
+				isDamage = true;
+
+				if (playerX > enemyX) pDirection = PLAYER_LEFT;
+				else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
+				else if (playerY > enemyY) pDirection = PLAYER_UP;
+				else if (playerY < enemyY) pDirection = PLAYER_DOWN;
+			}
+		}
 	}
 }
 

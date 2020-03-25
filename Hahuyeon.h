@@ -16,15 +16,15 @@ public:
 	virtual void update();
 	virtual void render(HDC hdc);
 
-	void mouseMove();
-	void playerMove();
-	void playerAstar();
-	void playerMenu();
-	void playerCollision();
-	void playerAnimation();
-	void playerState();
+	virtual void mouseMove();
+	virtual void playerMove();
+	virtual void playerAstar();
+	virtual void playerMenu();
+	virtual void playerCollision();
+	virtual void playerAnimation();
+	virtual void playerState();
 
-	void setPosition(RECT rc);
+	virtual void setPosition(RECT rc);
 
 	virtual PlayerInfo getPlayerInfo() { return hahuyeon; }
 };

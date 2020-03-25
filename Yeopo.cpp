@@ -11,6 +11,10 @@ Yeopo::~Yeopo()
 
 HRESULT Yeopo::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * enemyImg, const char * atkImg, const char * blockImg)
 {
+	//이름 및 얼굴
+	yeopo.name = "여포";
+	yeopo.face = "여포Face";
+	yeopo.className = "서량기병";
 	//이미지 및 애니메이션
 	yeopo.moveRngImg = IMAGEMANAGER->findImage(moveImg);	//캐릭터 클릭시 이동범위 이미지
 	yeopo.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -75,11 +79,6 @@ void Yeopo::update()
 
 	enemyAnimation();
 	enemyState();
-
-	if (KEYMANAGER->isOnceKeyDown('1'))
-	{
-		isTurn = true;
-	}
 }
 
 void Yeopo::render(HDC hdc)
@@ -134,7 +133,7 @@ void Yeopo::mouseMove()
 	{
 		if (PtInRect(&yeopo.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 			{
 				//선택한 타일 (캐릭터)
 				startTile = i;
@@ -171,6 +170,7 @@ void Yeopo::mouseMove()
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
 					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
+
 					//선택한 타일 (목표)
 					endTile = i;
 
@@ -282,7 +282,9 @@ void Yeopo::enemyAstar()
 	if (!optimalPath.empty())
 	{
 		if (!isStop)
+		{
 			enemyMove();
+		}
 
 		if (enemyX == mapX && enemyY == mapY)
 		{
@@ -454,301 +456,6 @@ void Yeopo::enemyMenu()
 
 void Yeopo::enemyCollision()
 {
-	/*for (int k = 0; k < vYeopo.size(); k++)
-	{
-		if (IntersectRect(&temp, &yeopo.rcAtk[0], &PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getAgjin()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getAgjin()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getAgjin()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getAgjin()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getAgjin()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getHahudon()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getHahudon()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getHahudon()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getHahudon()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getHahudon()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getHahuyeon()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getHahuyeon()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getHahuyeon()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getHahuyeon()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getHahuyeon()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getIjeon()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getIjeon()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getIjeon()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getIjeon()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getIjeon()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &PLAYERMANAGER->getJohong()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &PLAYERMANAGER->getJohong()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &PLAYERMANAGER->getJohong()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &PLAYERMANAGER->getJohong()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getJohong()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getJohong()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getJohong()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getJohong()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getJohong()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &PLAYERMANAGER->getJoin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &PLAYERMANAGER->getJoin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &PLAYERMANAGER->getJoin()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &PLAYERMANAGER->getJoin()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getJoin()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getJoin()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getJoin()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getJoin()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getJoin()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&PLAYERMANAGER->getJojo()->getPlayerVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > PLAYERMANAGER->getJojo()->getPlayerX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < PLAYERMANAGER->getJojo()->getPlayerX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > PLAYERMANAGER->getJojo()->getPlayerY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < PLAYERMANAGER->getJojo()->getPlayerY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&FRIENDMANAGER->getDogyeom()->getFriendVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > FRIENDMANAGER->getDogyeom()->getFriendX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < FRIENDMANAGER->getDogyeom()->getFriendX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > FRIENDMANAGER->getDogyeom()->getFriendY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < FRIENDMANAGER->getDogyeom()->getFriendY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &FRIENDMANAGER->getGwanu()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &FRIENDMANAGER->getGwanu()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &FRIENDMANAGER->getGwanu()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &FRIENDMANAGER->getGwanu()->getFriendVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&FRIENDMANAGER->getGwanu()->getFriendVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > FRIENDMANAGER->getGwanu()->getFriendX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < FRIENDMANAGER->getGwanu()->getFriendX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > FRIENDMANAGER->getGwanu()->getFriendY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < FRIENDMANAGER->getGwanu()->getFriendY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &FRIENDMANAGER->getJangbi()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &FRIENDMANAGER->getJangbi()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &FRIENDMANAGER->getJangbi()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &FRIENDMANAGER->getJangbi()->getFriendVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&FRIENDMANAGER->getJangbi()->getFriendVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > FRIENDMANAGER->getJangbi()->getFriendX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < FRIENDMANAGER->getJangbi()->getFriendX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > FRIENDMANAGER->getJangbi()->getFriendY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < FRIENDMANAGER->getJangbi()->getFriendY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &FRIENDMANAGER->getWonso()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &FRIENDMANAGER->getWonso()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &FRIENDMANAGER->getWonso()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &FRIENDMANAGER->getWonso()->getFriendVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&FRIENDMANAGER->getWonso()->getFriendVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > FRIENDMANAGER->getWonso()->getFriendX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < FRIENDMANAGER->getWonso()->getFriendX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > FRIENDMANAGER->getWonso()->getFriendY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < FRIENDMANAGER->getWonso()->getFriendY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else if (IntersectRect(&temp, &yeopo.rcAtk[0], &FRIENDMANAGER->getYubi()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[1], &FRIENDMANAGER->getYubi()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[2], &FRIENDMANAGER->getYubi()->getFriendVector()[0].rc) ||
-			IntersectRect(&temp, &yeopo.rcAtk[3], &FRIENDMANAGER->getYubi()->getFriendVector()[0].rc))
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&FRIENDMANAGER->getYubi()->getFriendVector()[0].rc, m_ptMouse) &&
-				KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-
-				if (enemyX > FRIENDMANAGER->getYubi()->getFriendX())
-					eDirection = ENEMY_LEFT;
-				else if (enemyX < FRIENDMANAGER->getYubi()->getFriendX())
-					eDirection = ENEMY_RIGHT;
-				else if (enemyY > FRIENDMANAGER->getYubi()->getFriendY())
-					eDirection = ENEMY_UP;
-				else if (enemyY < FRIENDMANAGER->getYubi()->getFriendY())
-					eDirection = ENEMY_DOWN;
-			}
-		}
-		else
-		{
-			frameX = 0;
-		}
-	}*/
 }
 
 void Yeopo::setPosition(RECT rc)

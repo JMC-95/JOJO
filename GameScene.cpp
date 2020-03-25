@@ -22,13 +22,13 @@ HRESULT GameScene::init()
 	{
 		PLAYERMANAGER->getPlayer()[i]->setMapMemoryAdress(_mainMap);
 	}
-	PLAYERMANAGER->getPlayer()[0]->setPosition(_mainMap->getMap()[216].rc);
-	PLAYERMANAGER->getPlayer()[1]->setPosition(_mainMap->getMap()[176].rc);
-	PLAYERMANAGER->getPlayer()[2]->setPosition(_mainMap->getMap()[196].rc);
-	PLAYERMANAGER->getPlayer()[3]->setPosition(_mainMap->getMap()[177].rc);
-	PLAYERMANAGER->getPlayer()[4]->setPosition(_mainMap->getMap()[237].rc);
-	PLAYERMANAGER->getPlayer()[5]->setPosition(_mainMap->getMap()[236].rc);
-	PLAYERMANAGER->getPlayer()[6]->setPosition(_mainMap->getMap()[197].rc);
+	PLAYERMANAGER->getPlayer()[0]->setPosition(_mainMap->getMap()[197].rc);
+	PLAYERMANAGER->getPlayer()[1]->setPosition(_mainMap->getMap()[196].rc);
+	PLAYERMANAGER->getPlayer()[2]->setPosition(_mainMap->getMap()[236].rc);
+	PLAYERMANAGER->getPlayer()[3]->setPosition(_mainMap->getMap()[176].rc);
+	PLAYERMANAGER->getPlayer()[4]->setPosition(_mainMap->getMap()[216].rc);
+	PLAYERMANAGER->getPlayer()[5]->setPosition(_mainMap->getMap()[177].rc);
+	PLAYERMANAGER->getPlayer()[6]->setPosition(_mainMap->getMap()[237].rc);
 
 	//¿ì±º
 	FRIENDMANAGER->init();
@@ -57,6 +57,24 @@ HRESULT GameScene::init()
 	ENEMYMANAGER->getEnemy()[2]->setPosition(_mainMap->getMap()[202].rc);
 	ENEMYMANAGER->getEnemy()[3]->setPosition(_mainMap->getMap()[184].rc);
 	ENEMYMANAGER->getEnemy()[4]->setPosition(_mainMap->getMap()[188].rc);
+	ENEMYMANAGER->getEnemy()[5]->setPosition(_mainMap->getMap()[169].rc);
+	ENEMYMANAGER->getEnemy()[6]->setPosition(_mainMap->getMap()[189].rc);
+	ENEMYMANAGER->getEnemy()[7]->setPosition(_mainMap->getMap()[209].rc);
+	ENEMYMANAGER->getEnemy()[8]->setPosition(_mainMap->getMap()[229].rc);
+	ENEMYMANAGER->getEnemy()[9]->setPosition(_mainMap->getMap()[167].rc);
+	ENEMYMANAGER->getEnemy()[10]->setPosition(_mainMap->getMap()[187].rc);
+	ENEMYMANAGER->getEnemy()[11]->setPosition(_mainMap->getMap()[207].rc);
+	ENEMYMANAGER->getEnemy()[12]->setPosition(_mainMap->getMap()[227].rc);
+	ENEMYMANAGER->getEnemy()[13]->setPosition(_mainMap->getMap()[148].rc);
+	ENEMYMANAGER->getEnemy()[14]->setPosition(_mainMap->getMap()[168].rc);
+	ENEMYMANAGER->getEnemy()[15]->setPosition(_mainMap->getMap()[208].rc);
+	ENEMYMANAGER->getEnemy()[16]->setPosition(_mainMap->getMap()[228].rc);
+	ENEMYMANAGER->getEnemy()[17]->setPosition(_mainMap->getMap()[248].rc);
+	ENEMYMANAGER->getEnemy()[18]->setPosition(_mainMap->getMap()[125].rc);
+	ENEMYMANAGER->getEnemy()[19]->setPosition(_mainMap->getMap()[165].rc);
+	ENEMYMANAGER->getEnemy()[20]->setPosition(_mainMap->getMap()[205].rc);
+	ENEMYMANAGER->getEnemy()[21]->setPosition(_mainMap->getMap()[225].rc);
+	ENEMYMANAGER->getEnemy()[22]->setPosition(_mainMap->getMap()[265].rc);
 
 	COLLISIONMANAGER->init();
 
@@ -78,12 +96,13 @@ void GameScene::update()
 
 	ANIMATIONMANAGER->update();
 	COLLISIONMANAGER->update();
+	gameTurn();
 
 	//auto& playerVector = PLAYERMANAGER->getPlayer();
 	//for (auto player = playerVector.begin(); player != playerVector.end(); )
 	//{
 	//	int hp = (*player)->getCurrentHp();
-	//
+
 	//	if (hp == 0)
 	//	{
 	//		player = playerVector.erase(player);
@@ -107,4 +126,49 @@ void GameScene::render()
 	FRIENDMANAGER->render(getMemDC());
 	ENEMYMANAGER->render(getMemDC());
 	_interface->render(getMemDC());
+}
+
+void GameScene::gameTurn()
+{
+	if (!PLAYERMANAGER->getPlayer()[0]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[1]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[2]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[3]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[4]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[5]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[6]->getIsTurn())
+	{
+
+	}
+
+	if (!FRIENDMANAGER->getFriend()[0]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[1]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[2]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[3]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[4]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[5]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[6]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[7]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[8]->getIsTurn())
+	{
+
+	}
+
+	if (!ENEMYMANAGER->getEnemy()[4]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[5]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[6]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[7]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[8]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[9]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[10]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[11]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[12]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[13]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[14]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[15]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[16]->getIsTurn() &&
+		!ENEMYMANAGER->getEnemy()[17]->getIsTurn())
+	{
+
+	}
 }

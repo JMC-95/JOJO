@@ -11,6 +11,10 @@ Hahudon::~Hahudon()
 
 HRESULT Hahudon::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
+	//이름 및 얼굴
+	hahudon.name = "하후돈";
+	hahudon.face = "하후돈Face";
+	hahudon.className = "경기병";
 	//이미지 및 애니메이션
 	hahudon.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	hahudon.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
@@ -67,7 +71,15 @@ void Hahudon::update()
 {
 	if (isTurn)
 	{
-		mouseMove();
+		if (!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[1]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[6]->getIsSelect())
+		{
+			mouseMove();
+		}
 	}
 
 	playerAnimation();
@@ -199,6 +211,12 @@ void Hahudon::mouseMove()
 		}
 	}
 
+	if (isSelect && KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+	{
+		isStop = true;
+		isClick = true;
+	}
+
 	playerAstar();
 	playerMenu();
 	playerCollision();
@@ -295,7 +313,10 @@ void Hahudon::playerAstar()
 				hahudon.rcAtk[3] = RectMake(hahudon.rc.left, hahudon.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
 				atkList.push_back(hahudon.rcAtk[j]);
 			}
+		}
 
+		if (isClick)
+		{
 			//메뉴선택 렉트
 			for (int j = 0; j < 5; j++)
 			{
@@ -376,34 +397,42 @@ void Hahudon::playerMenu()
 void Hahudon::playerCollision()
 {
 	RECT temp;
+	frameX = 0;
 
-	if (IntersectRect(&temp, &hahudon.rcAtk[0], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &hahudon.rcAtk[1], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &hahudon.rcAtk[2], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc) ||
-		IntersectRect(&temp, &hahudon.rcAtk[3], &ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc))
+	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
 	{
-		isTarget = true;
-		frameX = 1;
+		auto enemyX = ENEMYMANAGER->getEnemy()[j]->getEnemyX();
+		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
+		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
-		if (PtInRect(&ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc, m_ptMouse) &&
-			KEYMANAGER->isStayKeyDown(VK_LBUTTON) && isAtkRng)
+		bool isInterSect = false;
+
+		for (int k = 0; k < 8; k++)
 		{
-			isAtkRng = false;
-			isAtk = true;
-
-			if (playerX > ENEMYMANAGER->getEnemy()[4]->getEnemyX())
-				pDirection = PLAYER_LEFT;
-			else if (playerX < ENEMYMANAGER->getEnemy()[4]->getEnemyX())
-				pDirection = PLAYER_RIGHT;
-			else if (playerY > ENEMYMANAGER->getEnemy()[4]->getEnemyY())
-				pDirection = PLAYER_UP;
-			else if (playerY < ENEMYMANAGER->getEnemy()[4]->getEnemyY())
-				pDirection = PLAYER_DOWN;
+			if (IntersectRect(&temp, &hahudon.rcAtk[k], &enemyRect))
+			{
+				isInterSect = true;
+				break;
+			}
 		}
-	}
-	else
-	{
-		frameX = 0;
+
+		if (isInterSect)
+		{
+			isTarget = true;
+			frameX = 1;
+
+			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && isAtkRng)
+			{
+				isAtkRng = false;
+				isAtk = true;
+				isDamage = true;
+
+				if (playerX > enemyX) pDirection = PLAYER_LEFT;
+				else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
+				else if (playerY > enemyY) pDirection = PLAYER_UP;
+				else if (playerY < enemyY) pDirection = PLAYER_DOWN;
+			}
+		}
 	}
 }
 

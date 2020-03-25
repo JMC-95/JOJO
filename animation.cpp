@@ -237,48 +237,54 @@ void animation::frameUpdate(float elapsedTime)
 					//플레이어
 					for (int j = 0; j < PLAYERMANAGER->getPlayer().size(); j++)
 					{
-						if (PLAYERMANAGER->getPlayer()[j]->getIsAtk())
+						auto& player = PLAYERMANAGER->getPlayer()[j];
+
+						if (player->getIsAtk())
 						{
 							_nowPlayIndex = 0;
 							_play = false;
 
-							PLAYERMANAGER->getPlayer()[j]->setIsTurn(false);
-							PLAYERMANAGER->getPlayer()[j]->setIsSelect(false);
-							PLAYERMANAGER->getPlayer()[j]->setIsTarget(false);
-							PLAYERMANAGER->getPlayer()[j]->setIsAtk(false);
-							PLAYERMANAGER->getPlayer()[j]->setIsCancel(false);
+							player->setIsTurn(false);
+							player->setIsSelect(false);
+							player->setIsTarget(false);
+							player->setIsAtk(false);
+							player->setIsCancel(false);
 						}
 					}
 
 					//우군
 					for (int j = 0; j < FRIENDMANAGER->getFriend().size(); j++)
 					{
-						if (FRIENDMANAGER->getFriend()[j]->getIsAtk())
+						auto& friendly = FRIENDMANAGER->getFriend()[j];
+
+						if (friendly->getIsAtk())
 						{
 							_nowPlayIndex = 0;
 							_play = false;
 
-							FRIENDMANAGER->getFriend()[j]->setIsTurn(false);
-							FRIENDMANAGER->getFriend()[j]->setIsSelect(false);
-							FRIENDMANAGER->getFriend()[j]->setIsTarget(false);
-							FRIENDMANAGER->getFriend()[j]->setIsAtk(false);
-							FRIENDMANAGER->getFriend()[j]->setIsCancel(false);
+							friendly->setIsTurn(false);
+							friendly->setIsSelect(false);
+							friendly->setIsTarget(false);
+							friendly->setIsAtk(false);
+							friendly->setIsCancel(false);
 						}
 					}
 
 					//적군
 					for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
 					{
-						if (ENEMYMANAGER->getEnemy()[j]->getIsAtk())
+						auto& enemy = ENEMYMANAGER->getEnemy()[j];
+
+						if (enemy->getIsAtk())
 						{
 							_nowPlayIndex = 0;
 							_play = false;
 
-							ENEMYMANAGER->getEnemy()[j]->setIsTurn(false);
-							ENEMYMANAGER->getEnemy()[j]->setIsSelect(false);
-							ENEMYMANAGER->getEnemy()[j]->setIsTarget(false);
-							ENEMYMANAGER->getEnemy()[j]->setIsAtk(false);
-							ENEMYMANAGER->getEnemy()[j]->setIsCancel(false);
+							enemy->setIsTurn(false);
+							enemy->setIsSelect(false);
+							enemy->setIsTarget(false);
+							enemy->setIsAtk(false);
+							enemy->setIsCancel(false);
 						}
 					}
 				}

@@ -26,6 +26,24 @@ HRESULT EnemyManager::init()
 	vEnemy.push_back(new Yeopo);
 	vEnemy[4]->init("eMoveRange", "attackRange", "atkRange", "여포", "여포ATK", "여포BH");
 
+	for (int i = 5; i < 9; i++)
+	{
+		vEnemy.push_back(new Cavalry(i));
+		vEnemy[i]->init("eMoveRange", "attackRange", "atkRange", "적기병", "적기병ATK", "적기병BH");
+	}
+
+	for (int i = 9; i < 13; i++)
+	{
+		vEnemy.push_back(new Infantry(i));
+		vEnemy[i]->init("eMoveRange", "attackRange", "atkRange", "적보병", "적보병ATK", "적보병BH");
+	}
+
+	for (int i = 13; i < 23; i++)
+	{
+		vEnemy.push_back(new Archer(i));
+		vEnemy[i]->init("eMoveRange", "attackRange", "atkRange", "적궁병", "적궁병ATK", "적궁병BH");
+	}
+
 	return S_OK;
 }
 
