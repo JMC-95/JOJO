@@ -32,6 +32,8 @@ HRESULT FriendlyManager::init()
 		vFriend[i]->init("eMoveRange", "attackRange", "atkRange", "우군보병", "우군보병ATK", "우군보병BH");
 	}
 
+	fTurn = false;
+
 	return S_OK;
 }
 
@@ -45,6 +47,8 @@ void FriendlyManager::update()
 	{
 		vFriend[i]->update();
 	}
+
+	friendTurn();
 }
 
 void FriendlyManager::render(HDC hdc)
@@ -52,5 +56,34 @@ void FriendlyManager::render(HDC hdc)
 	for (int i = 0; i < vFriend.size(); i++)
 	{
 		vFriend[i]->render(hdc);
+	}
+}
+
+void FriendlyManager::friendTurn()
+{
+	if (FRIENDMANAGER->getFriend()[0]->getIsTurn() &&
+		FRIENDMANAGER->getFriend()[1]->getIsTurn() &&
+		FRIENDMANAGER->getFriend()[2]->getIsTurn() &&
+		FRIENDMANAGER->getFriend()[3]->getIsTurn() &&
+		FRIENDMANAGER->getFriend()[4]->getIsTurn() &&
+		FRIENDMANAGER->getFriend()[5]->getIsTurn() &&
+		FRIENDMANAGER->getFriend()[6]->getIsTurn() &&
+		FRIENDMANAGER->getFriend()[7]->getIsTurn() &&
+		FRIENDMANAGER->getFriend()[8]->getIsTurn() &&
+		!PLAYERMANAGER->getPturn() && !ENEMYMANAGER->getEturn())
+	{
+		fTurn = true;
+	}
+	else if (!FRIENDMANAGER->getFriend()[0]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[1]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[2]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[3]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[4]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[5]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[6]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[7]->getIsTurn() &&
+		!FRIENDMANAGER->getFriend()[8]->getIsTurn())
+	{
+		fTurn = false;
 	}
 }

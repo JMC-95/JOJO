@@ -96,7 +96,6 @@ void GameScene::update()
 
 	ANIMATIONMANAGER->update();
 	COLLISIONMANAGER->update();
-	gameTurn();
 
 	//auto& playerVector = PLAYERMANAGER->getPlayer();
 	//for (auto player = playerVector.begin(); player != playerVector.end(); )
@@ -126,49 +125,4 @@ void GameScene::render()
 	FRIENDMANAGER->render(getMemDC());
 	ENEMYMANAGER->render(getMemDC());
 	_interface->render(getMemDC());
-}
-
-void GameScene::gameTurn()
-{
-	if (!PLAYERMANAGER->getPlayer()[0]->getIsTurn() &&
-		!PLAYERMANAGER->getPlayer()[1]->getIsTurn() &&
-		!PLAYERMANAGER->getPlayer()[2]->getIsTurn() &&
-		!PLAYERMANAGER->getPlayer()[3]->getIsTurn() &&
-		!PLAYERMANAGER->getPlayer()[4]->getIsTurn() &&
-		!PLAYERMANAGER->getPlayer()[5]->getIsTurn() &&
-		!PLAYERMANAGER->getPlayer()[6]->getIsTurn())
-	{
-
-	}
-
-	if (!FRIENDMANAGER->getFriend()[0]->getIsTurn() &&
-		!FRIENDMANAGER->getFriend()[1]->getIsTurn() &&
-		!FRIENDMANAGER->getFriend()[2]->getIsTurn() &&
-		!FRIENDMANAGER->getFriend()[3]->getIsTurn() &&
-		!FRIENDMANAGER->getFriend()[4]->getIsTurn() &&
-		!FRIENDMANAGER->getFriend()[5]->getIsTurn() &&
-		!FRIENDMANAGER->getFriend()[6]->getIsTurn() &&
-		!FRIENDMANAGER->getFriend()[7]->getIsTurn() &&
-		!FRIENDMANAGER->getFriend()[8]->getIsTurn())
-	{
-
-	}
-
-	if (!ENEMYMANAGER->getEnemy()[4]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[5]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[6]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[7]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[8]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[9]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[10]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[11]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[12]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[13]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[14]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[15]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[16]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[17]->getIsTurn())
-	{
-
-	}
 }

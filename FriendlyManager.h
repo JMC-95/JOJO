@@ -12,6 +12,8 @@ class FriendlyManager : public singletonBase<FriendlyManager>
 private:
 	vector<FriendlyBase*> vFriend;
 
+	bool fTurn;
+
 public:
 	FriendlyManager();
 	~FriendlyManager();
@@ -20,6 +22,10 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+
+	void friendTurn();
+
+	bool getFturn() { return fTurn; }
 
 	//베이스 클래스의 벡터를 반환하는 함수
 	vector<FriendlyBase*>& getFriend() { return vFriend; }

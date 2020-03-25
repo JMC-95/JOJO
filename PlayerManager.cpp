@@ -32,6 +32,8 @@ HRESULT PlayerManager::init()
 	vPlayer.push_back(new Johong);
 	vPlayer[6]->init("pMoveRange", "attackRange", "atkRange", "Á¶È«", "Á¶È«ATK", "Á¶È«BH");
 
+	pTurn = true;
+
 	return S_OK;
 }
 
@@ -45,6 +47,8 @@ void PlayerManager::update()
 	{
 		vPlayer[i]->update();
 	}
+
+	playerTurn();
 }
 
 void PlayerManager::render(HDC hdc)
@@ -52,5 +56,38 @@ void PlayerManager::render(HDC hdc)
 	for (int i = 0; i < vPlayer.size(); i++)
 	{
 		vPlayer[i]->render(hdc);
+	}
+}
+
+void PlayerManager::playerTurn()
+{
+	if (PLAYERMANAGER->getPlayer()[0]->getIsTurn() &&
+		PLAYERMANAGER->getPlayer()[1]->getIsTurn() &&
+		PLAYERMANAGER->getPlayer()[2]->getIsTurn() &&
+		PLAYERMANAGER->getPlayer()[3]->getIsTurn() &&
+		PLAYERMANAGER->getPlayer()[4]->getIsTurn() &&
+		PLAYERMANAGER->getPlayer()[5]->getIsTurn() &&
+		PLAYERMANAGER->getPlayer()[6]->getIsTurn() &&
+		!FRIENDMANAGER->getFturn() && !ENEMYMANAGER->getEturn())
+	{
+		pTurn = true;
+
+		if (pTurn)
+		{
+			for (int i = 0; i < ENEMYMANAGER->getEnemy().size(); i++)
+			{
+				ENEMYMANAGER->getEnemy()[i]->setIsTurn(true);
+			}
+		}
+	}
+	else if (!PLAYERMANAGER->getPlayer()[0]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[1]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[2]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[3]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[4]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[5]->getIsTurn() &&
+		!PLAYERMANAGER->getPlayer()[6]->getIsTurn())
+	{
+		pTurn = false;
 	}
 }

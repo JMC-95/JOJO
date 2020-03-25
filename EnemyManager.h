@@ -14,6 +14,8 @@ class EnemyManager : public singletonBase<EnemyManager>
 private:
 	vector<EnemyBase*> vEnemy;
 
+	bool eTurn;
+
 public:
 	EnemyManager();
 	~EnemyManager();
@@ -22,6 +24,10 @@ public:
 	void release();
 	void update();
 	void render(HDC hdc);
+
+	void enemyTurn();
+
+	bool getEturn() { return eTurn; }
 
 	//베이스 클래스의 벡터를 반환하는 함수
 	vector<EnemyBase*>& getEnemy() { return vEnemy; }
