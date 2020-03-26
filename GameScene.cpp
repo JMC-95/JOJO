@@ -11,6 +11,11 @@ GameScene::~GameScene()
 
 HRESULT GameScene::init()
 {
+	//ÅÏ ÃÊ±âÈ­
+	pTurn = 0;
+	fTurn = 0;
+	eTurn = 0;
+
 	_mainMap = new MainMap;
 	_mainMap->init("¸¼À½");
 
@@ -89,6 +94,7 @@ void GameScene::release()
 
 void GameScene::update()
 {
+	gameTurn();
 	_mainMap->update();
 	PLAYERMANAGER->update();
 	FRIENDMANAGER->update();
@@ -96,26 +102,6 @@ void GameScene::update()
 
 	ANIMATIONMANAGER->update();
 	COLLISIONMANAGER->update();
-
-	//auto& playerVector = PLAYERMANAGER->getPlayer();
-	//for (auto player = playerVector.begin(); player != playerVector.end(); )
-	//{
-	//	int hp = (*player)->getCurrentHp();
-
-	//	if (hp == 0)
-	//	{
-	//		player = playerVector.erase(player);
-	//	}
-	//	else
-	//	{
-	//		player++;
-	//	}
-	//}
-
-	//if (KEYMANAGER->isOnceKeyDown('2'))
-	//{
-	//	PLAYERMANAGER->getPlayer().erase(PLAYERMANAGER->getPlayer().begin());
-	//}
 }
 
 void GameScene::render()
@@ -125,4 +111,110 @@ void GameScene::render()
 	FRIENDMANAGER->render(getMemDC());
 	ENEMYMANAGER->render(getMemDC());
 	_interface->render(getMemDC());
+
+	if (PLAYERMANAGER->getPturn())
+	{
+		if (pTurnCount < 60)
+		{
+			IMAGEMANAGER->render("playerTurn", getMemDC());
+
+			HFONT myFont = CreateFont(100, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñ ExtraBold");
+			HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
+			SetTextColor(getMemDC(), RGB(255, 255, 255));
+			sprintf_s(str, "¾Æ±º  Â÷·Ê");
+			TextOut(getMemDC(), 350, 400, str, strlen(str));
+			SelectObject(getMemDC(), oldFont);
+			DeleteObject(myFont);
+
+			HFONT myFont2 = CreateFont(72, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñ");
+			HFONT oldFont2 = (HFONT)SelectObject(getMemDC(), myFont2);
+			SetTextColor(getMemDC(), RGB(255, 255, 255));
+			sprintf_s(str, "Á¦ %dÅÏ", pTurn);
+			TextOut(getMemDC(), 460, 530, str, strlen(str));
+			SelectObject(getMemDC(), oldFont2);
+			DeleteObject(myFont2);
+		}
+	}
+	else if (FRIENDMANAGER->getFturn())
+	{
+		if (fTurnCount < 60)
+		{
+			IMAGEMANAGER->render("friendTurn", getMemDC());
+
+			HFONT myFont = CreateFont(100, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñ ExtraBold");
+			HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
+			SetTextColor(getMemDC(), RGB(255, 255, 255));
+			sprintf_s(str, "¿ì±º  Â÷·Ê");
+			TextOut(getMemDC(), 350, 400, str, strlen(str));
+			SelectObject(getMemDC(), oldFont);
+			DeleteObject(myFont);
+
+			HFONT myFont2 = CreateFont(72, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñ");
+			HFONT oldFont2 = (HFONT)SelectObject(getMemDC(), myFont2);
+			SetTextColor(getMemDC(), RGB(255, 255, 255));
+			sprintf_s(str, "Á¦ %dÅÏ", pTurn);
+			TextOut(getMemDC(), 460, 530, str, strlen(str));
+			SelectObject(getMemDC(), oldFont2);
+			DeleteObject(myFont2);
+		}
+	}
+	else if (ENEMYMANAGER->getEturn())
+	{
+		if (eTurnCount < 60)
+		{
+			IMAGEMANAGER->render("enemyTurn", getMemDC());
+
+			HFONT myFont = CreateFont(100, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñ ExtraBold");
+			HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
+			SetTextColor(getMemDC(), RGB(255, 255, 255));
+			sprintf_s(str, "Àû±º  Â÷·Ê");
+			TextOut(getMemDC(), 350, 400, str, strlen(str));
+			SelectObject(getMemDC(), oldFont);
+			DeleteObject(myFont);
+
+			HFONT myFont2 = CreateFont(72, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñ");
+			HFONT oldFont2 = (HFONT)SelectObject(getMemDC(), myFont2);
+			SetTextColor(getMemDC(), RGB(255, 255, 255));
+			sprintf_s(str, "Á¦ %dÅÏ", pTurn);
+			TextOut(getMemDC(), 460, 530, str, strlen(str));
+			SelectObject(getMemDC(), oldFont2);
+			DeleteObject(myFont2);
+		}
+	}
+}
+
+void GameScene::gameTurn()
+{
+	if (PLAYERMANAGER->getPturn())
+	{
+		pTurnCount++;
+
+		if (pTurnCount == 1)
+		{
+			pTurn++;
+		}
+	}
+	else if (!PLAYERMANAGER->getPturn()) pTurnCount = 0;
+
+	if (FRIENDMANAGER->getFturn())
+	{
+		fTurnCount++;
+
+		if (fTurnCount == 1)
+		{
+			fTurn++;
+		}
+	}
+	else if (!FRIENDMANAGER->getFturn()) fTurnCount = 0;
+
+	if (ENEMYMANAGER->getEturn())
+	{
+		eTurnCount++;
+
+		if (eTurnCount == 1)
+		{
+			eTurn++;
+		}
+	}
+	else if (!ENEMYMANAGER->getEturn()) eTurnCount = 0;
 }

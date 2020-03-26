@@ -86,6 +86,9 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("attackRange", "images/UI/InGame/AttackRange.bmp", 48, 48, true, RGB(247, 0, 255));	//이동시의 공격범위
 	IMAGEMANAGER->addImage("atkRange", "images/UI/InGame/AtkRange.bmp", 48, 48, true, RGB(247, 0, 255));		//실제 공격범위
 	IMAGEMANAGER->addImage("cursor", "images/UI/InGame/Cursor.bmp", 26, 26, true, RGB(255, 0, 255));			//마우스 커서
+	IMAGEMANAGER->addImage("playerTurn", "images/UI/InGame/PlayerTurn.bmp", 960, 960, true, RGB(247, 0, 255));	//플레이어 턴
+	IMAGEMANAGER->addImage("friendTurn", "images/UI/InGame/FriendTurn.bmp", 960, 960, true, RGB(247, 0, 255));	//우군 턴
+	IMAGEMANAGER->addImage("enemyTurn", "images/UI/InGame/EnemyTurn.bmp", 960, 960, true, RGB(247, 0, 255));	//적군 턴
 
 	//날씨 이미지
 	IMAGEMANAGER->addFrameImage("맑음", "images/UI/Weather/Sunny.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));

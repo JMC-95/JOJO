@@ -58,7 +58,7 @@ HRESULT Archer::init(const char * moveImg, const char * mAtkImg, const char * aR
 	startTile = endTile = -1;
 	speed = 6;	//¼Óµµ
 
-	isTurn = true;
+	isTurn = false;
 	isSelect = false;
 
 	return S_OK;
