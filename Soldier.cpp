@@ -59,6 +59,7 @@ HRESULT Soldier::init(const char * moveImg, const char * mAtkImg, const char * a
 	speed = 6;	//속도
 
 	isTurn = true;
+	isMove = true;
 	isSelect = false;
 
 	return S_OK;
@@ -75,11 +76,12 @@ void Soldier::update()
 {
 	if (isTurn)
 	{
-		mouseMove();
+		if (!PLAYERMANAGER->getPturn()) friendAi();
 	}
 
 	friendAnimation();
 	friendState();
+	mouseMove();
 }
 
 void Soldier::render(HDC hdc)
@@ -128,7 +130,7 @@ void Soldier::render(HDC hdc)
 	}
 }
 
-void Soldier::mouseMove()
+void Soldier::friendAi()
 {
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
@@ -159,7 +161,7 @@ void Soldier::mouseMove()
 				}
 
 				//이동범위
-				if (!isStop)
+				if (isMove)
 				{
 					floodFill(startTile, soldier.movingCount);
 				}
@@ -175,6 +177,7 @@ void Soldier::mouseMove()
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
 					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
+
 					//선택한 타일 (목표)
 					endTile = i;
 
@@ -218,26 +221,21 @@ void Soldier::friendMove()
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
-	if (!isMove)
+	if (friendX > stackX)
 	{
-		if (friendX > stackX)
-		{
-			fDirection = FRIEND_LEFT;
-		}
-		else if (friendX < stackX)
-		{
-			fDirection = FRIEND_RIGHT;
-		}
-		else if (friendY > stackY)
-		{
-			fDirection = FRIEND_UP;
-		}
-		else if (friendY < stackY)
-		{
-			fDirection = FRIEND_DOWN;
-		}
-
-		isMove = true;
+		fDirection = FRIEND_LEFT;
+	}
+	else if (friendX < stackX)
+	{
+		fDirection = FRIEND_RIGHT;
+	}
+	else if (friendY > stackY)
+	{
+		fDirection = FRIEND_UP;
+	}
+	else if (friendY < stackY)
+	{
+		fDirection = FRIEND_DOWN;
 	}
 
 	if (soldier.rc.left > 0 || soldier.rc.right < WINSIZEY ||
@@ -265,7 +263,6 @@ void Soldier::friendMove()
 
 		if (friendX == stackX && friendY == stackY)
 		{
-			isMove = false;
 			optimalPath.pop();
 		}
 	}
@@ -285,14 +282,14 @@ void Soldier::friendAstar()
 	//목표 타일을 클릭하면 캐릭터 이동
 	if (!optimalPath.empty())
 	{
-		if (!isStop)
+		if (isMove)
 		{
 			friendMove();
 		}
 
 		if (friendX == mapX && friendY == mapY)
 		{
-			isStop = true;
+			isMove = false;
 			isClick = true;
 
 			//공격범위
@@ -357,9 +354,9 @@ void Soldier::friendMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isTurn = false;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 			if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
@@ -367,8 +364,8 @@ void Soldier::friendMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 		}
@@ -502,6 +499,59 @@ void Soldier::friendState()
 	_Mp->setGauge(currentMp, maxMp);
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
+}
+
+void Soldier::mouseMove()
+{
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && PtInRect(&soldier.rc, m_ptMouse))
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+			{
+				//선택한 타일 (캐릭터)
+				startTile = i;
+
+				//캐릭터 클릭
+				isSelect = true;
+
+				//공격범위
+				for (int j = 0; j < 8; j++)
+				{
+					soldier.rcAtk[0] = RectMake(soldier.rc.left - 48, soldier.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					soldier.rcAtk[1] = RectMake(soldier.rc.left - 48, soldier.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					soldier.rcAtk[2] = RectMake(soldier.rc.left - 48, soldier.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					soldier.rcAtk[3] = RectMake(soldier.rc.left + 48, soldier.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					soldier.rcAtk[4] = RectMake(soldier.rc.left + 48, soldier.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					soldier.rcAtk[5] = RectMake(soldier.rc.left + 48, soldier.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					soldier.rcAtk[6] = RectMake(soldier.rc.left, soldier.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					soldier.rcAtk[7] = RectMake(soldier.rc.left, soldier.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(soldier.rcAtk[j]);
+				}
+
+				//이동범위
+				if (isMove) floodFill(startTile, soldier.movingCount);
+			}
+		}
+
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				//캐릭터 클릭
+				isSelect = false;
+
+				//공격범위
+				atkList.clear();
+
+				//이동범위
+				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				{
+					if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+				}
+			}
+		}
+	}
 }
 
 void Soldier::setPosition(RECT rc)

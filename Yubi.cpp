@@ -58,6 +58,7 @@ HRESULT Yubi::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	speed = 6;	//속도
 
 	isTurn = true;
+	isMove = true;
 	isSelect = false;
 
 	return S_OK;
@@ -74,11 +75,12 @@ void Yubi::update()
 {
 	if (isTurn)
 	{
-		mouseMove();
+		if (!PLAYERMANAGER->getPturn()) friendAi();
 	}
 
 	friendAnimation();
 	friendState();
+	mouseMove();
 }
 
 void Yubi::render(HDC hdc)
@@ -127,7 +129,7 @@ void Yubi::render(HDC hdc)
 	}
 }
 
-void Yubi::mouseMove()
+void Yubi::friendAi()
 {
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
@@ -154,7 +156,7 @@ void Yubi::mouseMove()
 				}
 
 				//이동범위
-				if (!isStop)
+				if (isMove)
 				{
 					floodFill(startTile, yubi.movingCount);
 				}
@@ -170,6 +172,7 @@ void Yubi::mouseMove()
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
 					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
+
 					//선택한 타일 (목표)
 					endTile = i;
 
@@ -213,26 +216,21 @@ void Yubi::friendMove()
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
-	if (!isMove)
+	if (friendX > stackX)
 	{
-		if (friendX > stackX)
-		{
-			fDirection = FRIEND_LEFT;
-		}
-		else if (friendX < stackX)
-		{
-			fDirection = FRIEND_RIGHT;
-		}
-		else if (friendY > stackY)
-		{
-			fDirection = FRIEND_UP;
-		}
-		else if (friendY < stackY)
-		{
-			fDirection = FRIEND_DOWN;
-		}
-
-		isMove = true;
+		fDirection = FRIEND_LEFT;
+	}
+	else if (friendX < stackX)
+	{
+		fDirection = FRIEND_RIGHT;
+	}
+	else if (friendY > stackY)
+	{
+		fDirection = FRIEND_UP;
+	}
+	else if (friendY < stackY)
+	{
+		fDirection = FRIEND_DOWN;
 	}
 
 	if (yubi.rc.left > 0 || yubi.rc.right < WINSIZEY ||
@@ -260,7 +258,6 @@ void Yubi::friendMove()
 
 		if (friendX == stackX && friendY == stackY)
 		{
-			isMove = false;
 			optimalPath.pop();
 		}
 	}
@@ -280,14 +277,14 @@ void Yubi::friendAstar()
 	//목표 타일을 클릭하면 캐릭터 이동
 	if (!optimalPath.empty())
 	{
-		if (!isStop)
+		if (isMove)
 		{
 			friendMove();
 		}
 
 		if (friendX == mapX && friendY == mapY)
 		{
-			isStop = true;
+			isMove = false;
 			isClick = true;
 
 			//공격범위
@@ -348,9 +345,9 @@ void Yubi::friendMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isTurn = false;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 			if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
@@ -358,8 +355,8 @@ void Yubi::friendMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 		}
@@ -493,6 +490,55 @@ void Yubi::friendState()
 	_Mp->setGauge(currentMp, maxMp);
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
+}
+
+void Yubi::mouseMove()
+{
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && PtInRect(&yubi.rc, m_ptMouse))
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+			{
+				//선택한 타일 (캐릭터)
+				startTile = i;
+
+				//캐릭터 클릭
+				isSelect = true;
+
+				//공격범위
+				for (int j = 0; j < 4; j++)
+				{
+					yubi.rcAtk[0] = RectMake(yubi.rc.left - 48, yubi.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					yubi.rcAtk[1] = RectMake(yubi.rc.left + 48, yubi.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					yubi.rcAtk[2] = RectMake(yubi.rc.left, yubi.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					yubi.rcAtk[3] = RectMake(yubi.rc.left, yubi.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(yubi.rcAtk[j]);
+				}
+
+				//이동범위
+				if (isMove) floodFill(startTile, yubi.movingCount);
+			}
+		}
+
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				//캐릭터 클릭
+				isSelect = false;
+
+				//공격범위
+				atkList.clear();
+
+				//이동범위
+				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				{
+					if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+				}
+			}
+		}
+	}
 }
 
 void Yubi::setPosition(RECT rc)

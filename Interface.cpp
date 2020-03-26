@@ -87,6 +87,11 @@ void Interface::playerInformation(HDC hdc)
 
 void Interface::friendInformation(HDC hdc)
 {
+	if (FRIENDMANAGER->getFriend()[0]->getIsClick())
+	{
+		IMAGEMANAGER->frameRender("¸Þ´º", hdc, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rc.left - 100, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rc.top - 35, FRIENDMANAGER->getFriend()[0]->getFrameX(), 1);
+	}
+
 	for (int i = 0; i < FRIENDMANAGER->getFriend().size(); i++)
 	{
 		auto& friendly = FRIENDMANAGER->getFriend()[i];

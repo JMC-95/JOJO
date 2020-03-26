@@ -55,9 +55,12 @@ HRESULT Dogyeom::init(const char * moveImg, const char * mAtkImg, const char * a
 	//캐릭터 방향 및 위치
 	fDirection = FRIEND_LEFT;
 	startTile = endTile = -1;
-	speed = 6;	//속도
+
+	//AI 이동력 및 속도
+	speed = 6;
 
 	isTurn = true;
+	isMove = true;
 	isSelect = false;
 
 	return S_OK;
@@ -74,11 +77,19 @@ void Dogyeom::update()
 {
 	if (isTurn)
 	{
-		mouseMove();
+		//if (!PLAYERMANAGER->getPturn()) friendAi();
+		friendAi();
 	}
 
 	friendAnimation();
 	friendState();
+	mouseMove();
+
+	if (KEYMANAGER->isOnceKeyDown('3'))
+	{
+		isTurn = true;
+		isMove = true;
+	}
 }
 
 void Dogyeom::render(HDC hdc)
@@ -127,78 +138,64 @@ void Dogyeom::render(HDC hdc)
 	}
 }
 
-void Dogyeom::mouseMove()
+void Dogyeom::friendAi()
 {
-	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
-		if (PtInRect(&dogyeom.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse))
+		positionX = dogyeom.rc.left / TILE_WIDTH;
+		positionY = dogyeom.rc.top / TILE_HEIGHT;
+		friendTile = positionX + (positionY * TILE_Y);
+
+		//선택한 타일 (캐릭터)
+		startTile = friendTile;
+
+		isSelect = true;
+		isFind = false;
+		noPath = false;
+		startAstar = false;
+
+		//공격범위
+		for (int j = 0; j < 4; j++)
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
-			{
-				//선택한 타일 (캐릭터)
-				startTile = i;
-
-				isSelect = true;
-				isFind = false;
-				noPath = false;
-				startAstar = false;
-
-				//공격범위
-				for (int j = 0; j < 4; j++)
-				{
-					dogyeom.rcAtk[0] = RectMake(dogyeom.rc.left - 48, dogyeom.rc.top, TILE_WIDTH, TILE_HEIGHT);
-					dogyeom.rcAtk[1] = RectMake(dogyeom.rc.left + 48, dogyeom.rc.top, TILE_WIDTH, TILE_HEIGHT);
-					dogyeom.rcAtk[2] = RectMake(dogyeom.rc.left, dogyeom.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
-					dogyeom.rcAtk[3] = RectMake(dogyeom.rc.left, dogyeom.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
-					atkList.push_back(dogyeom.rcAtk[j]);
-				}
-
-				//이동범위
-				if (!isStop)
-				{
-					floodFill(startTile, dogyeom.movingCount);
-				}
-			}
+			dogyeom.rcAtk[0] = RectMake(dogyeom.rc.left - 48, dogyeom.rc.top, TILE_WIDTH, TILE_HEIGHT);
+			dogyeom.rcAtk[1] = RectMake(dogyeom.rc.left + 48, dogyeom.rc.top, TILE_WIDTH, TILE_HEIGHT);
+			dogyeom.rcAtk[2] = RectMake(dogyeom.rc.left, dogyeom.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+			dogyeom.rcAtk[3] = RectMake(dogyeom.rc.left, dogyeom.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+			atkList.push_back(dogyeom.rcAtk[j]);
 		}
 
-		if (!PtInRect(&dogyeom.rc, m_ptMouse) && PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+		//이동범위
+		floodFill(startTile, dogyeom.movingCount);
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('2') && isSelect)
+	{
+		//선택한 타일(목표)
+		endTile = enemyTile;
+
+		//선택한 맵의 x좌표와 y좌표
+		mapX = mainMap->getMap()[endTile].rc.left + TILE_WIDTH * 0.5;
+		mapY = mainMap->getMap()[endTile].rc.top + TILE_HEIGHT * 0.5;
+
+		//이순간 Astar가 시작된다.
+		//Astar에 필요한 모든 것을 초기화 시켜주자.
+		openList.clear();
+		closeList.clear();
+
+		if (startTile != -1 && endTile != -1)
 		{
-			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			startAstar = true;
+			currentTile = startTile;
+
+			//시작 지점을 openList에 넣자
+			openList.push_back(currentTile);
+		}
+
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood)
 			{
-				if (mainMap->getMap()[i].flood)
-				{
-					//선택한 맵의 x좌표와 y좌표
-					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
-					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
-					//선택한 타일 (목표)
-					endTile = i;
-
-					//이순간 Astar가 시작된다.
-					//Astar에 필요한 모든 것을 초기화 시켜주자.
-					openList.clear();
-					closeList.clear();
-
-					if (startTile != -1 && endTile != -1)
-					{
-						startAstar = true;
-						currentTile = startTile;
-
-						//시작 지점을 openList에 넣자
-						openList.push_back(currentTile);
-					}
-				}
-				else
-				{
-					isSelect = false;
-				}
-
-				for (int i = 0; i < TILE_X * TILE_Y; i++)
-				{
-					if (mainMap->getMap()[i].flood)
-					{
-						mainMap->getMap()[i].flood = false;
-					}
-				}
+				mainMap->getMap()[i].flood = false;
 			}
 		}
 	}
@@ -213,26 +210,21 @@ void Dogyeom::friendMove()
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
-	if (!isMove)
+	if (friendX > stackX)
 	{
-		if (friendX > stackX)
-		{
-			fDirection = FRIEND_LEFT;
-		}
-		else if (friendX < stackX)
-		{
-			fDirection = FRIEND_RIGHT;
-		}
-		else if (friendY > stackY)
-		{
-			fDirection = FRIEND_UP;
-		}
-		else if (friendY < stackY)
-		{
-			fDirection = FRIEND_DOWN;
-		}
-
-		isMove = true;
+		fDirection = FRIEND_LEFT;
+	}
+	else if (friendX < stackX)
+	{
+		fDirection = FRIEND_RIGHT;
+	}
+	else if (friendY > stackY)
+	{
+		fDirection = FRIEND_UP;
+	}
+	else if (friendY < stackY)
+	{
+		fDirection = FRIEND_DOWN;
 	}
 
 	if (dogyeom.rc.left > 0 || dogyeom.rc.right < WINSIZEY ||
@@ -260,7 +252,6 @@ void Dogyeom::friendMove()
 
 		if (friendX == stackX && friendY == stackY)
 		{
-			isMove = false;
 			optimalPath.pop();
 		}
 	}
@@ -280,14 +271,15 @@ void Dogyeom::friendAstar()
 	//목표 타일을 클릭하면 캐릭터 이동
 	if (!optimalPath.empty())
 	{
-		if (!isStop)
+		if (isMove)
 		{
 			friendMove();
 		}
 
 		if (friendX == mapX && friendY == mapY)
 		{
-			isStop = true;
+			//isTurn = false;
+			isMove = false;
 			isClick = true;
 
 			//공격범위
@@ -348,9 +340,9 @@ void Dogyeom::friendMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isTurn = false;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 			if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
@@ -358,8 +350,8 @@ void Dogyeom::friendMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 		}
@@ -493,6 +485,55 @@ void Dogyeom::friendState()
 	_Mp->setGauge(currentMp, maxMp);
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
+}
+
+void Dogyeom::mouseMove()
+{
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && PtInRect(&dogyeom.rc, m_ptMouse))
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+			{
+				//선택한 타일 (캐릭터)
+				startTile = i;
+
+				//캐릭터 클릭
+				isSelect = true;
+
+				//공격범위
+				for (int j = 0; j < 4; j++)
+				{
+					dogyeom.rcAtk[0] = RectMake(dogyeom.rc.left - 48, dogyeom.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					dogyeom.rcAtk[1] = RectMake(dogyeom.rc.left + 48, dogyeom.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					dogyeom.rcAtk[2] = RectMake(dogyeom.rc.left, dogyeom.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					dogyeom.rcAtk[3] = RectMake(dogyeom.rc.left, dogyeom.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(dogyeom.rcAtk[j]);
+				}
+
+				//이동범위
+				if (isMove) floodFill(startTile, dogyeom.movingCount);
+			}
+		}
+
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				//캐릭터 클릭
+				isSelect = false;
+
+				//공격범위
+				atkList.clear();
+
+				//이동범위
+				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				{
+					if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+				}
+			}
+		}
+	}
 }
 
 void Dogyeom::setPosition(RECT rc)

@@ -57,6 +57,7 @@ HRESULT Jangje::init(const char * moveImg, const char * mAtkImg, const char * aR
 	startTile = endTile = -1;
 	speed = 6;	//속도
 
+	isMove = true;
 	isTurn = false;
 	isSelect = false;
 
@@ -154,7 +155,7 @@ void Jangje::mouseMove()
 				}
 
 				//이동범위
-				if (!isStop)
+				if (isMove)
 				{
 					floodFill(startTile, jangje.movingCount);
 				}
@@ -214,8 +215,6 @@ void Jangje::enemyMove()
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
-	if (!isMove)
-	{
 		if (enemyX > stackX)
 		{
 			eDirection = ENEMY_LEFT;
@@ -232,9 +231,6 @@ void Jangje::enemyMove()
 		{
 			eDirection = ENEMY_DOWN;
 		}
-
-		isMove = true;
-	}
 
 	if (jangje.rc.left > 0 || jangje.rc.right < WINSIZEY ||
 		jangje.rc.top > 0 || jangje.rc.bottom < WINSIZEY)
@@ -261,7 +257,6 @@ void Jangje::enemyMove()
 
 		if (enemyX == stackX && enemyY == stackY)
 		{
-			isMove = false;
 			optimalPath.pop();
 		}
 	}
@@ -281,14 +276,14 @@ void Jangje::enemyAstar()
 	//목표 타일을 클릭하면 캐릭터 이동
 	if (!optimalPath.empty())
 	{
-		if (!isStop)
+		if (isMove)
 		{
 			enemyMove();
 		}
 
 		if (enemyX == mapX && enemyY == mapY)
 		{
-			isStop = true;
+			isMove = false;
 			isClick = true;
 
 			//공격범위
@@ -436,9 +431,9 @@ void Jangje::enemyMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isTurn = false;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 			if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
@@ -446,8 +441,8 @@ void Jangje::enemyMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 		}

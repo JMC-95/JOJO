@@ -16,13 +16,14 @@ public:
 	virtual void update();
 	virtual void render(HDC hdc);
 
-	virtual void mouseMove();
+	virtual void friendAi();
 	virtual void friendMove();
 	virtual void friendAstar();
 	virtual void friendMenu();
 	virtual void friendCollision();
 	virtual void friendAnimation();
 	virtual void friendState();
+	virtual void mouseMove();
 
 	virtual void setPosition(RECT rc);
 

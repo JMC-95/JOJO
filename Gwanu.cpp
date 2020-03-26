@@ -58,6 +58,7 @@ HRESULT Gwanu::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	speed = 6;	//속도
 
 	isTurn = true;
+	isMove = true;
 	isSelect = false;
 
 	return S_OK;
@@ -74,11 +75,12 @@ void Gwanu::update()
 {
 	if (isTurn)
 	{
-		mouseMove();
+		if (!PLAYERMANAGER->getPturn()) friendAi();
 	}
 
 	friendAnimation();
 	friendState();
+	mouseMove();
 }
 
 void Gwanu::render(HDC hdc)
@@ -127,7 +129,7 @@ void Gwanu::render(HDC hdc)
 	}
 }
 
-void Gwanu::mouseMove()
+void Gwanu::friendAi()
 {
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
@@ -154,7 +156,7 @@ void Gwanu::mouseMove()
 				}
 
 				//이동범위
-				if (!isStop)
+				if (isMove)
 				{
 					floodFill(startTile, gwanu.movingCount);
 				}
@@ -170,6 +172,7 @@ void Gwanu::mouseMove()
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
 					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
+
 					//선택한 타일 (목표)
 					endTile = i;
 
@@ -213,26 +216,21 @@ void Gwanu::friendMove()
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
-	if (!isMove)
+	if (friendX > stackX)
 	{
-		if (friendX > stackX)
-		{
-			fDirection = FRIEND_LEFT;
-		}
-		else if (friendX < stackX)
-		{
-			fDirection = FRIEND_RIGHT;
-		}
-		else if (friendY > stackY)
-		{
-			fDirection = FRIEND_UP;
-		}
-		else if (friendY < stackY)
-		{
-			fDirection = FRIEND_DOWN;
-		}
-
-		isMove = true;
+		fDirection = FRIEND_LEFT;
+	}
+	else if (friendX < stackX)
+	{
+		fDirection = FRIEND_RIGHT;
+	}
+	else if (friendY > stackY)
+	{
+		fDirection = FRIEND_UP;
+	}
+	else if (friendY < stackY)
+	{
+		fDirection = FRIEND_DOWN;
 	}
 
 	if (gwanu.rc.left > 0 || gwanu.rc.right < WINSIZEY ||
@@ -260,7 +258,6 @@ void Gwanu::friendMove()
 
 		if (friendX == stackX && friendY == stackY)
 		{
-			isMove = false;
 			optimalPath.pop();
 		}
 	}
@@ -280,14 +277,14 @@ void Gwanu::friendAstar()
 	//목표 타일을 클릭하면 캐릭터 이동
 	if (!optimalPath.empty())
 	{
-		if (!isStop)
+		if (isMove)
 		{
 			friendMove();
 		}
 
 		if (friendX == mapX && friendY == mapY)
 		{
-			isStop = true;
+			isMove = false;
 			isClick = true;
 
 			//공격범위
@@ -348,9 +345,9 @@ void Gwanu::friendMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isTurn = false;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 			if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
@@ -358,8 +355,8 @@ void Gwanu::friendMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 		}
@@ -493,6 +490,55 @@ void Gwanu::friendState()
 	_Mp->setGauge(currentMp, maxMp);
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
+}
+
+void Gwanu::mouseMove()
+{
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && PtInRect(&gwanu.rc, m_ptMouse))
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+			{
+				//선택한 타일 (캐릭터)
+				startTile = i;
+
+				//캐릭터 클릭
+				isSelect = true;
+
+				//공격범위
+				for (int j = 0; j < 4; j++)
+				{
+					gwanu.rcAtk[0] = RectMake(gwanu.rc.left - 48, gwanu.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					gwanu.rcAtk[1] = RectMake(gwanu.rc.left + 48, gwanu.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					gwanu.rcAtk[2] = RectMake(gwanu.rc.left, gwanu.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					gwanu.rcAtk[3] = RectMake(gwanu.rc.left, gwanu.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(gwanu.rcAtk[j]);
+				}
+
+				//이동범위
+				if (isMove) floodFill(startTile, gwanu.movingCount);
+			}
+		}
+
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				//캐릭터 클릭
+				isSelect = false;
+
+				//공격범위
+				atkList.clear();
+
+				//이동범위
+				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				{
+					if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+				}
+			}
+		}
+	}
 }
 
 void Gwanu::setPosition(RECT rc)

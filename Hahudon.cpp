@@ -58,6 +58,7 @@ HRESULT Hahudon::init(const char * moveImg, const char * mAtkImg, const char * a
 	speed = 6;	//속도
 
 	isTurn = true;
+	isMove = true;
 	isSelect = false;
 
 	return S_OK;
@@ -161,7 +162,7 @@ void Hahudon::mouseMove()
 				}
 
 				//이동범위
-				if (!isStop)
+				if (isMove)
 				{
 					floodFill(startTile, hahudon.movingCount);
 				}
@@ -213,8 +214,8 @@ void Hahudon::mouseMove()
 
 	if (isSelect && KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 	{
-		isStop = true;
 		isClick = true;
+		isMove = false;
 	}
 
 	playerAstar();
@@ -227,8 +228,6 @@ void Hahudon::playerMove()
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
-	if (!isMove)
-	{
 		if (playerX > stackX)
 		{
 			pDirection = PLAYER_LEFT;
@@ -245,9 +244,6 @@ void Hahudon::playerMove()
 		{
 			pDirection = PLAYER_DOWN;
 		}
-
-		isMove = true;
-	}
 
 	if (hahudon.rc.left > 0 || hahudon.rc.right < WINSIZEY ||
 		hahudon.rc.top > 0 || hahudon.rc.bottom < WINSIZEY)
@@ -274,7 +270,6 @@ void Hahudon::playerMove()
 
 		if (playerX == stackX && playerY == stackY)
 		{
-			isMove = false;
 			optimalPath.pop();
 		}
 	}
@@ -294,14 +289,14 @@ void Hahudon::playerAstar()
 	//목표 타일을 클릭하면 캐릭터 이동
 	if (!optimalPath.empty())
 	{
-		if (!isStop)
+		if (isMove)
 		{
 			playerMove();
 		}
 
 		if (playerX == mapX && playerY == mapY)
 		{
-			isStop = true;
+			isMove = false;
 			isClick = true;
 
 			//공격범위
@@ -365,9 +360,9 @@ void Hahudon::playerMenu()
 				atkList.clear();
 				menuList.clear();
 
+				isMove = true;
 				isTurn = false;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 			if (PtInRect(&rcMenu[4], m_ptMouse))	//취소
@@ -386,8 +381,8 @@ void Hahudon::playerMenu()
 				playerX = prevTile.rc.left + TILE_WIDTH * 0.5;
 				playerY = prevTile.rc.top + TILE_HEIGHT * 0.5;
 
+				isMove = true;
 				isSelect = false;
-				isStop = false;
 				isClick = false;
 			}
 		}

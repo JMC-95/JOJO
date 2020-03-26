@@ -302,7 +302,7 @@ void tank::tankMove()
 	sX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	sY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
-	if (!isMove)
+	if (isMove)
 	{
 		if (playerX > sX)
 		{

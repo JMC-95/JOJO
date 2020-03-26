@@ -73,13 +73,12 @@ protected:	//일반 변수
 	bool isTurn;			//현재 캐릭터의 턴인지 확인하는 변수
 	bool isSelect;			//캐릭터를 선택했는지 확인하는 변수
 	bool isMove;			//캐릭터의 이동을 체크해주는 변수
-	bool isStop;			//캐릭터의 이동을 막아주는 변수
 	bool isClick;			//캐릭터의 메뉴 클릭
 	bool isTarget;			//공격 범위에 적이 있는지 체크해주는 변수
 	bool isAtkRng;			//적이 있다면 공격 버튼을 활성화해주는 변수
 	bool isAtk;				//적을 공격할 때 체크해주는 변수
-	bool isHit;
-	bool isDamage;
+	bool isHit;				//피격시 체크해주는 변수
+	bool isDamage;			//데미지를 판정해주는 변수
 
 protected:	//A*용 변수
 	int saveTile;			//시작 타일을 저장하는 변수
@@ -132,7 +131,7 @@ public:
 
 	bool getIsTurn() { return isTurn; }
 	bool getIsSelect() { return isSelect; }
-	bool getIsCancel() { return isStop; }
+	bool getIsCancel() { return isMove; }
 	bool getIsAtkRng() { return isAtkRng; }
 	bool getIsTarget() { return isTarget; }
 	bool getIsAtk() { return isAtk; }
@@ -143,7 +142,7 @@ public:
 	//Setter
 	void setIsTurn(bool turn) { isTurn = turn; }
 	void setIsSelect(bool select) { isSelect = select; }
-	void setIsCancel(bool cancel) { isStop = cancel; }
+	void setIsCancel(bool cancel) { isMove = cancel; }
 	void setIsTarget(bool target) { isTarget = target; }
 	void setIsAtk(bool atk) { isAtk = atk; }
 	void setIsHit(bool hit) { isHit = hit; }

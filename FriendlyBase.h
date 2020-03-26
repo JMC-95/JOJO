@@ -57,29 +57,27 @@ protected:
 	RECT rcMenu[5];				//메뉴 렉트
 
 protected:	//일반 변수
-	int number;				//번호
+	int number;				//다형성 번호
+	int speed;				//스피드
 	int currentHp, maxHp;	//체력
 	int currentMp, maxMp;	//마력
 	int currentExp, maxExp;	//경험치
-	int speed;				//스피드
-	int frameX;				//캐릭터의 프레임을 돌리기위한 변수
-	int frameY;				//캐릭터의 프레임을 돌리기위한 변수
 	int friendX, friendY;	//캐릭터 좌표
 	int mapX, mapY;			//클릭한 맵의 중점 좌표
 	int stackX, stackY;		//스택에 쌓아둔 타일의 중점 좌표 (길을 찾을 때 필요하다.)
+	int frameX, frameY;		//캐릭터의 프레임을 돌리기위한 변수
 
 	char str[128];
 
 	bool isTurn;			//현재 캐릭터의 턴인지 확인하는 변수
 	bool isSelect;			//캐릭터를 선택했는지 확인하는 변수
 	bool isMove;			//캐릭터의 이동을 체크해주는 변수
-	bool isStop;			//캐릭터의 이동을 막아주는 변수
 	bool isClick;			//캐릭터의 메뉴 클릭
 	bool isTarget;			//공격 범위에 적이 있는지 체크해주는 변수
 	bool isAtkRng;			//적이 있다면 공격 버튼을 활성화해주는 변수
 	bool isAtk;				//적을 공격할 때 체크해주는 변수
-	bool isHit;
-	bool isDamage;
+	bool isHit;				//피격시 체크해주는 변수
+	bool isDamage;			//데미지를 판정해주는 변수
 
 protected:	//A*용 변수
 	int startTile;			//A* 시작위치
@@ -89,6 +87,10 @@ protected:	//A*용 변수
 	bool startAstar;		//A* 에이스타를 실행하는지 확인하는 변수
 	bool isFind;			//A* 길을 찾았는지 못 찾았는지 확인하는 변수
 	bool noPath;			//A* 길을 찾았으면 최단 거리가 어디인지 확인하는 변수
+
+protected:	//AI용 변수
+	int positionX, positionY;
+	int friendTile, enemyTile;
 
 public:
 	FriendlyBase();
@@ -100,13 +102,14 @@ public:
 	virtual void update();
 	virtual void render(HDC hdc);
 
-	virtual void mouseMove();
+	virtual void friendAi();
 	virtual void friendMove();
 	virtual void friendAstar();
 	virtual void friendMenu();
 	virtual void friendCollision();
 	virtual void friendAnimation();
 	virtual void friendState();
+	virtual void mouseMove();
 
 	virtual void setPosition(RECT rc);
 
@@ -131,7 +134,7 @@ public:
 
 	bool getIsTurn() { return isTurn; }
 	bool getIsSelect() { return isSelect; }
-	bool getIsCancel() { return isStop; }
+	bool getIsCancel() { return isMove; }
 	bool getIsAtkRng() { return isAtkRng; }
 	bool getIsTarget() { return isTarget; }
 	bool getIsAtk() { return isAtk; }
@@ -142,7 +145,7 @@ public:
 	//Setter
 	void setIsTurn(bool turn) { isTurn = turn; }
 	void setIsSelect(bool select) { isSelect = select; }
-	void setIsCancel(bool cancel) { isStop = cancel; }
+	void setIsCancel(bool cancel) { isMove = cancel; }
 	void setIsTarget(bool target) { isTarget = target; }
 	void setIsAtk(bool atk) { isAtk = atk; }
 	void setIsHit(bool hit) { isHit = hit; }
