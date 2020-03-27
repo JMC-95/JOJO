@@ -246,7 +246,7 @@ void animation::frameUpdate(float elapsedTime)
 
 							player->setIsTurn(false);
 							player->setIsSelect(false);
-							player->setIsTarget(false);
+							//player->setIsTarget(false);
 							player->setIsAtk(false);
 							player->setIsCancel(false);
 						}

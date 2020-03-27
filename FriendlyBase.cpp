@@ -203,7 +203,7 @@ void FriendlyBase::aStar()
 
 void FriendlyBase::floodFill(int tile, int moveCount)
 {
-	RECT temp;
+	//RECT temp;
 
 	if (mainMap->getMap()[tile].obj != OBJ_CASTLEWALLS &&
 		mainMap->getMap()[tile].obj != OBJ_ROCKMOUNTAIN &&
@@ -228,21 +228,6 @@ void FriendlyBase::floodFill(int tile, int moveCount)
 			}
 
 			mainMap->getMap()[tile].flood = true;
-
-			for (int k = 4; k < 18; ++k)
-			{
-				auto& rc = mainMap->getMap()[tile].rc;
-				auto& enemyRect = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc;
-
-				if (IntersectRect(&temp, &rc, &enemyRect))
-				{
-					positionX = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc.left / TILE_WIDTH;
-					positionY = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc.top / TILE_HEIGHT;
-					enemyTile = positionX + (positionY * TILE_Y);
-
-					mainMap->getMap()[tile].flood = false;
-				}
-			}
 		}
 	}
 }

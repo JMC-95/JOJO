@@ -81,14 +81,6 @@ void Cavalry::update()
 
 	enemyAnimation();
 	enemyState();
-
-	for (int k = 0; k < PLAYERMANAGER->getPlayer().size(); k++)
-	{
-		if (PLAYERMANAGER->getPlayer()[k]->getIsAtk())
-		{
-			isHit = true;
-		}
-	}
 }
 
 void Cavalry::render(HDC hdc)

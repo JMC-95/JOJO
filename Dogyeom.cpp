@@ -142,6 +142,8 @@ void Dogyeom::friendAi()
 {
 	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
+		RECT temp;
+
 		positionX = dogyeom.rc.left / TILE_WIDTH;
 		positionY = dogyeom.rc.top / TILE_HEIGHT;
 		friendTile = positionX + (positionY * TILE_Y);
@@ -166,35 +168,56 @@ void Dogyeom::friendAi()
 
 		//이동범위
 		floodFill(startTile, dogyeom.movingCount);
-	}
-
-	if (KEYMANAGER->isOnceKeyDown('2') && isSelect)
-	{
-		//선택한 타일(목표)
-		endTile = enemyTile;
-
-		//선택한 맵의 x좌표와 y좌표
-		mapX = mainMap->getMap()[endTile].rc.left + TILE_WIDTH * 0.5;
-		mapY = mainMap->getMap()[endTile].rc.top + TILE_HEIGHT * 0.5;
-
-		//이순간 Astar가 시작된다.
-		//Astar에 필요한 모든 것을 초기화 시켜주자.
-		openList.clear();
-		closeList.clear();
-
-		if (startTile != -1 && endTile != -1)
-		{
-			startAstar = true;
-			currentTile = startTile;
-
-			//시작 지점을 openList에 넣자
-			openList.push_back(currentTile);
-		}
 
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
 			if (mainMap->getMap()[i].flood)
 			{
+				for (int k = 4; k < 18; ++k)
+				{
+					auto& rc = mainMap->getMap()[i].rc;
+					auto& enemyRect = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc;
+
+					if (IntersectRect(&temp, &rc, &enemyRect))
+					{
+						positionX = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc.left / TILE_WIDTH;
+						positionY = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc.top / TILE_HEIGHT;
+						enemyTile = positionX + (positionY * TILE_Y);
+						mainMap->getMap()[i].flood = false;
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	if (KEYMANAGER->isOnceKeyDown('2') && isSelect)
+	{
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood)
+			{
+				//선택한 타일(목표)
+				endTile = enemyTile;
+
+				//선택한 맵의 x좌표와 y좌표
+				mapX = mainMap->getMap()[endTile].rc.left + TILE_WIDTH * 0.5;
+				mapY = mainMap->getMap()[endTile].rc.top + TILE_HEIGHT * 0.5;
+
+				//이순간 Astar가 시작된다.
+				//Astar에 필요한 모든 것을 초기화 시켜주자.
+				openList.clear();
+				closeList.clear();
+
+				if (startTile != -1 && endTile != -1)
+				{
+					startAstar = true;
+					currentTile = startTile;
+
+					//시작 지점을 openList에 넣자
+					openList.push_back(currentTile);
+				}
+
 				mainMap->getMap()[i].flood = false;
 			}
 		}

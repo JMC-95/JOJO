@@ -232,22 +232,22 @@ void Agjin::playerMove()
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
-		if (playerX > stackX)
-		{
-			pDirection = PLAYER_LEFT;
-		}
-		else if (playerX < stackX)
-		{
-			pDirection = PLAYER_RIGHT;
-		}
-		else if (playerY > stackY)
-		{
-			pDirection = PLAYER_UP;
-		}
-		else if (playerY < stackY)
-		{
-			pDirection = PLAYER_DOWN;
-		}
+	if (playerX > stackX)
+	{
+		pDirection = PLAYER_LEFT;
+	}
+	else if (playerX < stackX)
+	{
+		pDirection = PLAYER_RIGHT;
+	}
+	else if (playerY > stackY)
+	{
+		pDirection = PLAYER_UP;
+	}
+	else if (playerY < stackY)
+	{
+		pDirection = PLAYER_DOWN;
+	}
 
 	if (agjin.rc.left > 0 || agjin.rc.right < WINSIZEY ||
 		agjin.rc.top > 0 || agjin.rc.bottom < WINSIZEY)
@@ -415,7 +415,7 @@ void Agjin::playerCollision()
 			if (IntersectRect(&temp, &agjin.rcAtk[k], &enemyRect))
 			{
 				isInterSect = true;
-				break;
+				//break;
 			}
 		}
 
@@ -423,12 +423,13 @@ void Agjin::playerCollision()
 		{
 			isTarget = true;
 			frameX = 1;
+			//}
 
-			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && isAtkRng)
+			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
-				isAtkRng = false;
 				isAtk = true;
 				isDamage = true;
+				isAtkRng = false;
 
 				if (playerX > enemyX) pDirection = PLAYER_LEFT;
 				else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
