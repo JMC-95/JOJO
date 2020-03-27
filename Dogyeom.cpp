@@ -55,6 +55,7 @@ HRESULT Dogyeom::init(const char * moveImg, const char * mAtkImg, const char * a
 	//캐릭터 방향 및 위치
 	fDirection = FRIEND_LEFT;
 	startTile = endTile = -1;
+	enemyTile = 0;
 
 	//AI 이동력 및 속도
 	speed = 6;
@@ -142,6 +143,8 @@ void Dogyeom::friendAi()
 {
 	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
+		test();
+
 		RECT temp;
 
 		positionX = dogyeom.rc.left / TILE_WIDTH;
@@ -180,11 +183,7 @@ void Dogyeom::friendAi()
 
 					if (IntersectRect(&temp, &rc, &enemyRect))
 					{
-						positionX = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc.left / TILE_WIDTH;
-						positionY = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc.top / TILE_HEIGHT;
-						enemyTile = positionX + (positionY * TILE_Y);
 						mainMap->getMap()[i].flood = false;
-						return;
 					}
 				}
 			}
@@ -224,8 +223,8 @@ void Dogyeom::friendAi()
 	}
 
 	friendAstar();
-	friendMenu();
 	friendCollision();
+	friendMenu();
 }
 
 void Dogyeom::friendMove()
@@ -392,32 +391,20 @@ void Dogyeom::friendCollision()
 		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
 		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
-		bool isInterSect = false;
-
-		for (int k = 0; k < 8; k++)
+		for (int k = 0; k < 4; k++)
 		{
 			if (IntersectRect(&temp, &dogyeom.rcAtk[k], &enemyRect))
 			{
-				isInterSect = true;
-				break;
-			}
-		}
+				isTarget = true;
+				frameX = 1;
 
-		if (isInterSect)
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-				isDamage = true;
-
-				if (friendX > enemyX) fDirection = FRIEND_LEFT;
-				else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
-				else if (friendY > enemyY) fDirection = FRIEND_UP;
-				else if (friendY < enemyY) fDirection = FRIEND_DOWN;
+				if (isAtk)
+				{
+					if (friendX > enemyX) fDirection = FRIEND_LEFT;
+					else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
+					else if (friendY > enemyY) fDirection = FRIEND_UP;
+					else if (friendY < enemyY) fDirection = FRIEND_DOWN;
+				}
 			}
 		}
 	}
@@ -564,4 +551,75 @@ void Dogyeom::setPosition(RECT rc)
 	dogyeom.rc = rc;
 	friendX = dogyeom.rc.left + (dogyeom.rc.right - dogyeom.rc.left) / 2;
 	friendY = dogyeom.rc.top + (dogyeom.rc.bottom - dogyeom.rc.top) / 2;
+}
+
+void Dogyeom::test()
+{
+	for (int i = 0; i < 14; i++)
+	{
+		int enemyNum = i + 4;
+		auto& enemyRect = ENEMYMANAGER->getEnemy()[enemyNum]->getEnemyInfo().rc;
+
+		positionX = dogyeom.rc.left / TILE_WIDTH;
+		positionY = dogyeom.rc.top / TILE_HEIGHT;
+		friendTile = positionX + (positionY * TILE_Y);
+
+		int ePositionX = enemyRect.left / TILE_WIDTH;
+		int ePositionY = enemyRect.top / TILE_HEIGHT;
+		enemyTile = ePositionX + (ePositionY * TILE_Y);
+
+		isFind = false;
+		noPath = false;
+		startAstar = false;
+
+		//선택한 타일 (캐릭터)
+		startTile = friendTile;
+
+		//선택한 타일(목표)
+		endTile = enemyTile;
+
+		//이순간 Astar가 시작된다.
+		//Astar에 필요한 모든 것을 초기화 시켜주자.
+		openList.clear();
+		closeList.clear();
+
+		if (startTile != -1 && endTile != -1)
+		{
+			startAstar = true;
+			currentTile = startTile;
+
+			//시작 지점을 openList에 넣자
+			openList.push_back(currentTile);
+		}
+
+		//목표 타일을 클릭하면 A* 시작
+		if (startAstar && !isFind && !noPath)
+		{
+			while (!isFind)
+			{
+				aStar();
+			}
+		}
+
+		vAstar.push_back(optimalPath.size());
+
+		for (int j = optimalPath.size(); j > 0; j--)
+		{
+			optimalPath.pop();
+		}
+	}
+
+	//최소값을 찾을땐 999, 최대값을 찾을땐 0을 입력한다.
+	//최소값
+	int minNum = vAstar[0];
+
+	for (int i = 0; i < vAstar.size(); i++)
+	{
+		int enemyNum = i + 4;
+		int distance = vAstar[i];
+
+		if (minNum > vAstar[i]) minNum = vAstar[i];
+	}
+
+	//최소 거리를 찾았으면 그 거리에 위치한 적의 타일 번호를 가져온다.
 }

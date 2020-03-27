@@ -42,11 +42,11 @@ void FriendlyBase::friendAstar()
 {
 }
 
-void FriendlyBase::friendMenu()
+void FriendlyBase::friendCollision()
 {
 }
 
-void FriendlyBase::friendCollision()
+void FriendlyBase::friendMenu()
 {
 }
 
@@ -203,8 +203,6 @@ void FriendlyBase::aStar()
 
 void FriendlyBase::floodFill(int tile, int moveCount)
 {
-	//RECT temp;
-
 	if (mainMap->getMap()[tile].obj != OBJ_CASTLEWALLS &&
 		mainMap->getMap()[tile].obj != OBJ_ROCKMOUNTAIN &&
 		mainMap->getMap()[tile].obj != OBJ_MOUNTAIN &&

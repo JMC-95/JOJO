@@ -77,7 +77,6 @@ protected:	//일반 변수
 	bool isAtkRng;			//적이 있다면 공격 버튼을 활성화해주는 변수
 	bool isAtk;				//적을 공격할 때 체크해주는 변수
 	bool isHit;				//피격시 체크해주는 변수
-	bool isDamage;			//데미지를 판정해주는 변수
 
 protected:	//A*용 변수
 	int startTile;			//A* 시작위치
@@ -105,8 +104,8 @@ public:
 	virtual void friendAi();
 	virtual void friendMove();
 	virtual void friendAstar();
-	virtual void friendMenu();
 	virtual void friendCollision();
+	virtual void friendMenu();
 	virtual void friendAnimation();
 	virtual void friendState();
 	virtual void mouseMove();
@@ -134,22 +133,21 @@ public:
 
 	bool getIsTurn() { return isTurn; }
 	bool getIsSelect() { return isSelect; }
-	bool getIsCancel() { return isMove; }
+	bool getIsMove() { return isMove; }
 	bool getIsAtkRng() { return isAtkRng; }
 	bool getIsTarget() { return isTarget; }
 	bool getIsAtk() { return isAtk; }
 	bool getIsHit() { return isHit; }
-	bool getIsDamage() { return isDamage; }
 	bool getIsClick() { return isClick; }
 
 	//Setter
 	void setIsTurn(bool turn) { isTurn = turn; }
 	void setIsSelect(bool select) { isSelect = select; }
-	void setIsCancel(bool cancel) { isMove = cancel; }
+	void setIsMove(bool cancel) { isMove = cancel; }
 	void setIsTarget(bool target) { isTarget = target; }
+	void setIsAtkRng(bool atkRng) { isAtkRng = atkRng; }
 	void setIsAtk(bool atk) { isAtk = atk; }
 	void setIsHit(bool hit) { isHit = hit; }
-	void setIsDamage(bool damage) { isDamage = damage; }
 
 	//프로그레스바
 	progressBar* getProgressBarHp() { return _Hp; }

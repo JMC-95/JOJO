@@ -212,8 +212,8 @@ void Soldier::friendAi()
 	}
 
 	friendAstar();
-	friendMenu();
 	friendCollision();
+	friendMenu();
 }
 
 void Soldier::friendMove()
@@ -383,32 +383,20 @@ void Soldier::friendCollision()
 		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
 		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
-		bool isInterSect = false;
-
 		for (int k = 0; k < 8; k++)
 		{
 			if (IntersectRect(&temp, &soldier.rcAtk[k], &enemyRect))
 			{
-				isInterSect = true;
-				break;
-			}
-		}
+				isTarget = true;
+				frameX = 1;
 
-		if (isInterSect)
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-				isDamage = true;
-
-				if (friendX > enemyX) fDirection = FRIEND_LEFT;
-				else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
-				else if (friendY > enemyY) fDirection = FRIEND_UP;
-				else if (friendY < enemyY) fDirection = FRIEND_DOWN;
+				if (isAtk)
+				{
+					if (friendX > enemyX) fDirection = FRIEND_LEFT;
+					else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
+					else if (friendY > enemyY) fDirection = FRIEND_UP;
+					else if (friendY < enemyY) fDirection = FRIEND_DOWN;
+				}
 			}
 		}
 	}

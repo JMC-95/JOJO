@@ -6,6 +6,8 @@ class Dogyeom : public FriendlyBase
 private:
 	FriendInfo dogyeom;
 
+	vector<int> vAstar;
+
 public:
 	Dogyeom();
 	~Dogyeom();
@@ -28,4 +30,6 @@ public:
 	virtual void setPosition(RECT rc);
 
 	virtual FriendInfo getFriendInfo() { return dogyeom; }
+
+	void test();
 };

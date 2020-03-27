@@ -169,6 +169,25 @@ void Agjin::mouseMove()
 				if (isMove)
 				{
 					floodFill(startTile, agjin.movingCount);
+
+					for (int j = 0; j < TILE_X * TILE_Y; j++)
+					{
+						RECT temp;
+						auto& rc = mainMap->getMap()[j].rc;
+
+						if (mainMap->getMap()[j].flood)
+						{
+							for (int k = 0; k < ENEMYMANAGER->getEnemy().size(); ++k)
+							{
+								auto& enemyRect = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc;
+
+								if (IntersectRect(&temp, &enemyRect, &rc))
+								{
+									mainMap->getMap()[j].flood = false;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -205,11 +224,11 @@ void Agjin::mouseMove()
 					isSelect = false;
 				}
 
-				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				for (int j = 0; j < TILE_X * TILE_Y; j++)
 				{
-					if (mainMap->getMap()[i].flood)
+					if (mainMap->getMap()[j].flood)
 					{
-						mainMap->getMap()[i].flood = false;
+						mainMap->getMap()[j].flood = false;
 					}
 				}
 			}
@@ -223,8 +242,8 @@ void Agjin::mouseMove()
 	}
 
 	playerAstar();
-	playerMenu();
 	playerCollision();
+	playerMenu();
 }
 
 void Agjin::playerMove()
@@ -334,6 +353,36 @@ void Agjin::playerAstar()
 	}
 }
 
+void Agjin::playerCollision()
+{
+	RECT temp;
+	frameX = 0;
+
+	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
+	{
+		auto enemyX = ENEMYMANAGER->getEnemy()[j]->getEnemyX();
+		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
+		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
+
+		for (int k = 0; k < 8; k++)
+		{
+			if (IntersectRect(&temp, &agjin.rcAtk[k], &enemyRect))
+			{
+				isTarget = true;
+				frameX = 1;
+
+				if (isAtk)
+				{
+					if (playerX > enemyX) pDirection = PLAYER_LEFT;
+					else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
+					else if (playerY > enemyY) pDirection = PLAYER_UP;
+					else if (playerY < enemyY) pDirection = PLAYER_DOWN;
+				}
+			}
+		}
+	}
+}
+
 void Agjin::playerMenu()
 {
 	//¸Þ´º
@@ -392,49 +441,6 @@ void Agjin::playerMenu()
 				isMove = true;
 				isSelect = false;
 				isClick = false;
-			}
-		}
-	}
-}
-
-void Agjin::playerCollision()
-{
-	RECT temp;
-	frameX = 0;
-
-	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
-	{
-		auto enemyX = ENEMYMANAGER->getEnemy()[j]->getEnemyX();
-		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
-		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
-
-		bool isInterSect = false;
-
-		for (int k = 0; k < 8; k++)
-		{
-			if (IntersectRect(&temp, &agjin.rcAtk[k], &enemyRect))
-			{
-				isInterSect = true;
-				//break;
-			}
-		}
-
-		if (isInterSect)
-		{
-			isTarget = true;
-			frameX = 1;
-			//}
-
-			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-			{
-				isAtk = true;
-				isDamage = true;
-				isAtkRng = false;
-
-				if (playerX > enemyX) pDirection = PLAYER_LEFT;
-				else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
-				else if (playerY > enemyY) pDirection = PLAYER_UP;
-				else if (playerY < enemyY) pDirection = PLAYER_DOWN;
 			}
 		}
 	}

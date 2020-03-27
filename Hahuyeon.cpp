@@ -165,6 +165,25 @@ void Hahuyeon::mouseMove()
 				if (isMove)
 				{
 					floodFill(startTile, hahuyeon.movingCount);
+
+					for (int j = 0; j < TILE_X * TILE_Y; j++)
+					{
+						RECT temp;
+						auto& rc = mainMap->getMap()[j].rc;
+
+						if (mainMap->getMap()[j].flood)
+						{
+							for (int k = 0; k < ENEMYMANAGER->getEnemy().size(); ++k)
+							{
+								auto& enemyRect = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc;
+
+								if (IntersectRect(&temp, &enemyRect, &rc))
+								{
+									mainMap->getMap()[j].flood = false;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -201,11 +220,11 @@ void Hahuyeon::mouseMove()
 					isSelect = false;
 				}
 
-				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				for (int j = 0; j < TILE_X * TILE_Y; j++)
 				{
-					if (mainMap->getMap()[i].flood)
+					if (mainMap->getMap()[j].flood)
 					{
-						mainMap->getMap()[i].flood = false;
+						mainMap->getMap()[j].flood = false;
 					}
 				}
 			}
@@ -219,8 +238,8 @@ void Hahuyeon::mouseMove()
 	}
 
 	playerAstar();
-	playerMenu();
 	playerCollision();
+	playerMenu();
 }
 
 void Hahuyeon::playerMove()
@@ -400,32 +419,20 @@ void Hahuyeon::playerCollision()
 		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
 		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
-		bool isInterSect = false;
-
 		for (int k = 0; k < 8; k++)
 		{
 			if (IntersectRect(&temp, &hahuyeon.rcAtk[k], &enemyRect))
 			{
-				isInterSect = true;
-				break;
-			}
-		}
+				isTarget = true;
+				frameX = 1;
 
-		if (isInterSect)
-		{
-			isTarget = true;
-			frameX = 1;
-
-			if (PtInRect(&enemyRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && isAtkRng)
-			{
-				isAtkRng = false;
-				isAtk = true;
-				isDamage = true;
-
-				if (playerX > enemyX) pDirection = PLAYER_LEFT;
-				else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
-				else if (playerY > enemyY) pDirection = PLAYER_UP;
-				else if (playerY < enemyY) pDirection = PLAYER_DOWN;
+				if (isAtk)
+				{
+					if (playerX > enemyX) pDirection = PLAYER_LEFT;
+					else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
+					else if (playerY > enemyY) pDirection = PLAYER_UP;
+					else if (playerY < enemyY) pDirection = PLAYER_DOWN;
+				}
 			}
 		}
 	}

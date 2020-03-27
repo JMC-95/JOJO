@@ -130,7 +130,7 @@ public:
 
 	bool getIsTurn() { return isTurn; }
 	bool getIsSelect() { return isSelect; }
-	bool getIsCancel() { return isMove; }
+	bool getIsMove() { return isMove; }
 	bool getIsAtkRng() { return isAtkRng; }
 	bool getIsTarget() { return isTarget; }
 	bool getIsAtk() { return isAtk; }
@@ -141,7 +141,7 @@ public:
 	//Setter
 	void setIsTurn(bool turn) { isTurn = turn; }
 	void setIsSelect(bool select) { isSelect = select; }
-	void setIsCancel(bool cancel) { isMove = cancel; }
+	void setIsMove(bool cancel) { isMove = cancel; }
 	void setIsTarget(bool target) { isTarget = target; }
 	void setIsAtk(bool atk) { isAtk = atk; }
 	void setIsHit(bool hit) { isHit = hit; }

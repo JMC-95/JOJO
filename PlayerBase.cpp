@@ -38,11 +38,11 @@ void PlayerBase::playerAstar()
 {
 }
 
-void PlayerBase::playerMenu()
+void PlayerBase::playerCollision()
 {
 }
 
-void PlayerBase::playerCollision()
+void PlayerBase::playerMenu()
 {
 }
 
@@ -199,9 +199,6 @@ void PlayerBase::aStar()
 
 void PlayerBase::floodFill(int tile, int moveCount)
 {
-	RECT temp;
-	auto& rc = mainMap->getMap()[tile].rc;
-
 	if (mainMap->getMap()[tile].obj != OBJ_CASTLEWALLS &&
 		mainMap->getMap()[tile].obj != OBJ_ROCKMOUNTAIN &&
 		mainMap->getMap()[tile].obj != OBJ_MOUNTAIN &&
@@ -225,16 +222,6 @@ void PlayerBase::floodFill(int tile, int moveCount)
 			}
 
 			mainMap->getMap()[tile].flood = true;
-
-			for (int z = 0; z < ENEMYMANAGER->getEnemy().size(); ++z)
-			{
-				auto& enemyRect = ENEMYMANAGER->getEnemy()[z]->getEnemyInfo().rc;
-
-				if (IntersectRect(&temp, &enemyRect, &rc))
-				{
-					mainMap->getMap()[tile].flood = false;
-				}
-			}
 		}
 	}
 }

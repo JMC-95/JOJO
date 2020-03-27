@@ -246,9 +246,16 @@ void animation::frameUpdate(float elapsedTime)
 
 							player->setIsTurn(false);
 							player->setIsSelect(false);
-							//player->setIsTarget(false);
+							player->setIsTarget(false);
 							player->setIsAtk(false);
-							player->setIsCancel(false);
+							player->setIsMove(false);
+						}
+						else if (!player->getIsAtk())
+						{
+							for (int i = 0; i < ENEMYMANAGER->getEnemy().size(); i++)
+							{
+								ENEMYMANAGER->getEnemy()[i]->setIsHit(false);
+							}
 						}
 					}
 
@@ -266,7 +273,14 @@ void animation::frameUpdate(float elapsedTime)
 							friendly->setIsSelect(false);
 							friendly->setIsTarget(false);
 							friendly->setIsAtk(false);
-							friendly->setIsCancel(false);
+							friendly->setIsMove(false);
+						}
+						else if (!friendly->getIsAtk())
+						{
+							for (int i = 0; i < ENEMYMANAGER->getEnemy().size(); i++)
+							{
+								ENEMYMANAGER->getEnemy()[i]->setIsHit(false);
+							}
 						}
 					}
 
@@ -284,7 +298,7 @@ void animation::frameUpdate(float elapsedTime)
 							enemy->setIsSelect(false);
 							enemy->setIsTarget(false);
 							enemy->setIsAtk(false);
-							enemy->setIsCancel(false);
+							enemy->setIsMove(false);
 						}
 					}
 				}
