@@ -3,6 +3,7 @@
 #include "TitleScene.h"
 #include "LobbyScene.h"
 #include "MapTool.h"
+#include "PreferencesScene.h"
 #include "GameScene.h"
 
 mainGame::mainGame()
@@ -27,6 +28,7 @@ HRESULT mainGame::init()
 	SCENEMANAGER->addScene("TitleScene", new TitleScene);
 	SCENEMANAGER->addScene("LobbyScene", new LobbyScene);
 	SCENEMANAGER->addScene("MapTool", new MapTool);
+	SCENEMANAGER->addScene("Preferences", new PreferencesScene);
 	SCENEMANAGER->addScene("GameScene", new GameScene);
 
 	//현재 씬
@@ -78,8 +80,10 @@ void mainGame::sounds()
 void mainGame::images()
 {
 	//씬 이미지
-	IMAGEMANAGER->addImage("titleScene", "images/UI/Scene/TitleScene.bmp", 642, 462, true, RGB(255, 0, 255));	//타이틀 씬
-	IMAGEMANAGER->addImage("lobbyScene", "images/UI/Scene/LobbyScene.bmp", 642, 462, true, RGB(255, 0, 255));	//로비 씬
+	IMAGEMANAGER->addImage("titleScene", "images/UI/Scene/TitleScene.bmp", 642, 462, true, RGB(255, 0, 255));			//타이틀 씬
+	IMAGEMANAGER->addImage("lobbyScene", "images/UI/Scene/LobbyScene.bmp", 642, 462, true, RGB(255, 0, 255));			//로비 씬
+	IMAGEMANAGER->addImage("preferences", "images/UI/Scene/PreferencesScene.bmp", 642, 462, true, RGB(255, 0, 255));	//환경설정 씬
+	IMAGEMANAGER->addImage("check", "images/UI/Scene/check.bmp", 9, 9, true, RGB(255, 0, 255));
 
 	//맵툴용 이미지
 	IMAGEMANAGER->addImage("map", "images/MapTool/Map.bmp", 960, 960, true, RGB(255, 0, 255));					//실제 맵의 이미지

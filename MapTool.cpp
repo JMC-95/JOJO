@@ -12,8 +12,15 @@ MapTool::~MapTool()
 HRESULT MapTool::init()
 {
 	//BGM
-	SOUNDMANAGER->stop("titleSound");
-	SOUNDMANAGER->play("mapToolSound", 1.0f);
+	if (isSound)
+	{
+		SOUNDMANAGER->stop("titleSound");
+		SOUNDMANAGER->play("mapToolSound", 1.0f);
+	}
+	else
+	{
+		SOUNDMANAGER->stop("mapToolSound");
+	}
 
 	mapToolSetup();
 

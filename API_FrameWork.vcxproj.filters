@@ -252,6 +252,9 @@
     <ClInclude Include="LobbyScene.h">
       <Filter>mainGame\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="PreferencesScene.h">
+      <Filter>mainGame\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -408,6 +411,9 @@
       <Filter>mainGame\Scene</Filter>
     </ClCompile>
     <ClCompile Include="LobbyScene.cpp">
+      <Filter>mainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PreferencesScene.cpp">
       <Filter>mainGame\Scene</Filter>
     </ClCompile>
   </ItemGroup>

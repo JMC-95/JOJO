@@ -12,8 +12,15 @@ TitleScene::~TitleScene()
 HRESULT TitleScene::init()
 {
 	//BGM
-	SOUNDMANAGER->stop("mapToolSound");
-	SOUNDMANAGER->play("titleSound", 1.0f);
+	if (isSound)
+	{
+		SOUNDMANAGER->stop("mapToolSound");
+		SOUNDMANAGER->play("titleSound", 1.0f);
+	}
+	else
+	{
+		SOUNDMANAGER->stop("titleSound");
+	}
 
 	listRect[0] = RectMake(237, 177, 173, 27);
 	listRect[1] = RectMake(237, 207, 173, 27);
@@ -41,7 +48,7 @@ void TitleScene::update()
 		}
 		else if (PtInRect(&listRect[2], m_ptMouse))
 		{
-			SCENEMANAGER->changeScene("GameScene");
+			SCENEMANAGER->changeScene("Preferences");
 		}
 		else if (PtInRect(&listRect[3], m_ptMouse))
 		{

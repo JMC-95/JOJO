@@ -12,8 +12,15 @@ GameScene::~GameScene()
 HRESULT GameScene::init()
 {
 	//BGM
-	SOUNDMANAGER->stop("lobbySound");
-	SOUNDMANAGER->play("gameSound", 1.0f);
+	if (isSound)
+	{
+		SOUNDMANAGER->stop("lobbySound");
+		SOUNDMANAGER->play("gameSound", 1.0f);
+	}
+	else
+	{
+		SOUNDMANAGER->stop("gameSound");
+	}
 
 	//턴 초기화
 	pTurn = 0;

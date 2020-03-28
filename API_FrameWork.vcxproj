@@ -189,6 +189,7 @@
     <ClInclude Include="MapTool.h" />
     <ClInclude Include="PlayerBase.h" />
     <ClInclude Include="PlayerManager.h" />
+    <ClInclude Include="PreferencesScene.h" />
     <ClInclude Include="progressBar.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="MapTool.cpp" />
     <ClCompile Include="PlayerBase.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
+    <ClCompile Include="PreferencesScene.cpp" />
     <ClCompile Include="progressBar.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="Soldier.cpp" />
