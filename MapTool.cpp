@@ -11,6 +11,10 @@ MapTool::~MapTool()
 
 HRESULT MapTool::init()
 {
+	//BGM
+	SOUNDMANAGER->stop("titleSound");
+	SOUNDMANAGER->play("mapToolSound", 1.0f);
+
 	mapToolSetup();
 
 	currentTile.x = 0;
@@ -185,7 +189,7 @@ void MapTool::mapToolButton()
 	}
 	if (PtInRect(&btnExit, m_ptMouse))
 	{
-		SCENEMANAGER->changeScene("GameScene");
+		SCENEMANAGER->changeScene("TitleScene");
 	}
 }
 

@@ -43,12 +43,12 @@ void PlayerManager::release()
 
 void PlayerManager::update()
 {
+	playerTurn();
+
 	for (int i = 0; i < vPlayer.size(); i++)
 	{
 		vPlayer[i]->update();
 	}
-
-	playerTurn();
 }
 
 void PlayerManager::render(HDC hdc)

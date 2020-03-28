@@ -615,10 +615,11 @@ void Dogyeom::test()
 
 	for (int i = 0; i < vAstar.size(); i++)
 	{
-		int enemyNum = i + 4;
 		int distance = vAstar[i];
 
 		if (minNum > vAstar[i]) minNum = vAstar[i];
+
+		if (minNum == distance) enemyNum = i + 4;
 	}
 
 	//최소 거리를 찾았으면 그 거리에 위치한 적의 타일 번호를 가져온다.

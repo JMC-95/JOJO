@@ -52,9 +52,6 @@
     <Filter Include="mainGame\Scene">
       <UniqueIdentifier>{30f0321c-a551-4e36-8c04-416461a41560}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mainGame\Test">
-      <UniqueIdentifier>{e28eae87-e56e-4775-add1-c759b0a018ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="mainGame\Player">
       <UniqueIdentifier>{2dd932b1-c6fa-4e84-b7fc-d51abea79a2e}</UniqueIdentifier>
     </Filter>
@@ -159,14 +156,8 @@
     <ClInclude Include="GameScene.h">
       <Filter>mainGame\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="testMap.h">
-      <Filter>mainGame\Test</Filter>
-    </ClInclude>
     <ClInclude Include="MainMap.h">
       <Filter>mainGame\MapTool</Filter>
-    </ClInclude>
-    <ClInclude Include="tank.h">
-      <Filter>mainGame\Test</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
       <Filter>Manager\addManager</Filter>
@@ -255,6 +246,12 @@
     <ClInclude Include="Yubi.h">
       <Filter>mainGame\Friendly</Filter>
     </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>mainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyScene.h">
+      <Filter>mainGame\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -317,14 +314,8 @@
     <ClCompile Include="GameScene.cpp">
       <Filter>mainGame\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="testMap.cpp">
-      <Filter>mainGame\Test</Filter>
-    </ClCompile>
     <ClCompile Include="MainMap.cpp">
       <Filter>mainGame\MapTool</Filter>
-    </ClCompile>
-    <ClCompile Include="tank.cpp">
-      <Filter>mainGame\Test</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
       <Filter>Manager\addManager</Filter>
@@ -412,6 +403,12 @@
     </ClCompile>
     <ClCompile Include="Yubi.cpp">
       <Filter>mainGame\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>mainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyScene.cpp">
+      <Filter>mainGame\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

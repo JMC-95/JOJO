@@ -182,6 +182,7 @@
     <ClInclude Include="Join.h" />
     <ClInclude Include="Jojo.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="LobbyScene.h" />
     <ClInclude Include="mainGame.h" />
     <ClInclude Include="MainMap.h" />
     <ClInclude Include="MapTiles.h" />
@@ -196,11 +197,10 @@
     <ClInclude Include="Soldier.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="tank.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="testMap.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
+    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="txtData.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="Wonso.h" />
@@ -240,6 +240,7 @@
     <ClCompile Include="Join.cpp" />
     <ClCompile Include="Jojo.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="LobbyScene.cpp" />
     <ClCompile Include="mainGame.cpp" />
     <ClCompile Include="MainMap.cpp" />
     <ClCompile Include="MapTool.cpp" />
@@ -249,10 +250,9 @@
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="Soldier.cpp" />
     <ClCompile Include="soundManager.cpp" />
-    <ClCompile Include="tank.cpp" />
-    <ClCompile Include="testMap.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="txtData.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="winMain.cpp" />

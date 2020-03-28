@@ -8,6 +8,8 @@ private:
 
 	vector<int> vAstar;
 
+	int enemyNum;
+
 public:
 	Dogyeom();
 	~Dogyeom();

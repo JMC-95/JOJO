@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "mainGame.h"
+#include "TitleScene.h"
+#include "LobbyScene.h"
 #include "MapTool.h"
 #include "GameScene.h"
 
@@ -15,15 +17,20 @@ HRESULT mainGame::init()
 {
 	gameNode::init(true);
 
+	//게임에서 쓰일 사운드
+	sounds();
+
 	//게임에서 쓰일 이미지
 	images();
 
 	//씬 추가
+	SCENEMANAGER->addScene("TitleScene", new TitleScene);
+	SCENEMANAGER->addScene("LobbyScene", new LobbyScene);
 	SCENEMANAGER->addScene("MapTool", new MapTool);
 	SCENEMANAGER->addScene("GameScene", new GameScene);
 
 	//현재 씬
-	SCENEMANAGER->changeScene("MapTool");
+	SCENEMANAGER->changeScene("TitleScene");
 
 	return S_OK;
 }
@@ -40,7 +47,7 @@ void mainGame::update()
 	SCENEMANAGER->update();
 }
 
-void mainGame::render(/*HDC hdc*/)
+void mainGame::render()
 {
 	//흰색 비트맵
 	PatBlt(getMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
@@ -57,15 +64,30 @@ void mainGame::render(/*HDC hdc*/)
 	this->getBackBuffer()->render(getHDC(), 0, 0);
 }
 
+void mainGame::sounds()
+{
+	//BGM
+	SOUNDMANAGER->addSound("titleSound", "sound/TitleSound.mp3", true, true);
+	SOUNDMANAGER->addSound("lobbySound", "sound/LobbySound.mp3", true, true);
+	SOUNDMANAGER->addSound("mapToolSound", "sound/MapToolSound.mp3", true, true);
+	SOUNDMANAGER->addSound("gameSound", "sound/GameSound.mp3", true, true);
+
+	//Effect
+}
+
 void mainGame::images()
 {
-	//맵툴 타일 이미지
-	IMAGEMANAGER->addFrameImage("tileMap", "images/MapTool/TileMap.bmp", 144, 480, SAMPLE_TILE_X, SAMPLE_TILE_Y, true, RGB(255, 0, 255));
+	//씬 이미지
+	IMAGEMANAGER->addImage("titleScene", "images/UI/Scene/TitleScene.bmp", 642, 462, true, RGB(255, 0, 255));	//타이틀 씬
+	IMAGEMANAGER->addImage("lobbyScene", "images/UI/Scene/LobbyScene.bmp", 642, 462, true, RGB(255, 0, 255));	//로비 씬
 
 	//맵툴용 이미지
 	IMAGEMANAGER->addImage("map", "images/MapTool/Map.bmp", 960, 960, true, RGB(255, 0, 255));					//실제 맵의 이미지
 	IMAGEMANAGER->addImage("subMap", "images/MapTool/SubMap.bmp", 240, 960, true, RGB(255, 0, 255));			//맵툴 이미지
 	IMAGEMANAGER->addImage("select", "images/MapTool/Select.bmp", 30, 30, true, RGB(255, 0, 255));				//맵툴 선택 이미지
+
+	//맵툴 타일 이미지
+	IMAGEMANAGER->addFrameImage("tileMap", "images/MapTool/TileMap.bmp", 144, 480, SAMPLE_TILE_X, SAMPLE_TILE_Y, true, RGB(255, 0, 255));
 
 	//맵 속성 이미지
 	IMAGEMANAGER->addImage("배경", "images/UI/Attribute/배경.bmp", 144, 96, true, RGB(247, 0, 255));

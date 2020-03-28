@@ -88,7 +88,6 @@ void soundManager::addSound(string keyName, string soundName, bool bgm, bool loo
 	}
 
 	m_totalSounds.insert(make_pair(keyName, &m_sound[m_totalSounds.size()]));
-	
 }
 
 void soundManager::play(string keyName, float volume)
