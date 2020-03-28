@@ -55,7 +55,7 @@ HRESULT Jangbi::init(const char * moveImg, const char * mAtkImg, const char * aR
 	//캐릭터 방향 및 위치
 	fDirection = FRIEND_LEFT;
 	startTile = endTile = -1;
-	speed = 6;	//속도
+	speed = 12;	//속도
 
 	isTurn = true;
 	isMove = true;
@@ -372,6 +372,7 @@ void Jangbi::friendCollision()
 	{
 		auto enemyX = ENEMYMANAGER->getEnemy()[j]->getEnemyX();
 		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
+		auto enemyHit = ENEMYMANAGER->getEnemy()[j]->getIsHit();
 		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
 		for (int k = 0; k < 4; k++)
@@ -380,15 +381,15 @@ void Jangbi::friendCollision()
 			{
 				isTarget = true;
 				frameX = 1;
-
-				if (isAtk)
-				{
-					if (friendX > enemyX) fDirection = FRIEND_LEFT;
-					else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
-					else if (friendY > enemyY) fDirection = FRIEND_UP;
-					else if (friendY < enemyY) fDirection = FRIEND_DOWN;
-				}
 			}
+		}
+
+		if (enemyHit)
+		{
+			if (friendX > enemyX) fDirection = FRIEND_LEFT;
+			else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
+			else if (friendY > enemyY) fDirection = FRIEND_UP;
+			else if (friendY < enemyY) fDirection = FRIEND_DOWN;
 		}
 	}
 }

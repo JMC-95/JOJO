@@ -51,6 +51,9 @@ void CollisionManager::playerToEnemyCollision()
 					{
 						if (PtInRect(&enemyRect, m_ptMouse))
 						{
+							if (k == 1) SOUNDMANAGER->play("aHit", 1.0f);
+							else SOUNDMANAGER->play("hit", 1.0f);
+
 							player->setIsAtk(true);
 							enemy->setIsHit(true);
 							player->setIsAtkRng(false);
@@ -95,6 +98,8 @@ void CollisionManager::playerToEnemyCollision()
 					{
 						if (PtInRect(&enemyRect, m_ptMouse))
 						{
+							SOUNDMANAGER->play("hit", 1.0f);
+
 							player->setIsAtk(true);
 							enemy->setIsHit(true);
 							player->setIsAtkRng(false);
@@ -135,6 +140,8 @@ void CollisionManager::playerToEnemyCollision()
 					{
 						if (PtInRect(&enemyRect, m_ptMouse))
 						{
+							SOUNDMANAGER->play("hit", 1.0f);
+
 							friendly->setIsAtk(true);
 							enemy->setIsHit(true);
 							friendly->setIsAtkRng(false);
@@ -179,6 +186,8 @@ void CollisionManager::playerToEnemyCollision()
 					{
 						if (PtInRect(&enemyRect, m_ptMouse))
 						{
+							SOUNDMANAGER->play("hit", 1.0f);
+
 							friendly->setIsAtk(true);
 							enemy->setIsHit(true);
 							friendly->setIsAtkRng(false);

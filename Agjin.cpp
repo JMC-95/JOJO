@@ -55,7 +55,7 @@ HRESULT Agjin::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	//캐릭터 방향 및 위치
 	pDirection = PLAYER_LEFT;
 	startTile = endTile = -1;
-	speed = 6;	//속도
+	speed = 12;	//속도
 
 	isTurn = true;
 	isMove = true;
@@ -141,6 +141,8 @@ void Agjin::mouseMove()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
+				SOUNDMANAGER->play("click", 1.0f);
+
 				//선택한 타일 (캐릭터)
 				startTile = i;
 				saveTile = startTile;
@@ -198,6 +200,8 @@ void Agjin::mouseMove()
 			{
 				if (mainMap->getMap()[i].flood)
 				{
+					SOUNDMANAGER->play("move", 1.0f);
+
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
 					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
@@ -221,6 +225,7 @@ void Agjin::mouseMove()
 				}
 				else
 				{
+					SOUNDMANAGER->play("clickMiss", 1.0f);
 					isSelect = false;
 				}
 
@@ -362,6 +367,7 @@ void Agjin::playerCollision()
 	{
 		auto enemyX = ENEMYMANAGER->getEnemy()[j]->getEnemyX();
 		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
+		auto enemyHit = ENEMYMANAGER->getEnemy()[j]->getIsHit();
 		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
 		for (int k = 0; k < 8; k++)
@@ -370,15 +376,15 @@ void Agjin::playerCollision()
 			{
 				isTarget = true;
 				frameX = 1;
-
-				if (isAtk)
-				{
-					if (playerX > enemyX) pDirection = PLAYER_LEFT;
-					else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
-					else if (playerY > enemyY) pDirection = PLAYER_UP;
-					else if (playerY < enemyY) pDirection = PLAYER_DOWN;
-				}
 			}
+		}
+
+		if (enemyHit)
+		{
+			if (playerX > enemyX) pDirection = PLAYER_LEFT;
+			else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
+			else if (playerY > enemyY) pDirection = PLAYER_UP;
+			else if (playerY < enemyY) pDirection = PLAYER_DOWN;
 		}
 	}
 }
@@ -390,6 +396,10 @@ void Agjin::playerMenu()
 	{
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
+			SOUNDMANAGER->stop("move");
+			SOUNDMANAGER->stop("clickMiss");
+			SOUNDMANAGER->play("click", 1.0f);
+
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
 				atkList.clear();

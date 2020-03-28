@@ -56,7 +56,7 @@ HRESULT Cavalry::init(const char * moveImg, const char * mAtkImg, const char * a
 	//캐릭터 방향 및 위치
 	eDirection = ENEMY_RIGHT;
 	startTile = endTile = -1;
-	speed = 6;	//속도
+	speed = 12;	//속도
 
 	isMove = true;
 	isTurn = false;

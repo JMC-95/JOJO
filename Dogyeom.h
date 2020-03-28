@@ -33,5 +33,5 @@ public:
 
 	virtual FriendInfo getFriendInfo() { return dogyeom; }
 
-	void test();
+	void aiAstar();
 };

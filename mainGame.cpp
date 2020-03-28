@@ -32,7 +32,7 @@ HRESULT mainGame::init()
 	SCENEMANAGER->addScene("GameScene", new GameScene);
 
 	//ÇöÀç ¾À
-	SCENEMANAGER->changeScene("TitleScene");
+	SCENEMANAGER->changeScene("GameScene");
 
 	return S_OK;
 }
@@ -69,12 +69,19 @@ void mainGame::render()
 void mainGame::sounds()
 {
 	//BGM
-	SOUNDMANAGER->addSound("titleSound", "sound/TitleSound.mp3", true, true);
-	SOUNDMANAGER->addSound("lobbySound", "sound/LobbySound.mp3", true, true);
-	SOUNDMANAGER->addSound("mapToolSound", "sound/MapToolSound.mp3", true, true);
-	SOUNDMANAGER->addSound("gameSound", "sound/GameSound.mp3", true, true);
+	SOUNDMANAGER->addSound("titleSound", "sound/bgm/TitleSound.mp3", true, true);
+	SOUNDMANAGER->addSound("lobbySound", "sound/bgm/LobbySound.mp3", true, true);
+	SOUNDMANAGER->addSound("mapToolSound", "sound/bgm/MapToolSound.mp3", true, true);
+	SOUNDMANAGER->addSound("gameSound", "sound/bgm/GameSound.mp3", true, true);
 
 	//Effect
+	SOUNDMANAGER->addSound("click", "sound/effect/Click.wav", false, false);
+	SOUNDMANAGER->addSound("clickMiss", "sound/effect/ClickMiss.wav", false, false);
+	SOUNDMANAGER->addSound("move", "sound/effect/Move.wav", false, false);
+	SOUNDMANAGER->addSound("cMove", "sound/effect/CavalryMove.wav", false, false);
+	SOUNDMANAGER->addSound("hit", "sound/effect/Hit.wav", false, false);
+	SOUNDMANAGER->addSound("aHit", "sound/effect/ArcherHit.wav", false, false);
+	SOUNDMANAGER->addSound("death", "sound/effect/Death.wav", false, false);
 }
 
 void mainGame::images()

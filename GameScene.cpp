@@ -52,8 +52,7 @@ HRESULT GameScene::init()
 	{
 		FRIENDMANAGER->getFriend()[i]->setMapMemoryAdress(_mainMap);
 	}
-	//FRIENDMANAGER->getFriend()[0]->setPosition(_mainMap->getMap()[117].rc);
-	FRIENDMANAGER->getFriend()[0]->setPosition(_mainMap->getMap()[171].rc);
+	FRIENDMANAGER->getFriend()[0]->setPosition(_mainMap->getMap()[117].rc);
 	FRIENDMANAGER->getFriend()[1]->setPosition(_mainMap->getMap()[317].rc);
 	FRIENDMANAGER->getFriend()[2]->setPosition(_mainMap->getMap()[277].rc);
 	FRIENDMANAGER->getFriend()[3]->setPosition(_mainMap->getMap()[199].rc);

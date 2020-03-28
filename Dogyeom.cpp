@@ -58,7 +58,7 @@ HRESULT Dogyeom::init(const char * moveImg, const char * mAtkImg, const char * a
 	enemyTile = 0;
 
 	//AI 이동력 및 속도
-	speed = 6;
+	speed = 12;
 
 	isTurn = true;
 	isMove = true;
@@ -141,11 +141,15 @@ void Dogyeom::render(HDC hdc)
 
 void Dogyeom::friendAi()
 {
+	RECT temp;
+
 	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
-		test();
+		//턴이 되면 벡터를 초기화 하자.
+		vAstar.clear();
 
-		RECT temp;
+		//가장 가까운 적의 위치를 찾는 함수
+		aiAstar();
 
 		positionX = dogyeom.rc.left / TILE_WIDTH;
 		positionY = dogyeom.rc.top / TILE_HEIGHT;
@@ -389,6 +393,7 @@ void Dogyeom::friendCollision()
 	{
 		auto enemyX = ENEMYMANAGER->getEnemy()[j]->getEnemyX();
 		auto enemyY = ENEMYMANAGER->getEnemy()[j]->getEnemyY();
+		auto enemyHit = ENEMYMANAGER->getEnemy()[j]->getIsHit();
 		auto& enemyRect = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo().rc;
 
 		for (int k = 0; k < 4; k++)
@@ -397,15 +402,15 @@ void Dogyeom::friendCollision()
 			{
 				isTarget = true;
 				frameX = 1;
-
-				if (isAtk)
-				{
-					if (friendX > enemyX) fDirection = FRIEND_LEFT;
-					else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
-					else if (friendY > enemyY) fDirection = FRIEND_UP;
-					else if (friendY < enemyY) fDirection = FRIEND_DOWN;
-				}
 			}
+		}
+
+		if (enemyHit)
+		{
+			if (friendX > enemyX) fDirection = FRIEND_LEFT;
+			else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
+			else if (friendY > enemyY) fDirection = FRIEND_UP;
+			else if (friendY < enemyY) fDirection = FRIEND_DOWN;
 		}
 	}
 }
@@ -553,8 +558,9 @@ void Dogyeom::setPosition(RECT rc)
 	friendY = dogyeom.rc.top + (dogyeom.rc.bottom - dogyeom.rc.top) / 2;
 }
 
-void Dogyeom::test()
+void Dogyeom::aiAstar()
 {
+	//캐릭터의 위치에서 가장 가까운 적의 위치를 찾아내는 Astar
 	for (int i = 0; i < 14; i++)
 	{
 		int enemyNum = i + 4;
@@ -601,8 +607,10 @@ void Dogyeom::test()
 			}
 		}
 
+		//벡터에 optimalPath 값을 각각 넣어줌.
 		vAstar.push_back(optimalPath.size());
 
+		//for문을 실행하지 않으면 optimalPath의 값이 계속 중첩됨.
 		for (int j = optimalPath.size(); j > 0; j--)
 		{
 			optimalPath.pop();
@@ -610,9 +618,9 @@ void Dogyeom::test()
 	}
 
 	//최소값을 찾을땐 999, 최대값을 찾을땐 0을 입력한다.
-	//최소값
-	int minNum = vAstar[0];
+	int minNum = vAstar[0];	//최소값
 
+	//for문을 실행하면서 optimalPath의 값이 가장 작은 위치의 적을 찾아줌. 
 	for (int i = 0; i < vAstar.size(); i++)
 	{
 		int distance = vAstar[i];
@@ -622,5 +630,8 @@ void Dogyeom::test()
 		if (minNum == distance) enemyNum = i + 4;
 	}
 
-	//최소 거리를 찾았으면 그 거리에 위치한 적의 타일 번호를 가져온다.
+	//찾은 적의 타일 번호
+	positionX = ENEMYMANAGER->getEnemy()[enemyNum]->getEnemyInfo().rc.left / TILE_WIDTH;
+	positionY = ENEMYMANAGER->getEnemy()[enemyNum]->getEnemyInfo().rc.top / TILE_WIDTH;
+	enemyTile = positionX + (positionY * TILE_Y);
 }
