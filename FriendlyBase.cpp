@@ -30,6 +30,10 @@ void FriendlyBase::mouseMove()
 {
 }
 
+void FriendlyBase::aiAstar()
+{
+}
+
 void FriendlyBase::friendAi()
 {
 }

@@ -167,6 +167,8 @@ void Wonso::friendAi()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
+				SOUNDMANAGER->play("cMove", 1.0f);
+
 				if (mainMap->getMap()[i].flood)
 				{
 					//선택한 맵의 x좌표와 y좌표
@@ -296,17 +298,20 @@ void Wonso::friendAstar()
 				wonso.rcAtk[3] = RectMake(wonso.rc.left, wonso.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
 				atkList.push_back(wonso.rcAtk[j]);
 			}
+		}
+	}
 
-			//메뉴선택 렉트
-			for (int j = 0; j < 5; j++)
-			{
-				rcMenu[0] = RectMake(wonso.rc.left - 97, wonso.rc.top - 30, 82, 20);
-				rcMenu[1] = RectMake(wonso.rc.left - 97, wonso.rc.top - 9, 82, 20);
-				rcMenu[2] = RectMake(wonso.rc.left - 97, wonso.rc.top + 12, 82, 20);
-				rcMenu[3] = RectMake(wonso.rc.left - 97, wonso.rc.top + 38, 82, 20);
-				rcMenu[4] = RectMake(wonso.rc.left - 97, wonso.rc.top + 63, 82, 20);
-				menuList.push_back(rcMenu[j]);
-			}
+	if (isClick)
+	{
+		//메뉴선택 렉트
+		for (int j = 0; j < 5; j++)
+		{
+			rcMenu[0] = RectMake(wonso.rc.left - 97, wonso.rc.top - 30, 82, 20);
+			rcMenu[1] = RectMake(wonso.rc.left - 97, wonso.rc.top - 9, 82, 20);
+			rcMenu[2] = RectMake(wonso.rc.left - 97, wonso.rc.top + 12, 82, 20);
+			rcMenu[3] = RectMake(wonso.rc.left - 97, wonso.rc.top + 38, 82, 20);
+			rcMenu[4] = RectMake(wonso.rc.left - 97, wonso.rc.top + 63, 82, 20);
+			menuList.push_back(rcMenu[j]);
 		}
 	}
 }
@@ -448,6 +453,13 @@ void Wonso::friendAnimation()
 				friendAni = ANIMATIONMANAGER->findAnimation("friendDown");
 				ANIMATIONMANAGER->resume("friendDown");
 				break;
+			}
+
+			if (currentHp < 40 && !isSelect && isMove)
+			{
+				ANIMATIONMANAGER->addAnimation("friendHp", "원소", 12, 13, 2, false, true);
+				friendAni = ANIMATIONMANAGER->findAnimation("friendHp");
+				ANIMATIONMANAGER->resume("friendHp");
 			}
 		}
 	}

@@ -246,6 +246,7 @@ void Johong::mouseMove()
 	{
 		isClick = true;
 		isMove = false;
+		isSelect = false;
 	}
 
 	playerAstar();
@@ -343,19 +344,19 @@ void Johong::playerAstar()
 				atkList.push_back(johong.rcAtk[j]);
 			}
 		}
+	}
 
-		if (isClick)
+	if (isClick)
+	{
+		//메뉴선택 렉트
+		for (int j = 0; j < 5; j++)
 		{
-			//메뉴선택 렉트
-			for (int j = 0; j < 5; j++)
-			{
-				rcMenu[0] = RectMake(johong.rc.left - 97, johong.rc.top - 30, 82, 20);
-				rcMenu[1] = RectMake(johong.rc.left - 97, johong.rc.top - 9, 82, 20);
-				rcMenu[2] = RectMake(johong.rc.left - 97, johong.rc.top + 12, 82, 20);
-				rcMenu[3] = RectMake(johong.rc.left - 97, johong.rc.top + 38, 82, 20);
-				rcMenu[4] = RectMake(johong.rc.left - 97, johong.rc.top + 63, 82, 20);
-				menuList.push_back(rcMenu[j]);
-			}
+			rcMenu[0] = RectMake(johong.rc.left - 97, johong.rc.top - 30, 82, 20);
+			rcMenu[1] = RectMake(johong.rc.left - 97, johong.rc.top - 9, 82, 20);
+			rcMenu[2] = RectMake(johong.rc.left - 97, johong.rc.top + 12, 82, 20);
+			rcMenu[3] = RectMake(johong.rc.left - 97, johong.rc.top + 38, 82, 20);
+			rcMenu[4] = RectMake(johong.rc.left - 97, johong.rc.top + 63, 82, 20);
+			menuList.push_back(rcMenu[j]);
 		}
 	}
 }
@@ -512,6 +513,13 @@ void Johong::playerAnimation()
 				playerAni = ANIMATIONMANAGER->findAnimation("playerDown");
 				ANIMATIONMANAGER->resume("playerDown");
 				break;
+			}
+
+			if (currentHp < 40 && !isSelect && isMove)
+			{
+				ANIMATIONMANAGER->addAnimation("playerHp", "조홍", 12, 13, 2, false, true);
+				playerAni = ANIMATIONMANAGER->findAnimation("playerHp");
+				ANIMATIONMANAGER->resume("playerHp");
 			}
 		}
 	}

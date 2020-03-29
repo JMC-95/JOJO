@@ -196,31 +196,38 @@ void Dogyeom::friendAi()
 
 	if (KEYMANAGER->isOnceKeyDown('2') && isSelect)
 	{
+		SOUNDMANAGER->play("cMove", 1.0f);
+
+		//찾은 적의 타일 번호
+		positionX = ENEMYMANAGER->getEnemy()[enemyNum]->getEnemyInfo().rc.left / TILE_WIDTH;
+		positionY = ENEMYMANAGER->getEnemy()[enemyNum]->getEnemyInfo().rc.top / TILE_WIDTH;
+		enemyTile = positionX + (positionY * TILE_Y);
+
+		//선택한 타일(목표)
+		endTile = enemyTile;
+
+		//선택한 맵의 x좌표와 y좌표
+		mapX = mainMap->getMap()[endTile].rc.left + TILE_WIDTH * 0.5;
+		mapY = mainMap->getMap()[endTile].rc.top + TILE_HEIGHT * 0.5;
+
+		//이순간 Astar가 시작된다.
+		//Astar에 필요한 모든 것을 초기화 시켜주자.
+		openList.clear();
+		closeList.clear();
+
+		if (startTile != -1 && endTile != -1)
+		{
+			startAstar = true;
+			currentTile = startTile;
+
+			//시작 지점을 openList에 넣자
+			openList.push_back(currentTile);
+		}
+
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
 			if (mainMap->getMap()[i].flood)
 			{
-				//선택한 타일(목표)
-				endTile = enemyTile;
-
-				//선택한 맵의 x좌표와 y좌표
-				mapX = mainMap->getMap()[endTile].rc.left + TILE_WIDTH * 0.5;
-				mapY = mainMap->getMap()[endTile].rc.top + TILE_HEIGHT * 0.5;
-
-				//이순간 Astar가 시작된다.
-				//Astar에 필요한 모든 것을 초기화 시켜주자.
-				openList.clear();
-				closeList.clear();
-
-				if (startTile != -1 && endTile != -1)
-				{
-					startAstar = true;
-					currentTile = startTile;
-
-					//시작 지점을 openList에 넣자
-					openList.push_back(currentTile);
-				}
-
 				mainMap->getMap()[i].flood = false;
 			}
 		}
@@ -297,10 +304,7 @@ void Dogyeom::friendAstar()
 	//목표 타일을 클릭하면 캐릭터 이동
 	if (!optimalPath.empty())
 	{
-		if (isMove)
-		{
-			friendMove();
-		}
+		if (isMove) friendMove();
 
 		if (friendX == mapX && friendY == mapY)
 		{
@@ -317,17 +321,20 @@ void Dogyeom::friendAstar()
 				dogyeom.rcAtk[3] = RectMake(dogyeom.rc.left, dogyeom.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
 				atkList.push_back(dogyeom.rcAtk[j]);
 			}
+		}
+	}
 
-			//메뉴선택 렉트
-			for (int j = 0; j < 5; j++)
-			{
-				rcMenu[0] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top - 30, 82, 20);
-				rcMenu[1] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top - 9, 82, 20);
-				rcMenu[2] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top + 12, 82, 20);
-				rcMenu[3] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top + 38, 82, 20);
-				rcMenu[4] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top + 63, 82, 20);
-				menuList.push_back(rcMenu[j]);
-			}
+	if (isClick)
+	{
+		//메뉴선택 렉트
+		for (int j = 0; j < 5; j++)
+		{
+			rcMenu[0] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top - 30, 82, 20);
+			rcMenu[1] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top - 9, 82, 20);
+			rcMenu[2] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top + 12, 82, 20);
+			rcMenu[3] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top + 38, 82, 20);
+			rcMenu[4] = RectMake(dogyeom.rc.left - 97, dogyeom.rc.top + 63, 82, 20);
+			menuList.push_back(rcMenu[j]);
 		}
 	}
 }
@@ -469,6 +476,13 @@ void Dogyeom::friendAnimation()
 				friendAni = ANIMATIONMANAGER->findAnimation("friendDown");
 				ANIMATIONMANAGER->resume("friendDown");
 				break;
+			}
+
+			if (currentHp < 40 && !isSelect && isMove)
+			{
+				ANIMATIONMANAGER->addAnimation("friendHp", "도겸", 12, 13, 2, false, true);
+				friendAni = ANIMATIONMANAGER->findAnimation("friendHp");
+				ANIMATIONMANAGER->resume("friendHp");
 			}
 		}
 	}
@@ -629,9 +643,4 @@ void Dogyeom::aiAstar()
 
 		if (minNum == distance) enemyNum = i + 4;
 	}
-
-	//찾은 적의 타일 번호
-	positionX = ENEMYMANAGER->getEnemy()[enemyNum]->getEnemyInfo().rc.left / TILE_WIDTH;
-	positionY = ENEMYMANAGER->getEnemy()[enemyNum]->getEnemyInfo().rc.top / TILE_WIDTH;
-	enemyTile = positionX + (positionY * TILE_Y);
 }

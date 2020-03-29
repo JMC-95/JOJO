@@ -365,6 +365,13 @@ void Beonju::enemyAnimation()
 				ANIMATIONMANAGER->resume("enemyDown");
 				break;
 			}
+
+			if (currentHp < 40 && !isSelect && isMove)
+			{
+				ANIMATIONMANAGER->addAnimation("enemyHp", "¹øÁÖ", 12, 13, 2, false, true);
+				enemyAni = ANIMATIONMANAGER->findAnimation("enemyHp");
+				ANIMATIONMANAGER->resume("enemyHp");
+			}
 		}
 	}
 	else

@@ -247,6 +247,7 @@ void Jojo::mouseMove()
 	{
 		isClick = true;
 		isMove = false;
+		isSelect = false;
 	}
 
 	playerAstar();
@@ -340,19 +341,19 @@ void Jojo::playerAstar()
 				atkList.push_back(jojo.rcAtk[j]);
 			}
 		}
+	}
 
-		if (isClick)
+	if (isClick)
+	{
+		//메뉴선택 렉트
+		for (int j = 0; j < 5; j++)
 		{
-			//메뉴선택 렉트
-			for (int j = 0; j < 5; j++)
-			{
-				rcMenu[0] = RectMake(jojo.rc.left - 97, jojo.rc.top - 30, 82, 20);
-				rcMenu[1] = RectMake(jojo.rc.left - 97, jojo.rc.top - 9, 82, 20);
-				rcMenu[2] = RectMake(jojo.rc.left - 97, jojo.rc.top + 12, 82, 20);
-				rcMenu[3] = RectMake(jojo.rc.left - 97, jojo.rc.top + 38, 82, 20);
-				rcMenu[4] = RectMake(jojo.rc.left - 97, jojo.rc.top + 63, 82, 20);
-				menuList.push_back(rcMenu[j]);
-			}
+			rcMenu[0] = RectMake(jojo.rc.left - 97, jojo.rc.top - 30, 82, 20);
+			rcMenu[1] = RectMake(jojo.rc.left - 97, jojo.rc.top - 9, 82, 20);
+			rcMenu[2] = RectMake(jojo.rc.left - 97, jojo.rc.top + 12, 82, 20);
+			rcMenu[3] = RectMake(jojo.rc.left - 97, jojo.rc.top + 38, 82, 20);
+			rcMenu[4] = RectMake(jojo.rc.left - 97, jojo.rc.top + 63, 82, 20);
+			menuList.push_back(rcMenu[j]);
 		}
 	}
 }
@@ -509,6 +510,13 @@ void Jojo::playerAnimation()
 				playerAni = ANIMATIONMANAGER->findAnimation("playerDown");
 				ANIMATIONMANAGER->resume("playerDown");
 				break;
+			}
+
+			if (currentHp < 40 && !isSelect && isMove)
+			{
+				ANIMATIONMANAGER->addAnimation("playerHp", "조조", 12, 13, 2, false, true);
+				playerAni = ANIMATIONMANAGER->findAnimation("playerHp");
+				ANIMATIONMANAGER->resume("playerHp");
 			}
 		}
 	}

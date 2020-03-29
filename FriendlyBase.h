@@ -88,6 +88,9 @@ protected:	//A*용 변수
 	bool noPath;			//A* 길을 찾았으면 최단 거리가 어디인지 확인하는 변수
 
 protected:	//AI용 변수
+	vector<int> vAstar;
+
+	int enemyNum;
 	int positionX, positionY;
 	int friendTile, enemyTile;
 
@@ -109,6 +112,7 @@ public:
 	virtual void friendAnimation();
 	virtual void friendState();
 	virtual void mouseMove();
+	virtual void aiAstar();
 
 	virtual void setPosition(RECT rc);
 

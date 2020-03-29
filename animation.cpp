@@ -248,7 +248,7 @@ void animation::frameUpdate(float elapsedTime)
 							player->setIsSelect(false);
 							player->setIsTarget(false);
 							player->setIsAtk(false);
-							player->setIsMove(false);
+							player->setIsMove(true);
 						}
 						else if (!player->getIsAtk())
 						{
@@ -273,7 +273,7 @@ void animation::frameUpdate(float elapsedTime)
 							friendly->setIsSelect(false);
 							friendly->setIsTarget(false);
 							friendly->setIsAtk(false);
-							friendly->setIsMove(false);
+							friendly->setIsMove(true);
 						}
 						else if (!friendly->getIsAtk())
 						{
@@ -298,7 +298,7 @@ void animation::frameUpdate(float elapsedTime)
 							enemy->setIsSelect(false);
 							enemy->setIsTarget(false);
 							enemy->setIsAtk(false);
-							enemy->setIsMove(false);
+							enemy->setIsMove(true);
 						}
 					}
 				}

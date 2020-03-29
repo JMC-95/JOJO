@@ -240,6 +240,7 @@ void Hahudon::mouseMove()
 	{
 		isClick = true;
 		isMove = false;
+		isSelect = false;
 	}
 
 	playerAstar();
@@ -333,19 +334,19 @@ void Hahudon::playerAstar()
 				atkList.push_back(hahudon.rcAtk[j]);
 			}
 		}
+	}
 
-		if (isClick)
+	if (isClick)
+	{
+		//메뉴선택 렉트
+		for (int j = 0; j < 5; j++)
 		{
-			//메뉴선택 렉트
-			for (int j = 0; j < 5; j++)
-			{
-				rcMenu[0] = RectMake(hahudon.rc.left - 97, hahudon.rc.top - 30, 82, 20);
-				rcMenu[1] = RectMake(hahudon.rc.left - 97, hahudon.rc.top - 9, 82, 20);
-				rcMenu[2] = RectMake(hahudon.rc.left - 97, hahudon.rc.top + 12, 82, 20);
-				rcMenu[3] = RectMake(hahudon.rc.left - 97, hahudon.rc.top + 38, 82, 20);
-				rcMenu[4] = RectMake(hahudon.rc.left - 97, hahudon.rc.top + 63, 82, 20);
-				menuList.push_back(rcMenu[j]);
-			}
+			rcMenu[0] = RectMake(hahudon.rc.left - 97, hahudon.rc.top - 30, 82, 20);
+			rcMenu[1] = RectMake(hahudon.rc.left - 97, hahudon.rc.top - 9, 82, 20);
+			rcMenu[2] = RectMake(hahudon.rc.left - 97, hahudon.rc.top + 12, 82, 20);
+			rcMenu[3] = RectMake(hahudon.rc.left - 97, hahudon.rc.top + 38, 82, 20);
+			rcMenu[4] = RectMake(hahudon.rc.left - 97, hahudon.rc.top + 63, 82, 20);
+			menuList.push_back(rcMenu[j]);
 		}
 	}
 }
@@ -502,6 +503,13 @@ void Hahudon::playerAnimation()
 				playerAni = ANIMATIONMANAGER->findAnimation("playerDown");
 				ANIMATIONMANAGER->resume("playerDown");
 				break;
+			}
+
+			if (currentHp < 40 && !isSelect && isMove)
+			{
+				ANIMATIONMANAGER->addAnimation("playerHp", "하후돈", 12, 13, 2, false, true);
+				playerAni = ANIMATIONMANAGER->findAnimation("playerHp");
+				ANIMATIONMANAGER->resume("playerHp");
 			}
 		}
 	}

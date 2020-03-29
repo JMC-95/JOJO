@@ -6,10 +6,6 @@ class Dogyeom : public FriendlyBase
 private:
 	FriendInfo dogyeom;
 
-	vector<int> vAstar;
-
-	int enemyNum;
-
 public:
 	Dogyeom();
 	~Dogyeom();
@@ -28,10 +24,9 @@ public:
 	virtual void friendAnimation();
 	virtual void friendState();
 	virtual void mouseMove();
+	virtual void aiAstar();
 
 	virtual void setPosition(RECT rc);
 
 	virtual FriendInfo getFriendInfo() { return dogyeom; }
-
-	void aiAstar();
 };
