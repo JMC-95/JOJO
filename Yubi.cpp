@@ -491,6 +491,8 @@ void Yubi::friendState()
 	_Mp->setGauge(currentMp, maxMp);
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
+
+	if (currentHp < 0) currentHp = 0;
 }
 
 void Yubi::mouseMove()

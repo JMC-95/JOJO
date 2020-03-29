@@ -301,8 +301,67 @@ void animation::frameUpdate(float elapsedTime)
 							enemy->setIsMove(true);
 						}
 					}
+
+					death();
 				}
 			}
+		}
+	}
+}
+
+void animation::death()
+{
+	//ÇÃ·¹ÀÌ¾î Á×À½
+	auto& playerVector = PLAYERMANAGER->getPlayer();
+
+	for (auto player = playerVector.begin(); player != playerVector.end(); )
+	{
+		int hp = (*player)->getCurrentHp();
+
+		if (hp <= 0)
+		{
+			SOUNDMANAGER->play("death", 1.0f);
+			player = playerVector.erase(player);
+		}
+		else
+		{
+			player++;
+		}
+	}
+
+	//¿ì±º Á×À½
+	auto& friendVector = PLAYERMANAGER->getPlayer();
+
+	for (auto friendly = friendVector.begin(); friendly != friendVector.end(); )
+	{
+		int hp = (*friendly)->getCurrentHp();
+
+		if (hp <= 0)
+		{
+			SOUNDMANAGER->play("death", 1.0f);
+			friendly = friendVector.erase(friendly);
+		}
+		else
+		{
+			friendly++;
+		}
+	}
+
+	//Àû±º Á×À½
+	auto& enemyVector = ENEMYMANAGER->getEnemy();
+
+	for (auto enemy = enemyVector.begin(); enemy != enemyVector.end(); )
+	{
+		int hp = (*enemy)->getCurrentHp();
+
+		if (hp <= 0)
+		{
+			SOUNDMANAGER->play("death", 1.0f);
+			enemy = enemyVector.erase(enemy);
+		}
+		else
+		{
+			enemy++;
 		}
 	}
 }

@@ -40,6 +40,7 @@ public:
 	//프레임 업데이트 타임
 	void frameUpdate(float elapsedTime);
 
+	void death();
 	void start();
 	void stop();
 	void pause();
