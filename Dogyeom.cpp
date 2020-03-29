@@ -180,6 +180,28 @@ void Dogyeom::friendAi()
 		{
 			if (mainMap->getMap()[i].flood)
 			{
+				for (int k = 0; k < PLAYERMANAGER->getPlayer().size(); ++k)
+				{
+					auto& rc = mainMap->getMap()[i].rc;
+					auto& playerRect = PLAYERMANAGER->getPlayer()[k]->getPlayerInfo().rc;
+
+					if (IntersectRect(&temp, &rc, &playerRect))
+					{
+						mainMap->getMap()[i].flood = false;
+					}
+				}
+
+				for (int k = 0; k < FRIENDMANAGER->getFriend().size(); ++k)
+				{
+					auto& rc = mainMap->getMap()[i].rc;
+					auto& friendRect = FRIENDMANAGER->getFriend()[k]->getFriendInfo().rc;
+
+					if (IntersectRect(&temp, &rc, &friendRect))
+					{
+						mainMap->getMap()[i].flood = false;
+					}
+				}
+
 				for (int k = 4; k < 18; ++k)
 				{
 					auto& rc = mainMap->getMap()[i].rc;
