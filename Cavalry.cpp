@@ -23,6 +23,8 @@ HRESULT Cavalry::init(const char * moveImg, const char * mAtkImg, const char * a
 	cavalry.img = IMAGEMANAGER->findImage(enemyImg);			//캐릭터 이미지
 	cavalry.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	cavalry.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("enemyRight", "적기병", 6, 7, 2, false, true);
+	enemyAni = ANIMATIONMANAGER->findAnimation("enemyRight");
 	//스테이터스
 	cavalry.level = 2;			//레벨
 	cavalry.hp = 105;			//체력

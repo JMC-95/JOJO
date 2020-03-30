@@ -40,14 +40,17 @@ void TitleScene::update()
 	{
 		if (PtInRect(&listRect[0], m_ptMouse))
 		{
+			SOUNDMANAGER->play("click", 1.0f);
 			SCENEMANAGER->changeScene("LobbyScene");
 		}
 		else if (PtInRect(&listRect[1], m_ptMouse))
 		{
+			SOUNDMANAGER->play("click", 1.0f);
 			SCENEMANAGER->changeScene("MapTool");
 		}
 		else if (PtInRect(&listRect[2], m_ptMouse))
 		{
+			SOUNDMANAGER->play("click", 1.0f);
 			SCENEMANAGER->changeScene("Preferences");
 		}
 		else if (PtInRect(&listRect[3], m_ptMouse))

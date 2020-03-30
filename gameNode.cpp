@@ -44,6 +44,14 @@ void gameNode::release()
 		//타이머 해제
 		KillTimer(m_hWnd, 1);
 
+		KEYMANAGER->release();
+		IMAGEMANAGER->release();
+		TIMEMANAGER->release();
+		SCENEMANAGER->release();
+		SOUNDMANAGER->release();
+		ANIMATIONMANAGER->release();
+		EFFECTMANAGER->release();
+
 		KEYMANAGER->releaseSingleton();
 		IMAGEMANAGER->releaseSingleton();
 		TIMEMANAGER->releaseSingleton();
@@ -53,13 +61,6 @@ void gameNode::release()
 		EFFECTMANAGER->releaseSingleton();
 		RND->releaseSingleton();
 		TXTDATA->releaseSingleton();
-
-		KEYMANAGER->release();
-		IMAGEMANAGER->release();
-		TIMEMANAGER->release();
-		SCENEMANAGER->release();
-		ANIMATIONMANAGER->release();
-		EFFECTMANAGER->release();
 	}
 
 	ReleaseDC(m_hWnd, _hdc);

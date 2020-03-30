@@ -22,6 +22,8 @@ HRESULT Dogyeom::init(const char * moveImg, const char * mAtkImg, const char * a
 	dogyeom.img = IMAGEMANAGER->findImage(friendImg);			//캐릭터 이미지
 	dogyeom.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	dogyeom.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("friendLeft", "도겸", 4, 5, 2, false, true);
+	friendAni = ANIMATIONMANAGER->findAnimation("friendLeft");
 	//스테이터스
 	dogyeom.level = 6;			//레벨
 	dogyeom.hp = 125;			//체력

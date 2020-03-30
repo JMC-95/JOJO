@@ -22,6 +22,8 @@ HRESULT Gwanu::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	gwanu.img = IMAGEMANAGER->findImage(friendImg);			//캐릭터 이미지
 	gwanu.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	gwanu.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("friendLeft", "관우", 4, 5, 2, false, true);
+	friendAni = ANIMATIONMANAGER->findAnimation("friendLeft");
 	//스테이터스
 	gwanu.level = 6;		//레벨
 	gwanu.hp = 132;			//체력

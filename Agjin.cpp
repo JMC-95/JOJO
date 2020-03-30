@@ -22,6 +22,8 @@ HRESULT Agjin::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	agjin.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
 	agjin.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	agjin.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("playerLeft", "악진", 4, 5, 2, false, true);
+	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
 	//스테이터스
 	agjin.level = 4;		//레벨
 	agjin.hp = 142;			//체력
@@ -49,7 +51,7 @@ HRESULT Agjin::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	_Exp = new progressBar;
 	_Exp->init("images/UI/Info/EXP.bmp", "images/UI/Info/Back_EXP.bmp", 1095, 243, 45, 12);
 	_Exp->setGauge(currentExp, maxExp);
-	currentExp = 52;
+	currentExp = 0;
 	maxExp = 100;
 
 	//캐릭터 방향 및 위치
@@ -77,7 +79,8 @@ void Agjin::update()
 			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[6]->getIsSelect())
+			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
+			!ENEMYMANAGER->getEturn())
 		{
 			mouseMove();
 		}
@@ -325,6 +328,8 @@ void Agjin::playerAstar()
 
 		if (playerX == mapX && playerY == mapY)
 		{
+			atkList.clear();
+
 			isMove = false;
 			isClick = true;
 

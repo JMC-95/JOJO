@@ -22,6 +22,8 @@ HRESULT Wonso::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	wonso.img = IMAGEMANAGER->findImage(friendImg);			//캐릭터 이미지
 	wonso.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	wonso.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("friendLeft", "원소", 4, 5, 2, false, true);
+	friendAni = ANIMATIONMANAGER->findAnimation("friendLeft");
 	//스테이터스
 	wonso.level = 6;		//레벨
 	wonso.hp = 125;			//체력

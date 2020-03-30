@@ -36,10 +36,12 @@ void PreferencesScene::update()
 			if (!bgmCheck) isSound = false;
 			else if (bgmCheck) isSound = true;
 
+			SOUNDMANAGER->play("click", 1.0f);
 			SCENEMANAGER->changeScene("TitleScene");
 		}
 		else if (PtInRect(&rc[2], m_ptMouse))
 		{
+			SOUNDMANAGER->play("click", 1.0f);
 			SCENEMANAGER->changeScene("TitleScene");
 		}
 	}

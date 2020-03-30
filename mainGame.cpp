@@ -32,7 +32,7 @@ HRESULT mainGame::init()
 	SCENEMANAGER->addScene("GameScene", new GameScene);
 
 	//현재 씬
-	SCENEMANAGER->changeScene("GameScene");
+	SCENEMANAGER->changeScene("TitleScene");
 
 	return S_OK;
 }
@@ -73,6 +73,8 @@ void mainGame::sounds()
 	SOUNDMANAGER->addSound("lobbySound", "sound/bgm/LobbySound.mp3", true, true);
 	SOUNDMANAGER->addSound("mapToolSound", "sound/bgm/MapToolSound.mp3", true, true);
 	SOUNDMANAGER->addSound("gameSound", "sound/bgm/GameSound.mp3", true, true);
+	SOUNDMANAGER->addSound("deathSound", "sound/bgm/DeathSound.mp3", true, true);
+	SOUNDMANAGER->addSound("endingSound", "sound/bgm/EndingSound.mp3", true, true);
 
 	//Effect
 	SOUNDMANAGER->addSound("click", "sound/effect/Click.wav", false, false);
@@ -82,6 +84,9 @@ void mainGame::sounds()
 	SOUNDMANAGER->addSound("hit", "sound/effect/Hit.wav", false, false);
 	SOUNDMANAGER->addSound("aHit", "sound/effect/ArcherHit.wav", false, false);
 	SOUNDMANAGER->addSound("death", "sound/effect/Death.wav", false, false);
+	SOUNDMANAGER->addSound("pSelect", "sound/effect/Select.wav", false, false);
+	SOUNDMANAGER->addSound("start", "sound/effect/Start.wav", false, false);
+	SOUNDMANAGER->addSound("noStart", "sound/effect/NoStart.wav", false, false);
 }
 
 void mainGame::images()
@@ -91,6 +96,17 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("lobbyScene", "images/UI/Scene/LobbyScene.bmp", 642, 462, true, RGB(255, 0, 255));			//로비 씬
 	IMAGEMANAGER->addImage("preferences", "images/UI/Scene/PreferencesScene.bmp", 642, 462, true, RGB(255, 0, 255));	//환경설정 씬
 	IMAGEMANAGER->addImage("check", "images/UI/Scene/check.bmp", 9, 9, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("outgoing", "images/UI/Lobby/출진.bmp", 642, 462, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o조조", "images/UI/Lobby/조조.bmp", 199, 431, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o하후돈", "images/UI/Lobby/하후돈.bmp", 199, 431, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o하후연", "images/UI/Lobby/하후연.bmp", 199, 431, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o조인", "images/UI/Lobby/조인.bmp", 199, 431, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o악진", "images/UI/Lobby/악진.bmp", 199, 431, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o이전", "images/UI/Lobby/이전.bmp", 199, 431, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o조홍", "images/UI/Lobby/조홍.bmp", 199, 431, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("equipment", "images/UI/Lobby/장비.bmp", 642, 462, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("buy", "images/UI/Lobby/구입.bmp", 1284, 462, 2, 1, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addFrameImage("sell", "images/UI/Lobby/매각.bmp", 1284, 462, 2, 1, true, RGB(255, 0, 255));
 
 	//맵툴용 이미지
 	IMAGEMANAGER->addImage("map", "images/MapTool/Map.bmp", 960, 960, true, RGB(255, 0, 255));					//실제 맵의 이미지
@@ -122,6 +138,8 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("playerTurn", "images/UI/InGame/PlayerTurn.bmp", 960, 960, true, RGB(247, 0, 255));	//플레이어 턴
 	IMAGEMANAGER->addImage("friendTurn", "images/UI/InGame/FriendTurn.bmp", 960, 960, true, RGB(247, 0, 255));	//우군 턴
 	IMAGEMANAGER->addImage("enemyTurn", "images/UI/InGame/EnemyTurn.bmp", 960, 960, true, RGB(247, 0, 255));	//적군 턴
+	IMAGEMANAGER->addImage("gameWin", "images/UI/InGame/GameOver.bmp", 960, 960, true, RGB(247, 0, 255));		//승리
+	IMAGEMANAGER->addImage("gameOver", "images/UI/InGame/GameOver.bmp", 640, 400, true, RGB(247, 0, 255));		//패배
 
 	//날씨 이미지
 	IMAGEMANAGER->addFrameImage("맑음", "images/UI/Weather/Sunny.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));

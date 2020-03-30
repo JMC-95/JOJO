@@ -22,6 +22,8 @@ HRESULT Yeopo::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	yeopo.img = IMAGEMANAGER->findImage(enemyImg);			//캐릭터 이미지
 	yeopo.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	yeopo.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("enemyRight", "여포", 6, 7, 2, false, true);
+	enemyAni = ANIMATIONMANAGER->findAnimation("enemyRight");
 	//스테이터스
 	yeopo.level = 6;			//레벨
 	yeopo.hp = 180;				//체력
@@ -460,6 +462,58 @@ void Yeopo::enemyMenu()
 
 void Yeopo::enemyCollision()
 {
+	RECT temp;
+	frameX = 0;
+
+	for (int j = 0; j < PLAYERMANAGER->getPlayer().size(); j++)
+	{
+		auto playerX = PLAYERMANAGER->getPlayer()[j]->getPlayerX();
+		auto playerY = PLAYERMANAGER->getPlayer()[j]->getPlayerY();
+		auto playerHit = PLAYERMANAGER->getPlayer()[j]->getIsHit();
+		auto& playerRect = PLAYERMANAGER->getPlayer()[j]->getPlayerInfo().rc;
+
+		for (int k = 0; k < 4; k++)
+		{
+			if (IntersectRect(&temp, &yeopo.rcAtk[k], &playerRect))
+			{
+				isTarget = true;
+				frameX = 1;
+			}
+		}
+
+		if (playerHit)
+		{
+			if (enemyX > playerX) eDirection = ENEMY_LEFT;
+			else if (enemyX < playerX) eDirection = ENEMY_RIGHT;
+			else if (enemyX > playerY) eDirection = ENEMY_UP;
+			else if (enemyX < playerY) eDirection = ENEMY_DOWN;
+		}
+	}
+
+	for (int j = 0; j < FRIENDMANAGER->getFriend().size(); j++)
+	{
+		auto friendX = FRIENDMANAGER->getFriend()[j]->getFriendX();
+		auto friendY = FRIENDMANAGER->getFriend()[j]->getFriendY();
+		auto friendHit = FRIENDMANAGER->getFriend()[j]->getIsHit();
+		auto& friendRect = FRIENDMANAGER->getFriend()[j]->getFriendInfo().rc;
+
+		for (int k = 0; k < 4; k++)
+		{
+			if (IntersectRect(&temp, &yeopo.rcAtk[k], &friendRect))
+			{
+				isTarget = true;
+				frameX = 1;
+			}
+		}
+
+		if (friendHit)
+		{
+			if (enemyX > friendX) eDirection = ENEMY_LEFT;
+			else if (enemyX < friendX) eDirection = ENEMY_RIGHT;
+			else if (enemyX > friendY) eDirection = ENEMY_UP;
+			else if (enemyX < friendY) eDirection = ENEMY_DOWN;
+		}
+	}
 }
 
 void Yeopo::setPosition(RECT rc)

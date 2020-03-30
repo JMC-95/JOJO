@@ -14,14 +14,14 @@ HRESULT PlayerManager::init()
 	vPlayer.push_back(new Jojo);
 	vPlayer[0]->init("pMoveRange", "attackRange", "atkRange", "조조", "조조ATK", "조조BH");
 
+	vPlayer.push_back(new Hahudon);
+	vPlayer[1]->init("pMoveRange", "attackRange", "atkRange", "하후돈", "하후돈ATK", "하후돈BH");
+
 	vPlayer.push_back(new Hahuyeon);
-	vPlayer[1]->init("pMoveRange", "attackRange", "atkRange", "하후연", "하후연ATK", "하후연BH");
+	vPlayer[2]->init("pMoveRange", "attackRange", "atkRange", "하후연", "하후연ATK", "하후연BH");
 
 	vPlayer.push_back(new Join);
-	vPlayer[2]->init("pMoveRange", "attackRange", "atkRange", "조인", "조인ATK", "조인BH");
-
-	vPlayer.push_back(new Hahudon);
-	vPlayer[3]->init("pMoveRange", "attackRange", "atkRange", "하후돈", "하후돈ATK", "하후돈BH");
+	vPlayer[3]->init("pMoveRange", "attackRange", "atkRange", "조인", "조인ATK", "조인BH");
 
 	vPlayer.push_back(new Agjin);
 	vPlayer[4]->init("pMoveRange", "attackRange", "atkRange", "악진", "악진ATK", "악진BH");

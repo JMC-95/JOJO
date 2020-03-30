@@ -22,6 +22,8 @@ HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	jojo.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
 	jojo.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	jojo.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("playerLeft", "조조", 4, 5, 2, false, true);
+	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
 	//스테이터스
 	jojo.level = 6;			//레벨
 	jojo.hp = 132;			//체력
@@ -49,7 +51,7 @@ HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	_Exp = new progressBar;
 	_Exp->init("images/UI/Info/EXP.bmp", "images/UI/Info/Back_EXP.bmp", 1095, 243, 45, 12);
 	_Exp->setGauge(currentExp, maxExp);
-	currentExp = 11;
+	currentExp = 57;
 	maxExp = 100;
 
 	//캐릭터 방향 및 위치
@@ -80,7 +82,8 @@ void Jojo::update()
 			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[6]->getIsSelect())
+			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
+			!ENEMYMANAGER->getEturn())
 		{
 			mouseMove();
 		}
@@ -92,6 +95,11 @@ void Jojo::update()
 
 	playerAnimation();
 	playerState();
+
+	if (KEYMANAGER->isOnceKeyDown('4'))
+	{
+		currentHp -= 50;
+	}
 }
 
 void Jojo::render(HDC hdc)
@@ -328,6 +336,8 @@ void Jojo::playerAstar()
 
 		if (playerX == mapX && playerY == mapY)
 		{
+			atkList.clear();
+
 			isMove = false;
 			isClick = true;
 

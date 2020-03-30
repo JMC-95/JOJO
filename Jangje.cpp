@@ -22,6 +22,8 @@ HRESULT Jangje::init(const char * moveImg, const char * mAtkImg, const char * aR
 	jangje.img = IMAGEMANAGER->findImage(enemyImg);				//캐릭터 이미지
 	jangje.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	jangje.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("enemyRight", "장제", 6, 7, 2, false, true);
+	enemyAni = ANIMATIONMANAGER->findAnimation("enemyRight");
 	//스테이터스
 	jangje.level = 6;			//레벨
 	jangje.hp = 125;			//체력

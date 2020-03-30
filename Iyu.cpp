@@ -22,6 +22,8 @@ HRESULT Iyu::init(const char * moveImg, const char * mAtkImg, const char * aRngI
 	iyu.img = IMAGEMANAGER->findImage(enemyImg);			//캐릭터 이미지
 	iyu.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	iyu.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("enemyRight", "이유", 6, 7, 2, false, true);
+	enemyAni = ANIMATIONMANAGER->findAnimation("enemyRight");
 	//스테이터스
 	iyu.level = 6;			//레벨
 	iyu.hp = 110;			//체력

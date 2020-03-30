@@ -300,6 +300,18 @@ void animation::frameUpdate(float elapsedTime)
 							enemy->setIsAtk(false);
 							enemy->setIsMove(true);
 						}
+						else if (!enemy->getIsAtk())
+						{
+							for (int i = 0; i < PLAYERMANAGER->getPlayer().size(); i++)
+							{
+								PLAYERMANAGER->getPlayer()[i]->setIsHit(false);
+							}
+
+							for (int i = 0; i < FRIENDMANAGER->getFriend().size(); i++)
+							{
+								FRIENDMANAGER->getFriend()[i]->setIsHit(false);
+							}
+						}
 					}
 
 					death();

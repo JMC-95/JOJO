@@ -22,6 +22,8 @@ HRESULT Ijeon::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	ijeon.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
 	ijeon.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	ijeon.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("playerLeft", "이전", 4, 5, 2, false, true);
+	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
 	//스테이터스
 	ijeon.level = 4;		//레벨
 	ijeon.hp = 138;			//체력
@@ -49,7 +51,7 @@ HRESULT Ijeon::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	_Exp = new progressBar;
 	_Exp->init("images/UI/Info/EXP.bmp", "images/UI/Info/Back_EXP.bmp", 1095, 243, 45, 12);
 	_Exp->setGauge(currentExp, maxExp);
-	currentExp = 39;
+	currentExp = 0;
 	maxExp = 100;
 
 	//캐릭터 방향 및 위치
@@ -77,7 +79,8 @@ void Ijeon::update()
 			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[6]->getIsSelect())
+			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
+			!ENEMYMANAGER->getEturn())
 		{
 			mouseMove();
 		}
@@ -325,6 +328,8 @@ void Ijeon::playerAstar()
 
 		if (playerX == mapX && playerY == mapY)
 		{
+			atkList.clear();
+
 			isMove = false;
 			isClick = true;
 

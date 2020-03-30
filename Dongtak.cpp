@@ -22,6 +22,8 @@ HRESULT Dongtak::init(const char * moveImg, const char * mAtkImg, const char * a
 	dongtak.img = IMAGEMANAGER->findImage(enemyImg);			//캐릭터 이미지
 	dongtak.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	dongtak.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("enemyRight", "동탁", 6, 7, 2, false, true);
+	enemyAni = ANIMATIONMANAGER->findAnimation("enemyRight");
 	//스테이터스
 	dongtak.level = 6;			//레벨
 	dongtak.hp = 135;			//체력

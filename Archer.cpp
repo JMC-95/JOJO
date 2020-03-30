@@ -23,6 +23,8 @@ HRESULT Archer::init(const char * moveImg, const char * mAtkImg, const char * aR
 	archer.img = IMAGEMANAGER->findImage(enemyImg);				//캐릭터 이미지
 	archer.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	archer.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("enemyRight", "적궁병", 6, 7, 2, false, true);
+	enemyAni = ANIMATIONMANAGER->findAnimation("enemyRight");
 	//스테이터스
 	archer.level = 2;			//레벨
 	archer.hp = 94;				//체력

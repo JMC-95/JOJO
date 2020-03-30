@@ -57,16 +57,15 @@ protected:
 	RECT rcMenu[5];				//메뉴 렉트
 
 protected:	//일반 변수
-	int number;				//번호
+	int number;				//다형성 번호
+	int speed;				//스피드
 	int currentHp, maxHp;	//체력
 	int currentMp, maxMp;	//마력
 	int currentExp, maxExp;	//경험치
-	int speed;				//스피드
-	int frameX;				//캐릭터의 프레임을 돌리기위한 변수
-	int frameY;				//캐릭터의 프레임을 돌리기위한 변수
 	int enemyX, enemyY;		//캐릭터 좌표
 	int mapX, mapY;			//클릭한 맵의 중점 좌표
 	int stackX, stackY;		//스택에 쌓아둔 타일의 중점 좌표 (길을 찾을 때 필요하다.)
+	int frameX, frameY;		//캐릭터의 프레임을 돌리기위한 변수
 
 	char str[128];
 
@@ -78,7 +77,6 @@ protected:	//일반 변수
 	bool isAtkRng;			//적이 있다면 공격 버튼을 활성화해주는 변수
 	bool isAtk;				//적을 공격할 때 체크해주는 변수
 	bool isHit;				//피격시 체크해주는 변수
-	bool isDamage;			//데미지를 판정해주는 변수
 
 protected:	//A*용 변수
 	int startTile;			//A* 시작위치
@@ -102,8 +100,8 @@ public:
 	virtual void mouseMove();
 	virtual void enemyMove();
 	virtual void enemyAstar();
-	virtual void enemyMenu();
 	virtual void enemyCollision();
+	virtual void enemyMenu();
 	virtual void enemyAnimation();
 	virtual void enemyState();
 
@@ -135,7 +133,6 @@ public:
 	bool getIsTarget() { return isTarget; }
 	bool getIsAtk() { return isAtk; }
 	bool getIsHit() { return isHit; }
-	bool getIsDamage() { return isDamage; }
 	bool getIsClick() { return isClick; }
 
 	//Setter
@@ -143,9 +140,9 @@ public:
 	void setIsSelect(bool select) { isSelect = select; }
 	void setIsMove(bool cancel) { isMove = cancel; }
 	void setIsTarget(bool target) { isTarget = target; }
+	void setIsAtkRng(bool atkRng) { isAtkRng = atkRng; }
 	void setIsAtk(bool atk) { isAtk = atk; }
 	void setIsHit(bool hit) { isHit = hit; }
-	void setIsDamage(bool damage) { isDamage = damage; }
 
 	//프로그레스바
 	progressBar* getProgressBarHp() { return _Hp; }

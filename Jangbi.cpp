@@ -22,6 +22,8 @@ HRESULT Jangbi::init(const char * moveImg, const char * mAtkImg, const char * aR
 	jangbi.img = IMAGEMANAGER->findImage(friendImg);			//캐릭터 이미지
 	jangbi.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	jangbi.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("friendLeft", "장비", 4, 5, 2, false, true);
+	friendAni = ANIMATIONMANAGER->findAnimation("friendLeft");
 	//스테이터스
 	jangbi.level = 6;		//레벨
 	jangbi.hp = 125;		//체력

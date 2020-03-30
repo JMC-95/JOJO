@@ -182,7 +182,7 @@ void MapTool::mapToolButton()
 
 		if (GetOpenFileName(&ofn) == FALSE)return;
 
-		isOfnCheck = true;
+		//isOfnCheck = true;
 	}
 	if (PtInRect(&btnSave, m_ptMouse))
 	{
@@ -316,6 +316,7 @@ LRESULT MapTool::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam
 	switch (iMessage)
 	{
 	case WM_LBUTTONDOWN:
+		SOUNDMANAGER->play("click", 1.0f);
 		this->setMap();
 		break;
 	case WM_MOUSEMOVE:

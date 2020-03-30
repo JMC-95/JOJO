@@ -22,6 +22,8 @@ HRESULT Yubi::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	yubi.img = IMAGEMANAGER->findImage(friendImg);			//캐릭터 이미지
 	yubi.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	yubi.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("friendLeft", "유비", 4, 5, 2, false, true);
+	friendAni = ANIMATIONMANAGER->findAnimation("friendLeft");
 	//스테이터스
 	yubi.level = 6;			//레벨
 	yubi.hp = 125;			//체력

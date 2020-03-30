@@ -23,6 +23,8 @@ HRESULT Soldier::init(const char * moveImg, const char * mAtkImg, const char * a
 	soldier.img = IMAGEMANAGER->findImage(friendImg);			//캐릭터 이미지
 	soldier.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	soldier.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("friendLeft", "우군보병", 4, 5, 2, false, true);
+	friendAni = ANIMATIONMANAGER->findAnimation("friendLeft");
 	//스테이터스
 	soldier.level = 2;			//레벨
 	soldier.hp = 116;			//체력

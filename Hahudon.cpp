@@ -22,6 +22,8 @@ HRESULT Hahudon::init(const char * moveImg, const char * mAtkImg, const char * a
 	hahudon.img = IMAGEMANAGER->findImage(playerImg);			//캐릭터 이미지
 	hahudon.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	hahudon.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("playerLeft", "하후돈", 4, 5, 2, false, true);
+	playerAni = ANIMATIONMANAGER->findAnimation("playerLeft");
 	//스테이터스
 	hahudon.level = 6;			//레벨
 	hahudon.hp = 136;			//체력
@@ -49,7 +51,7 @@ HRESULT Hahudon::init(const char * moveImg, const char * mAtkImg, const char * a
 	_Exp = new progressBar;
 	_Exp->init("images/UI/Info/EXP.bmp", "images/UI/Info/Back_EXP.bmp", 1095, 243, 45, 12);
 	_Exp->setGauge(currentExp, maxExp);
-	currentExp = 3;
+	currentExp = 28;
 	maxExp = 100;
 
 	//캐릭터 방향 및 위치
@@ -73,11 +75,12 @@ void Hahudon::update()
 	if (isTurn)
 	{
 		if (!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[1]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[6]->getIsSelect())
+			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
+			!ENEMYMANAGER->getEturn())
 		{
 			mouseMove();
 		}
@@ -321,6 +324,8 @@ void Hahudon::playerAstar()
 
 		if (playerX == mapX && playerY == mapY)
 		{
+			atkList.clear();
+
 			isMove = false;
 			isClick = true;
 

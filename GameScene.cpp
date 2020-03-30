@@ -33,15 +33,15 @@ HRESULT GameScene::init()
 	_interface = new Interface;
 
 	//아군
-	PLAYERMANAGER->init();
+	//PLAYERMANAGER->init(); 로비에서 init을 하고 넘어온다.
 	for (int i = 0; i < PLAYERMANAGER->getPlayer().size(); i++)
 	{
 		PLAYERMANAGER->getPlayer()[i]->setMapMemoryAdress(_mainMap);
 	}
 	PLAYERMANAGER->getPlayer()[0]->setPosition(_mainMap->getMap()[197].rc);
-	PLAYERMANAGER->getPlayer()[1]->setPosition(_mainMap->getMap()[196].rc);
-	PLAYERMANAGER->getPlayer()[2]->setPosition(_mainMap->getMap()[236].rc);
-	PLAYERMANAGER->getPlayer()[3]->setPosition(_mainMap->getMap()[176].rc);
+	PLAYERMANAGER->getPlayer()[1]->setPosition(_mainMap->getMap()[176].rc);
+	PLAYERMANAGER->getPlayer()[2]->setPosition(_mainMap->getMap()[196].rc);
+	PLAYERMANAGER->getPlayer()[3]->setPosition(_mainMap->getMap()[236].rc);
 	PLAYERMANAGER->getPlayer()[4]->setPosition(_mainMap->getMap()[216].rc);
 	PLAYERMANAGER->getPlayer()[5]->setPosition(_mainMap->getMap()[177].rc);
 	PLAYERMANAGER->getPlayer()[6]->setPosition(_mainMap->getMap()[237].rc);
@@ -192,10 +192,16 @@ void GameScene::render()
 			DeleteObject(myFont2);
 		}
 	}
+
+	if (isGameOver)
+	{
+		IMAGEMANAGER->render("gameOver", getMemDC(), 240, 280);
+	}
 }
 
 void GameScene::gameTurn()
 {
+	//플레이어 턴
 	if (PLAYERMANAGER->getPturn())
 	{
 		pTurnCount++;
@@ -207,6 +213,7 @@ void GameScene::gameTurn()
 	}
 	else if (!PLAYERMANAGER->getPturn()) pTurnCount = 0;
 
+	//우군 턴
 	if (FRIENDMANAGER->getFturn())
 	{
 		fTurnCount++;
@@ -218,6 +225,7 @@ void GameScene::gameTurn()
 	}
 	else if (!FRIENDMANAGER->getFturn()) fTurnCount = 0;
 
+	//적군 턴
 	if (ENEMYMANAGER->getEturn())
 	{
 		eTurnCount++;
@@ -228,4 +236,9 @@ void GameScene::gameTurn()
 		}
 	}
 	else if (!ENEMYMANAGER->getEturn()) eTurnCount = 0;
+
+	if (PLAYERMANAGER->getPlayer()[0]->getCurrentHp() <= 0)
+	{
+		isGameOver = true;
+	}
 }

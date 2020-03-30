@@ -22,6 +22,8 @@ HRESULT Beonju::init(const char * moveImg, const char * mAtkImg, const char * aR
 	beonju.img = IMAGEMANAGER->findImage(enemyImg);				//캐릭터 이미지
 	beonju.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	beonju.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("enemyRight", "번주", 6, 7, 2, false, true);
+	enemyAni = ANIMATIONMANAGER->findAnimation("enemyRight");
 	//스테이터스
 	beonju.level = 6;			//레벨
 	beonju.hp = 125;			//체력

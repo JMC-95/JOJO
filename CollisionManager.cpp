@@ -18,6 +18,7 @@ void CollisionManager::update()
 {
 	playerToEnemyCollision();
 	enemyToPlayerCollision();
+	enemyToFriendCollision();
 }
 
 void CollisionManager::playerToEnemyCollision()
@@ -204,4 +205,182 @@ void CollisionManager::playerToEnemyCollision()
 
 void CollisionManager::enemyToPlayerCollision()
 {
+	//적군 기병
+	for (int k = 0; k < 9; k++)
+	{
+		auto& enemy = ENEMYMANAGER->getEnemy()[k];
+		auto&enemyInfo = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo();
+		auto enemyAtkRc = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rcAtk;
+		auto enemyAtkRng = ENEMYMANAGER->getEnemy()[k]->getIsAtkRng();
+
+		if (enemyAtkRng)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				for (int i = 0; i < PLAYERMANAGER->getPlayer().size(); i++)
+				{
+					auto& player = PLAYERMANAGER->getPlayer()[i];
+					auto& playerInfo = PLAYERMANAGER->getPlayer()[i]->getPlayerInfo();
+					auto& playerRect = PLAYERMANAGER->getPlayer()[i]->getPlayerInfo().rc;
+
+					enemy->setIsHit(false);
+
+					if (IntersectRect(&temp, &enemyAtkRc[0], &playerRect) ||
+						IntersectRect(&temp, &enemyAtkRc[1], &playerRect) ||
+						IntersectRect(&temp, &enemyAtkRc[2], &playerRect) ||
+						IntersectRect(&temp, &enemyAtkRc[3], &playerRect))
+					{
+						if (PtInRect(&playerRect, m_ptMouse))
+						{
+							SOUNDMANAGER->play("hit", 1.0f);
+
+							enemy->setIsAtk(true);
+							player->setIsHit(true);
+							enemy->setIsAtkRng(false);
+
+							damage = (enemyInfo.atk - playerInfo.def) / 2 + enemyInfo.level + 25;
+							player->hitDamage(damage);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//적군 보병 + 궁병
+	for (int k = 9; k < PLAYERMANAGER->getPlayer().size(); k++)
+	{
+		auto& enemy = ENEMYMANAGER->getEnemy()[k];
+		auto&enemyInfo = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo();
+		auto enemyAtkRc = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rcAtk;
+		auto enemyAtkRng = ENEMYMANAGER->getEnemy()[k]->getIsAtkRng();
+
+		if (enemyAtkRng)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				for (int i = 0; i < PLAYERMANAGER->getPlayer().size(); i++)
+				{
+					auto& player = PLAYERMANAGER->getPlayer()[i];
+					auto& playerInfo = PLAYERMANAGER->getPlayer()[i]->getPlayerInfo();
+					auto& playerRect = PLAYERMANAGER->getPlayer()[i]->getPlayerInfo().rc;
+
+					enemy->setIsHit(false);
+
+					if (IntersectRect(&temp, &enemyAtkRc[0], &playerRect) ||
+						IntersectRect(&temp, &enemyAtkRc[1], &playerRect) ||
+						IntersectRect(&temp, &enemyAtkRc[2], &playerRect) ||
+						IntersectRect(&temp, &enemyAtkRc[3], &playerRect) ||
+						IntersectRect(&temp, &enemyAtkRc[4], &playerRect) ||
+						IntersectRect(&temp, &enemyAtkRc[5], &playerRect) ||
+						IntersectRect(&temp, &enemyAtkRc[6], &playerRect) ||
+						IntersectRect(&temp, &enemyAtkRc[7], &playerRect))
+					{
+						if (PtInRect(&playerRect, m_ptMouse))
+						{
+							SOUNDMANAGER->play("hit", 1.0f);
+
+							enemy->setIsAtk(true);
+							player->setIsHit(true);
+							enemy->setIsAtkRng(false);
+
+							damage = (enemyInfo.atk - playerInfo.def) / 2 + enemyInfo.level + 25;
+							player->hitDamage(damage);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void CollisionManager::enemyToFriendCollision()
+{
+	//적군 기병
+	for (int k = 0; k < 9; k++)
+	{
+		auto& enemy = ENEMYMANAGER->getEnemy()[k];
+		auto&enemyInfo = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo();
+		auto enemyAtkRc = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rcAtk;
+		auto enemyAtkRng = ENEMYMANAGER->getEnemy()[k]->getIsAtkRng();
+
+		if (enemyAtkRng)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				for (int i = 0; i < FRIENDMANAGER->getFriend().size(); i++)
+				{
+					auto& friendly = FRIENDMANAGER->getFriend()[i];
+					auto& friendInfo = FRIENDMANAGER->getFriend()[i]->getFriendInfo();
+					auto& friendRect = FRIENDMANAGER->getFriend()[i]->getFriendInfo().rc;
+
+					enemy->setIsHit(false);
+
+					if (IntersectRect(&temp, &enemyAtkRc[0], &friendRect) ||
+						IntersectRect(&temp, &enemyAtkRc[1], &friendRect) ||
+						IntersectRect(&temp, &enemyAtkRc[2], &friendRect) ||
+						IntersectRect(&temp, &enemyAtkRc[3], &friendRect))
+					{
+						if (PtInRect(&friendRect, m_ptMouse))
+						{
+							SOUNDMANAGER->play("hit", 1.0f);
+
+							enemy->setIsAtk(true);
+							friendly->setIsHit(true);
+							enemy->setIsAtkRng(false);
+
+							damage = (enemyInfo.atk - friendInfo.def) / 2 + enemyInfo.level + 25;
+							friendly->hitDamage(damage);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//적군 보병 + 궁병
+	for (int k = 9; k < PLAYERMANAGER->getPlayer().size(); k++)
+	{
+		auto& enemy = ENEMYMANAGER->getEnemy()[k];
+		auto&enemyInfo = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo();
+		auto enemyAtkRc = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rcAtk;
+		auto enemyAtkRng = ENEMYMANAGER->getEnemy()[k]->getIsAtkRng();
+
+		if (enemyAtkRng)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				for (int i = 0; i < FRIENDMANAGER->getFriend().size(); i++)
+				{
+					auto& friendly = FRIENDMANAGER->getFriend()[i];
+					auto& friendInfo = FRIENDMANAGER->getFriend()[i]->getFriendInfo();
+					auto& friendRect = FRIENDMANAGER->getFriend()[i]->getFriendInfo().rc;
+
+					enemy->setIsHit(false);
+
+					if (IntersectRect(&temp, &enemyAtkRc[0], &friendRect) ||
+						IntersectRect(&temp, &enemyAtkRc[1], &friendRect) ||
+						IntersectRect(&temp, &enemyAtkRc[2], &friendRect) ||
+						IntersectRect(&temp, &enemyAtkRc[3], &friendRect) ||
+						IntersectRect(&temp, &enemyAtkRc[4], &friendRect) ||
+						IntersectRect(&temp, &enemyAtkRc[5], &friendRect) ||
+						IntersectRect(&temp, &enemyAtkRc[6], &friendRect) ||
+						IntersectRect(&temp, &enemyAtkRc[7], &friendRect))
+					{
+						if (PtInRect(&friendRect, m_ptMouse))
+						{
+							SOUNDMANAGER->play("hit", 1.0f);
+
+							enemy->setIsAtk(true);
+							friendly->setIsHit(true);
+							enemy->setIsAtkRng(false);
+
+							damage = (enemyInfo.atk - friendInfo.def) / 2 + enemyInfo.level + 25;
+							friendly->hitDamage(damage);
+						}
+					}
+				}
+			}
+		}
+	}
 }

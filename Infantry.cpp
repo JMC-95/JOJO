@@ -23,6 +23,8 @@ HRESULT Infantry::init(const char * moveImg, const char * mAtkImg, const char * 
 	infantry.img = IMAGEMANAGER->findImage(enemyImg);			//캐릭터 이미지
 	infantry.atkImg = IMAGEMANAGER->findImage(atkImg);			//공격 이미지
 	infantry.blockImg = IMAGEMANAGER->findImage(blockImg);		//방어 및 피격 이미지
+	ANIMATIONMANAGER->addAnimation("enemyRight", "적보병", 6, 7, 2, false, true);
+	enemyAni = ANIMATIONMANAGER->findAnimation("enemyRight");
 	//스테이터스
 	infantry.level = 2;			//레벨
 	infantry.hp = 116;			//체력
