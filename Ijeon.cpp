@@ -34,6 +34,13 @@ HRESULT Ijeon::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	ijeon.agi = 45;			//순발력
 	ijeon.ten = 36;			//사기
 	ijeon.movingCount = 4;	//이동력
+	//아이템
+	ijeon.weaponName = ITEMMANAGER->getWeapon()[0].name;
+	ijeon.armorName = ITEMMANAGER->getArmor()[0].name;
+	ijeon.weaponImg = ITEMMANAGER->getWeapon()[0].itemImage;
+	ijeon.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	ijeon.addAtk = ITEMMANAGER->getWeapon()[0].power;
+	ijeon.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

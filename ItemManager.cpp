@@ -128,7 +128,6 @@ HRESULT ItemManager::init()
 	vAllItem.push_back(tridentHalberd);
 	vAllItem.push_back(leather);
 	vAllItem.push_back(silver);
-	vAllItem.push_back(horse);
 	vAllItem.push_back(potion);
 
 	return S_OK;

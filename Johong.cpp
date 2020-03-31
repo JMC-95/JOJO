@@ -34,6 +34,13 @@ HRESULT Johong::init(const char * moveImg, const char * mAtkImg, const char * aR
 	johong.agi = 41;			//순발력
 	johong.ten = 43;			//사기
 	johong.movingCount = 4;		//이동력
+	//아이템
+	johong.weaponName = ITEMMANAGER->getWeapon()[0].name;
+	johong.armorName = ITEMMANAGER->getArmor()[0].name;
+	johong.weaponImg = ITEMMANAGER->getWeapon()[0].itemImage;
+	johong.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	johong.addAtk = ITEMMANAGER->getWeapon()[0].power;
+	johong.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

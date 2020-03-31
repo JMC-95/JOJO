@@ -34,6 +34,13 @@ HRESULT Hahuyeon::init(const char * moveImg, const char * mAtkImg, const char * 
 	hahuyeon.agi = 41;			//순발력
 	hahuyeon.ten = 51;			//사기
 	hahuyeon.movingCount = 6;	//이동력
+	//아이템
+	hahuyeon.weaponName = ITEMMANAGER->getWeapon()[2].name;
+	hahuyeon.armorName = ITEMMANAGER->getArmor()[0].name;
+	hahuyeon.weaponImg = ITEMMANAGER->getWeapon()[2].itemImage;
+	hahuyeon.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	hahuyeon.addAtk = ITEMMANAGER->getWeapon()[2].power;
+	hahuyeon.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

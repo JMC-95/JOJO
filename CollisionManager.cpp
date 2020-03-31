@@ -59,7 +59,7 @@ void CollisionManager::playerToEnemyCollision()
 							enemy->setIsHit(true);
 							player->setIsAtkRng(false);
 
-							damage = (playerInfo.atk - (enemyInfo.def + enemyInfo.addDef)) / 2 + playerInfo.level + 25;
+							damage = ((playerInfo.atk + playerInfo.addAtk) - (enemyInfo.def + enemyInfo.addDef)) / 2 + playerInfo.level + 25;
 							enemy->hitDamage(damage);
 						}
 					}
@@ -105,7 +105,7 @@ void CollisionManager::playerToEnemyCollision()
 							enemy->setIsHit(true);
 							player->setIsAtkRng(false);
 
-							damage = (playerInfo.atk - (enemyInfo.def + enemyInfo.addDef)) / 2 + playerInfo.level + 25;
+							damage = ((playerInfo.atk + playerInfo.addAtk) - (enemyInfo.def + enemyInfo.addDef)) / 2 + playerInfo.level + 25;
 							enemy->hitDamage(damage);
 						}
 					}
@@ -238,7 +238,7 @@ void CollisionManager::enemyToPlayerCollision()
 							player->setIsHit(true);
 							enemy->setIsAtkRng(false);
 
-							damage = ((enemyInfo.atk + enemyInfo.addAtk) - playerInfo.def) / 2 + enemyInfo.level + 25;
+							damage = ((enemyInfo.atk + enemyInfo.addAtk) - (playerInfo.def + playerInfo.addDef)) / 2 + enemyInfo.level + 25;
 							player->hitDamage(damage);
 						}
 					}
@@ -284,7 +284,7 @@ void CollisionManager::enemyToPlayerCollision()
 							player->setIsHit(true);
 							enemy->setIsAtkRng(false);
 
-							damage = ((enemyInfo.atk + enemyInfo.addAtk) - playerInfo.def) / 2 + enemyInfo.level + 25;
+							damage = ((enemyInfo.atk + enemyInfo.addAtk) - (playerInfo.def + playerInfo.addDef)) / 2 + enemyInfo.level + 25;
 							player->hitDamage(damage);
 						}
 					}

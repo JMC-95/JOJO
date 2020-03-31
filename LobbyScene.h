@@ -14,7 +14,6 @@ private:
 	//아이템 벡터
 	vector<ItemInfo> vWeapon;		//무기
 	vector<ItemInfo> vArmor;		//갑옷
-	vector<ItemInfo> vAssistant;	//보조
 	vector<ItemInfo> vPotion;		//물약
 	vector<ItemInfo> vAllItem;		//모든 아이템
 
@@ -22,7 +21,7 @@ private:
 	//씬 렉트
 	RECT menuRect[4];	//로비
 	RECT outRect[9];	//출진
-	RECT equipRect[3];	//장비
+	RECT equipRect[6];	//장비
 	RECT buyRect[5];	//구입
 	RECT sellRect[3];	//매각
 
@@ -40,6 +39,10 @@ private:
 	bool isInventory;	//장비
 	bool isBuyShop;		//구입
 	bool isSellShop;	//매각
+
+	bool isBuy;			//구매 했냐?
+	bool isEquipment;	//장착 했냐?
+	bool isSell;		//판매 했냐?
 
 public:
 	LobbyScene();

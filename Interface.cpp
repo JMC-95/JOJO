@@ -51,6 +51,8 @@ void Interface::playerInformation(HDC hdc)
 			player->getProgressBarHp()->render(hdc);
 			player->getProgressBarMp()->render(hdc);
 			player->getProgressBarExp()->render(hdc);
+			playerInfo.weaponImg->render(hdc, 965, 456);
+			playerInfo.armorImg->render(hdc, 1047, 456);
 
 			HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñÃ¼");
 			HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
@@ -61,9 +63,9 @@ void Interface::playerInformation(HDC hdc)
 			TextOut(hdc, 1040, 220, str, strlen(str));
 			sprintf_s(str, "%d", playerInfo.level);
 			TextOut(hdc, 1057, 243, str, strlen(str));
-			sprintf_s(str, "%d", playerInfo.atk);
+			sprintf_s(str, "%d", playerInfo.atk + playerInfo.addAtk);
 			TextOut(hdc, 1005, 343, str, strlen(str));
-			sprintf_s(str, "%d", playerInfo.def);
+			sprintf_s(str, "%d", playerInfo.def + playerInfo.addDef);
 			TextOut(hdc, 1097, 343, str, strlen(str));
 			sprintf_s(str, "%d", playerInfo.ten);
 			TextOut(hdc, 1170, 343, str, strlen(str));
@@ -81,6 +83,22 @@ void Interface::playerInformation(HDC hdc)
 			TextOut(hdc, 1095, 243, str, strlen(str));
 			SelectObject(hdc, oldFont);
 			DeleteObject(myFont);
+
+			HFONT myFont2 = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñÃ¼");
+			HFONT oldFont2 = (HFONT)SelectObject(hdc, myFont2);
+			SetTextColor(hdc, RGB(0, 0, 0));
+			sprintf_s(str, playerInfo.weaponName);
+			TextOut(hdc, 960, 438, str, strlen(str));
+			sprintf_s(str, playerInfo.armorName);
+			TextOut(hdc, 1040, 438, str, strlen(str));
+			sprintf_s(str, "¾øÀ½");
+			TextOut(hdc, 1130, 438, str, strlen(str));
+			sprintf_s(str, "+%d", playerInfo.addAtk);
+			TextOut(hdc, 1002, 491, str, strlen(str));
+			sprintf_s(str, "+%d", playerInfo.addDef);
+			TextOut(hdc, 1084, 491, str, strlen(str));
+			SelectObject(hdc, oldFont2);
+			DeleteObject(myFont2);
 		}
 	}
 }

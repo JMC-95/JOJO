@@ -34,6 +34,13 @@ HRESULT Agjin::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	agjin.agi = 35;			//순발력
 	agjin.ten = 51;			//사기
 	agjin.movingCount = 4;	//이동력
+	//아이템
+	agjin.weaponName = ITEMMANAGER->getWeapon()[0].name;
+	agjin.armorName = ITEMMANAGER->getArmor()[0].name;
+	agjin.weaponImg = ITEMMANAGER->getWeapon()[0].itemImage;
+	agjin.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	agjin.addAtk = ITEMMANAGER->getWeapon()[0].power;
+	agjin.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

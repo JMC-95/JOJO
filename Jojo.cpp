@@ -34,7 +34,14 @@ HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	jojo.agi = 58;			//순발력
 	jojo.ten = 60;			//사기
 	jojo.movingCount = 6;	//이동력
-
+	//아이템
+	jojo.weaponName = ITEMMANAGER->getWeapon()[0].name;
+	jojo.armorName = ITEMMANAGER->getArmor()[0].name;
+	jojo.weaponImg = ITEMMANAGER->getWeapon()[0].itemImage;
+	jojo.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	jojo.addAtk = ITEMMANAGER->getWeapon()[0].power;
+	jojo.addDef = ITEMMANAGER->getArmor()[0].power;
+	
 	//HP ProgressBar
 	_Hp = new progressBar;
 	_Hp->init("images/UI/Info/HP.bmp", "images/UI/Info/Back_P.bmp", 1056, 289, 84, 12);

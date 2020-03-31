@@ -89,6 +89,7 @@ void Dogyeom::update()
 	{
 		//if (!PLAYERMANAGER->getPturn()) friendAi();
 		friendAi();
+		//적이 죽었을때 멈춤 버그
 	}
 
 	friendAnimation();

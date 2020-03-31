@@ -17,7 +17,7 @@ HRESULT LobbyScene::init()
 	if (isSound)
 	{
 		SOUNDMANAGER->stop("titleSound");
-		SOUNDMANAGER->play("lobbySound", 1.0f);
+		//SOUNDMANAGER->play("lobbySound", 1.0f);
 	}
 	else SOUNDMANAGER->stop("lobbySound");
 
@@ -30,9 +30,7 @@ HRESULT LobbyScene::init()
 	//æ∆¿Ã≈€ ∫§≈Õ
 	vWeapon = ITEMMANAGER->getWeapon();
 	vArmor = ITEMMANAGER->getArmor();
-	vAssistant = ITEMMANAGER->getAssistant();
 	vPotion = ITEMMANAGER->getPotion();
-	vAllItem = ITEMMANAGER->getAllItem();
 
 	money = 30000;
 	playerCount = 0;
@@ -96,6 +94,9 @@ void LobbyScene::update()
 				equipRect[0] = RectMake(323, 378, 60, 20);
 				equipRect[1] = RectMake(410, 378, 75, 20);
 				equipRect[2] = RectMake(488, 378, 75, 20);
+				equipRect[3] = RectMake(512, 122, 32, 32);
+				equipRect[4] = RectMake(512, 220, 32, 32);
+				equipRect[5] = RectMake(512, 317, 32, 32);
 				vEquipment.push_back(equipRect[i]);
 			}
 
@@ -171,20 +172,27 @@ void LobbyScene::render()
 
 		IMAGEMANAGER->render("outgoing", getMemDC());
 		IMAGEMANAGER->frameRender("¡∂¡∂", getMemDC(), outRect[2].left, outRect[2].top, 0, 8);
+		IMAGEMANAGER->render("n¡∂¡∂", getMemDC(), 30, 90);
 		IMAGEMANAGER->frameRender("«œ»ƒµ∑", getMemDC(), outRect[3].left, outRect[3].top, 0, 8);
+		IMAGEMANAGER->render("n«œ»ƒµ∑", getMemDC(), 85, 90);
 		IMAGEMANAGER->frameRender("«œ»ƒø¨", getMemDC(), outRect[4].left, outRect[4].top, 0, 8);
+		IMAGEMANAGER->render("n«œ»ƒø¨", getMemDC(), 140, 90);
 		IMAGEMANAGER->frameRender("¡∂¿Œ", getMemDC(), outRect[5].left, outRect[5].top, 0, 8);
+		IMAGEMANAGER->render("n¡∂¿Œ", getMemDC(), 197, 90);
 		IMAGEMANAGER->frameRender("æ«¡¯", getMemDC(), outRect[6].left, outRect[6].top, 0, 8);
+		IMAGEMANAGER->render("næ«¡¯", getMemDC(), 253, 90);
 		IMAGEMANAGER->frameRender("¿Ã¿¸", getMemDC(), outRect[7].left, outRect[7].top, 0, 8);
+		IMAGEMANAGER->render("n¿Ã¿¸", getMemDC(), 307, 90);
 		IMAGEMANAGER->frameRender("¡∂»´", getMemDC(), outRect[8].left, outRect[8].top, 0, 8);
+		IMAGEMANAGER->render("n¡∂»´", getMemDC(), 360, 90);
 
-		if (playerNum == 0) IMAGEMANAGER->render("o¡∂¡∂", getMemDC(), 427, 3);
-		else if (playerNum == 1) IMAGEMANAGER->render("o«œ»ƒµ∑", getMemDC(), 427, 3);
-		else if (playerNum == 2) IMAGEMANAGER->render("o«œ»ƒø¨", getMemDC(), 427, 3);
-		else if (playerNum == 3) IMAGEMANAGER->render("o¡∂¿Œ", getMemDC(), 427, 3);
-		else if (playerNum == 4) IMAGEMANAGER->render("oæ«¡¯", getMemDC(), 427, 3);
-		else if (playerNum == 5) IMAGEMANAGER->render("o¿Ã¿¸", getMemDC(), 427, 3);
-		else if (playerNum == 6) IMAGEMANAGER->render("o¡∂»´", getMemDC(), 427, 3);
+		if (playerNum == 0) IMAGEMANAGER->render("o¡∂¡∂", getMemDC(), 427, 5);
+		else if (playerNum == 1) IMAGEMANAGER->render("o«œ»ƒµ∑", getMemDC(), 427, 5);
+		else if (playerNum == 2) IMAGEMANAGER->render("o«œ»ƒø¨", getMemDC(), 427, 5);
+		else if (playerNum == 3) IMAGEMANAGER->render("o¡∂¿Œ", getMemDC(), 427, 5);
+		else if (playerNum == 4) IMAGEMANAGER->render("oæ«¡¯", getMemDC(), 427, 5);
+		else if (playerNum == 5) IMAGEMANAGER->render("o¿Ã¿¸", getMemDC(), 427, 5);
+		else if (playerNum == 6) IMAGEMANAGER->render("o¡∂»´", getMemDC(), 427, 5);
 
 		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "≥™¥Æ∞ÌµÒ√º");
 		HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
@@ -192,23 +200,23 @@ void LobbyScene::render()
 		sprintf_s(str, "%d / 7", playerCount);
 		TextOut(getMemDC(), 95, 317, str, strlen(str));
 		sprintf_s(str, "%d", player->getMaxHp());
-		TextOut(getMemDC(), 590, 145, str, strlen(str));
+		TextOut(getMemDC(), 590, 134, str, strlen(str));
 		sprintf_s(str, "%d", player->getMaxMp());
-		TextOut(getMemDC(), 597, 178, str, strlen(str));
+		TextOut(getMemDC(), 597, 168, str, strlen(str));
 		sprintf_s(str, "%d", player->getCurrentExp());
-		TextOut(getMemDC(), 597, 212, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.atk);
-		TextOut(getMemDC(), 597, 244, str, strlen(str));
+		TextOut(getMemDC(), 597, 204, str, strlen(str));
+		sprintf_s(str, "%d", playerInfo.atk + playerInfo.addAtk);
+		TextOut(getMemDC(), 597, 238, str, strlen(str));
 		sprintf_s(str, "%d", playerInfo.will);
-		TextOut(getMemDC(), 597, 278, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.def);
-		TextOut(getMemDC(), 597, 310, str, strlen(str));
+		TextOut(getMemDC(), 597, 273, str, strlen(str));
+		sprintf_s(str, "%d", playerInfo.def + playerInfo.addDef);
+		TextOut(getMemDC(), 597, 307, str, strlen(str));
 		sprintf_s(str, "%d", playerInfo.agi);
-		TextOut(getMemDC(), 597, 343, str, strlen(str));
+		TextOut(getMemDC(), 597, 342, str, strlen(str));
 		sprintf_s(str, "%d", playerInfo.ten);
 		TextOut(getMemDC(), 597, 376, str, strlen(str));
 		sprintf_s(str, "%d", playerInfo.movingCount);
-		TextOut(getMemDC(), 603, 409, str, strlen(str));
+		TextOut(getMemDC(), 603, 411, str, strlen(str));
 		sprintf_s(str, "√‚¡¯");
 		TextOut(getMemDC(), 467, 442, str, strlen(str));
 		sprintf_s(str, "√Îº“");
@@ -224,11 +232,86 @@ void LobbyScene::render()
 		IMAGEMANAGER->render("equipment", getMemDC());
 		IMAGEMANAGER->render(playerInfo.face, getMemDC(), 415, 100);
 
-		for (int i = 0; i < 13; i++)
+		for (int i = 0; i < vAllItem.size(); i++)
 		{
-			Rectangle(getMemDC(), itemRect[i].left, itemRect[i].top, itemRect[i].right, itemRect[i].bottom);
+			if (PtInRect(&itemRect[i], m_ptMouse)) IMAGEMANAGER->alphaRender("equipSelect", getMemDC(), itemRect[i].left, itemRect[i].top, 100);
+
+			if (vAllItem[i].name == "¥‹∞À") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left - 2, itemRect[i].top - 2, 24, 24);
+			else if (vAllItem[i].name == "¥‹√¢") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left, itemRect[i].top, 22, 22);
+			else if (vAllItem[i].name == "π›±√") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left, itemRect[i].top - 1, 22, 22);
+			else if (vAllItem[i].name == "∞°¡◊∞©ø ") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left + 1, itemRect[i].top, 20, 20);
+
+			//æ∆¿Ã≈€ º≥∏Ì
+			HFONT myFont2 = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "≥™¥Æ∞ÌµÒ√º");
+			HFONT oldFont2 = (HFONT)SelectObject(getMemDC(), myFont2);
+			SetTextColor(getMemDC(), RGB(0, 0, 0));
+			sprintf_s(str, vAllItem[i].name);
+			TextOut(getMemDC(), itemRect[i].left + 22, itemRect[i].top + 4, str, strlen(str));
+			if (vAllItem[i].itemKind == ITEM_ARMOR)
+			{
+				sprintf_s(str, vAllItem[i].attribute);
+				TextOut(getMemDC(), itemRect[i].left + 135, itemRect[i].top + 4, str, strlen(str));
+			}
+			else
+			{
+				sprintf_s(str, vAllItem[i].attribute);
+				TextOut(getMemDC(), itemRect[i].left + 140, itemRect[i].top + 4, str, strlen(str));
+			}
+			sprintf_s(str, "%d", vAllItem[i].level);
+			TextOut(getMemDC(), itemRect[i].left + 190, itemRect[i].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vAllItem[i].exp);
+			TextOut(getMemDC(), itemRect[i].left + 223, itemRect[i].top + 4, str, strlen(str));
+			sprintf_s(str, "+%d", vAllItem[i].power);
+			TextOut(getMemDC(), itemRect[i].left + 253, itemRect[i].top + 4, str, strlen(str));
+			if (vAllItem[i].name == "¥‹∞À")
+			{
+				if (playerNum == 0 || playerNum == 4 || playerNum == 5 || playerNum == 6)
+				{
+					sprintf_s(str, "O");
+					TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+				}
+				else
+				{
+					sprintf_s(str, "X");
+					TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+				}
+			}
+			if (vAllItem[i].name == "¥‹√¢")
+			{
+				if (playerNum == 1 || playerNum == 3)
+				{
+					sprintf_s(str, "O");
+					TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+				}
+				else
+				{
+					sprintf_s(str, "X");
+					TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+				}
+			}
+			if (vAllItem[i].name == "π›±√")
+			{
+				if (playerNum == 2)
+				{
+					sprintf_s(str, "O");
+					TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+				}
+				else
+				{
+					sprintf_s(str, "X");
+					TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+				}
+			}
+			if (vAllItem[i].name == "∞°¡◊∞©ø ")
+			{
+				sprintf_s(str, "O");
+				TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+			}
+			SelectObject(getMemDC(), oldFont2);
+			DeleteObject(myFont2);
 		}
 
+		//¿Œ≈Õ∆‰¿ÃΩ∫
 		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "≥™¥Æ∞ÌµÒ√º");
 		HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
 		SetTextColor(getMemDC(), RGB(0, 0, 0));
@@ -271,12 +354,21 @@ void LobbyScene::render()
 
 		if (frameX == 0)
 		{
+			for (int i = 0; i < 4; i++)
+			{
+				if (PtInRect(&itemRect[i], m_ptMouse)) IMAGEMANAGER->alphaRender("buySelect", getMemDC(), itemRect[i].left, itemRect[i].top, 100);
+			}
+
 			vWeapon[0].itemImage->render(getMemDC(), itemRect[0].left - 2, itemRect[0].top - 2, 24, 24);
 			vWeapon[1].itemImage->render(getMemDC(), itemRect[1].left, itemRect[1].top, 22, 22);
 			vWeapon[2].itemImage->render(getMemDC(), itemRect[2].left, itemRect[2].top - 1, 22, 22);
 			vArmor[0].itemImage->render(getMemDC(), itemRect[3].left + 1, itemRect[3].top, 20, 20);
 		}
-		else vPotion[0].itemImage->render(getMemDC(), itemRect[0].left + 1, itemRect[0].top, 20, 20);
+		else
+		{
+			if (PtInRect(&itemRect[0], m_ptMouse)) IMAGEMANAGER->alphaRender("buySelect", getMemDC(), itemRect[0].left, itemRect[0].top, 100);
+			vPotion[0].itemImage->render(getMemDC(), itemRect[0].left + 1, itemRect[0].top, 20, 20);
+		}
 
 		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "≥™¥Æ∞ÌµÒ√º");
 		HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
@@ -460,10 +552,7 @@ void LobbyScene::battle()
 
 			for (int i = 0; i < 4; i++)
 			{
-				menuRect[0] = RectMake(441, 411, 50, 50);
-				menuRect[1] = RectMake(491, 411, 50, 50);
-				menuRect[2] = RectMake(541, 411, 50, 50);
-				menuRect[3] = RectMake(591, 411, 50, 50);
+				menuRect[i] = RectMake(441 + 50 * i, 411, 50, 50);
 				vMenu.push_back(menuRect[i]);
 			}
 		}
@@ -566,10 +655,7 @@ void LobbyScene::equipment()
 
 			for (int i = 0; i < 4; i++)
 			{
-				menuRect[0] = RectMake(441, 411, 50, 50);
-				menuRect[1] = RectMake(491, 411, 50, 50);
-				menuRect[2] = RectMake(541, 411, 50, 50);
-				menuRect[3] = RectMake(591, 411, 50, 50);
+				menuRect[i] = RectMake(441 + 50 * i, 411, 50, 50);
 				vMenu.push_back(menuRect[i]);
 			}
 		}
@@ -582,6 +668,18 @@ void LobbyScene::equipment()
 		{
 			SOUNDMANAGER->play("click", 1.0f);
 			if (playerNum < 6) playerNum += 1;
+		}
+		else if (PtInRect(&equipRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+		}
+		else if (PtInRect(&equipRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+		}
+		else if (PtInRect(&equipRect[5], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
 		}
 	}
 }
@@ -598,10 +696,7 @@ void LobbyScene::buyShop()
 
 			for (int i = 0; i < 4; i++)
 			{
-				menuRect[0] = RectMake(441, 411, 50, 50);
-				menuRect[1] = RectMake(491, 411, 50, 50);
-				menuRect[2] = RectMake(541, 411, 50, 50);
-				menuRect[3] = RectMake(591, 411, 50, 50);
+				menuRect[i] = RectMake(441 + 50 * i, 411, 50, 50);
 				vMenu.push_back(menuRect[i]);
 			}
 		}
@@ -633,30 +728,34 @@ void LobbyScene::buyShop()
 				if (PtInRect(&itemRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					SOUNDMANAGER->play("buy", 1.0f);
+					money -= 1000;
 					vWeapon[0].stock += 1;
 					vWeapon[0].count += 1;
-					money -= 1000;
+					vAllItem.push_back(vWeapon[0]);
 				}
 				else if (PtInRect(&itemRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					SOUNDMANAGER->play("buy", 1.0f);
+					money -= 1000;
 					vWeapon[1].stock += 1;
 					vWeapon[1].count += 1;
-					money -= 1000;
+					vAllItem.push_back(vWeapon[1]);
 				}
 				else if (PtInRect(&itemRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					SOUNDMANAGER->play("buy", 1.0f);
+					money -= 1000;
 					vWeapon[2].stock += 1;
 					vWeapon[2].count += 1;
-					money -= 1000;
+					vAllItem.push_back(vWeapon[2]);
 				}
 				else if (PtInRect(&itemRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					SOUNDMANAGER->play("buy", 1.0f);
+					money -= 1000;
 					vArmor[0].stock += 1;
 					vArmor[0].count += 1;
-					money -= 1000;
+					vAllItem.push_back(vArmor[0]);
 				}
 			}
 		}
@@ -664,12 +763,12 @@ void LobbyScene::buyShop()
 		{
 			if (money >= 100)
 			{
-
 				if (PtInRect(&itemRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 				{
 					SOUNDMANAGER->play("buy", 1.0f);
-					vPotion[0].stock += 1;
 					money -= 100;
+					vPotion[0].stock += 1;
+					//vAllItem.push_back(vPotion[0]);
 				}
 			}
 		}
@@ -688,10 +787,7 @@ void LobbyScene::sellShop()
 
 			for (int i = 0; i < 4; i++)
 			{
-				menuRect[0] = RectMake(441, 411, 50, 50);
-				menuRect[1] = RectMake(491, 411, 50, 50);
-				menuRect[2] = RectMake(541, 411, 50, 50);
-				menuRect[3] = RectMake(591, 411, 50, 50);
+				menuRect[i] = RectMake(441 + 50 * i, 411, 50, 50);
 				vMenu.push_back(menuRect[i]);
 			}
 		}

@@ -100,16 +100,33 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("lobbyScene", "images/UI/Scene/LobbyScene.bmp", 642, 462, true, RGB(255, 0, 255));			//로비 씬
 	IMAGEMANAGER->addImage("preferences", "images/UI/Scene/PreferencesScene.bmp", 642, 462, true, RGB(255, 0, 255));	//환경설정 씬
 	IMAGEMANAGER->addImage("check", "images/UI/Scene/check.bmp", 9, 9, true, RGB(255, 0, 255));
+
+	//로비에서 사용할 이미지
+	//선택
+	IMAGEMANAGER->addImage("equipSelect", "images/UI/Lobby/EquipSelect.bmp", 325, 20, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("buySelect", "images/UI/Lobby/BuySelect.bmp", 348, 20, true, RGB(247, 0, 255));
+	//IMAGEMANAGER->addImage("sellSelect", "images/UI/Lobby/SellSelect.bmp", 313, 20, true, RGB(247, 0, 255));
+	//출진
 	IMAGEMANAGER->addImage("outgoing", "images/UI/Lobby/출진.bmp", 642, 462, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("o조조", "images/UI/Lobby/조조.bmp", 199, 431, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("o하후돈", "images/UI/Lobby/하후돈.bmp", 199, 431, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("o하후연", "images/UI/Lobby/하후연.bmp", 199, 431, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("o조인", "images/UI/Lobby/조인.bmp", 199, 431, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("o악진", "images/UI/Lobby/악진.bmp", 199, 431, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("o이전", "images/UI/Lobby/이전.bmp", 199, 431, true, RGB(255, 0, 255));
-	IMAGEMANAGER->addImage("o조홍", "images/UI/Lobby/조홍.bmp", 199, 431, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o조조", "images/UI/Lobby/조조.bmp", 193, 427, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("n조조", "images/UI/Lobby/조조name.bmp", 45, 13, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o하후돈", "images/UI/Lobby/하후돈.bmp", 193, 427, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("n하후돈", "images/UI/Lobby/하후돈name.bmp", 45, 13, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o하후연", "images/UI/Lobby/하후연.bmp", 193, 427, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("n하후연", "images/UI/Lobby/하후연name.bmp", 45, 13, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o조인", "images/UI/Lobby/조인.bmp", 193, 427, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("n조인", "images/UI/Lobby/조인name.bmp", 45, 13, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o악진", "images/UI/Lobby/악진.bmp", 193, 427, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("n악진", "images/UI/Lobby/악진name.bmp", 45, 13, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o이전", "images/UI/Lobby/이전.bmp", 193, 427, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("n이전", "images/UI/Lobby/이전name.bmp", 45, 13, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("o조홍", "images/UI/Lobby/조홍.bmp", 193, 427, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("n조홍", "images/UI/Lobby/조홍name.bmp", 45, 13, true, RGB(255, 0, 255));
+	//장비
 	IMAGEMANAGER->addImage("equipment", "images/UI/Lobby/장비.bmp", 642, 462, true, RGB(255, 0, 255));
+	//구입
 	IMAGEMANAGER->addFrameImage("buy", "images/UI/Lobby/구입.bmp", 1284, 462, 2, 1, true, RGB(255, 0, 255));
+	//매각
 	IMAGEMANAGER->addFrameImage("sell", "images/UI/Lobby/매각.bmp", 1284, 462, 2, 1, true, RGB(255, 0, 255));
 
 	//맵툴용 이미지

@@ -34,6 +34,13 @@ HRESULT Join::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	join.agi = 43;				//순발력
 	join.ten = 39;				//사기
 	join.movingCount = 6;		//이동력
+	//아이템
+	join.weaponName = ITEMMANAGER->getWeapon()[1].name;
+	join.armorName = ITEMMANAGER->getArmor()[0].name;
+	join.weaponImg = ITEMMANAGER->getWeapon()[1].itemImage;
+	join.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	join.addAtk = ITEMMANAGER->getWeapon()[1].power;
+	join.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

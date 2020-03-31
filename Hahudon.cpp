@@ -34,6 +34,13 @@ HRESULT Hahudon::init(const char * moveImg, const char * mAtkImg, const char * a
 	hahudon.agi = 63;			//순발력
 	hahudon.ten = 45;			//사기
 	hahudon.movingCount = 6;	//이동력
+	//아이템
+	hahudon.weaponName = ITEMMANAGER->getWeapon()[1].name;
+	hahudon.armorName = ITEMMANAGER->getArmor()[0].name;
+	hahudon.weaponImg = ITEMMANAGER->getWeapon()[1].itemImage;
+	hahudon.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	hahudon.addAtk = ITEMMANAGER->getWeapon()[1].power;
+	hahudon.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;
