@@ -34,6 +34,15 @@ HRESULT Yeopo::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	yeopo.agi = 65;				//순발력
 	yeopo.ten = 65;				//사기
 	yeopo.movingCount = 6;		//이동력
+	//아이템
+	yeopo.weaponName = ITEMMANAGER->getWeapon()[4].name;
+	yeopo.armorName = ITEMMANAGER->getArmor()[1].name;
+	yeopo.asstName = ITEMMANAGER->getAssistant()[0].name;
+	yeopo.weaponImg = ITEMMANAGER->getWeapon()[4].itemImage;
+	yeopo.armorImg = ITEMMANAGER->getArmor()[1].itemImage;
+	yeopo.asstImg = ITEMMANAGER->getAssistant()[0].itemImage;
+	yeopo.addAtk = ITEMMANAGER->getWeapon()[4].power;
+	yeopo.addDef = ITEMMANAGER->getArmor()[1].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

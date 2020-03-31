@@ -34,6 +34,13 @@ HRESULT Dongtak::init(const char * moveImg, const char * mAtkImg, const char * a
 	dongtak.agi = 55;			//순발력
 	dongtak.ten = 55;			//사기
 	dongtak.movingCount = 6;	//이동력
+	//아이템
+	dongtak.weaponName = ITEMMANAGER->getWeapon()[1].name;
+	dongtak.armorName = ITEMMANAGER->getArmor()[0].name;
+	dongtak.weaponImg = ITEMMANAGER->getWeapon()[1].itemImage;
+	dongtak.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	dongtak.addAtk = ITEMMANAGER->getWeapon()[1].power;
+	dongtak.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

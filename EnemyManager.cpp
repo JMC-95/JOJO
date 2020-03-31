@@ -45,6 +45,7 @@ HRESULT EnemyManager::init()
 	}
 
 	eTurn = false;
+	isClear = false;
 
 	return S_OK;
 }
@@ -55,12 +56,14 @@ void EnemyManager::release()
 
 void EnemyManager::update()
 {
+	enemyTurn();
+
 	for (int i = 0; i < vEnemy.size(); i++)
 	{
 		vEnemy[i]->update();
 	}
 
-	enemyTurn();
+	if (vEnemy.size() < 10) isClear = true;
 }
 
 void EnemyManager::render(HDC hdc)

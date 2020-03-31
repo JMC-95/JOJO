@@ -5,6 +5,7 @@
 #include "MapTool.h"
 #include "PreferencesScene.h"
 #include "GameScene.h"
+#include "GameOver.h"
 
 mainGame::mainGame()
 {
@@ -30,9 +31,10 @@ HRESULT mainGame::init()
 	SCENEMANAGER->addScene("MapTool", new MapTool);
 	SCENEMANAGER->addScene("Preferences", new PreferencesScene);
 	SCENEMANAGER->addScene("GameScene", new GameScene);
+	SCENEMANAGER->addScene("GameOver", new GameOver);
 
 	//현재 씬
-	SCENEMANAGER->changeScene("TitleScene");
+	SCENEMANAGER->changeScene("LobbyScene");
 
 	return S_OK;
 }
@@ -87,6 +89,8 @@ void mainGame::sounds()
 	SOUNDMANAGER->addSound("pSelect", "sound/effect/Select.wav", false, false);
 	SOUNDMANAGER->addSound("start", "sound/effect/Start.wav", false, false);
 	SOUNDMANAGER->addSound("noStart", "sound/effect/NoStart.wav", false, false);
+	SOUNDMANAGER->addSound("buy", "sound/effect/Buy.wav", false, false);
+	SOUNDMANAGER->addSound("sell", "sound/effect/Sell.wav", false, false);
 }
 
 void mainGame::images()
@@ -138,8 +142,8 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("playerTurn", "images/UI/InGame/PlayerTurn.bmp", 960, 960, true, RGB(247, 0, 255));	//플레이어 턴
 	IMAGEMANAGER->addImage("friendTurn", "images/UI/InGame/FriendTurn.bmp", 960, 960, true, RGB(247, 0, 255));	//우군 턴
 	IMAGEMANAGER->addImage("enemyTurn", "images/UI/InGame/EnemyTurn.bmp", 960, 960, true, RGB(247, 0, 255));	//적군 턴
-	IMAGEMANAGER->addImage("gameWin", "images/UI/InGame/GameOver.bmp", 960, 960, true, RGB(247, 0, 255));		//승리
-	IMAGEMANAGER->addImage("gameOver", "images/UI/InGame/GameOver.bmp", 640, 400, true, RGB(247, 0, 255));		//패배
+	IMAGEMANAGER->addImage("gameClear", "images/UI/InGame/GameClear.bmp", 1200, 960, true, RGB(247, 0, 255));	//승리
+	IMAGEMANAGER->addImage("gameOver", "images/UI/InGame/GameOver.bmp", 1200, 960, true, RGB(247, 0, 255));		//패배
 
 	//날씨 이미지
 	IMAGEMANAGER->addFrameImage("맑음", "images/UI/Weather/Sunny.bmp", 216, 200, 1, 4, true, RGB(247, 0, 255));

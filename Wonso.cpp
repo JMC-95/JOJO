@@ -34,6 +34,13 @@ HRESULT Wonso::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	wonso.agi = 50;			//순발력
 	wonso.ten = 50;			//사기
 	wonso.movingCount = 6;	//이동력
+	//아이템
+	wonso.weaponName = ITEMMANAGER->getWeapon()[0].name;
+	wonso.armorName = ITEMMANAGER->getArmor()[0].name;
+	wonso.weaponImg = ITEMMANAGER->getWeapon()[0].itemImage;
+	wonso.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	wonso.addAtk = ITEMMANAGER->getWeapon()[0].power;
+	wonso.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -325,6 +332,8 @@ void Wonso::friendMenu()
 	{
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
+			SOUNDMANAGER->stop("cMove");
+
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
 				atkList.clear();

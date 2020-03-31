@@ -18,8 +18,6 @@ private:
 
 	char str[128];
 
-	bool isGameOver;
-
 public:
 	GameScene();
 	~GameScene();

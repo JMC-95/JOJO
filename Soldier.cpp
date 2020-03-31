@@ -35,6 +35,13 @@ HRESULT Soldier::init(const char * moveImg, const char * mAtkImg, const char * a
 	soldier.agi = 32;			//순발력
 	soldier.ten = 32;			//사기
 	soldier.movingCount = 4;	//이동력
+		//아이템
+	soldier.weaponName = ITEMMANAGER->getWeapon()[0].name;
+	soldier.armorName = ITEMMANAGER->getArmor()[0].name;
+	soldier.weaponImg = ITEMMANAGER->getWeapon()[0].itemImage;
+	soldier.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	soldier.addAtk = ITEMMANAGER->getWeapon()[0].power;
+	soldier.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -334,6 +341,8 @@ void Soldier::friendMenu()
 	{
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
+			SOUNDMANAGER->stop("move");
+
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
 				atkList.clear();

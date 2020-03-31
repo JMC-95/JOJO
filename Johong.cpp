@@ -88,8 +88,6 @@ void Johong::update()
 
 	playerAnimation();
 	playerState();
-
-	if (KEYMANAGER->isOnceKeyDown('5')) isTurn = true;
 }
 
 void Johong::render(HDC hdc)

@@ -34,6 +34,13 @@ HRESULT Dogyeom::init(const char * moveImg, const char * mAtkImg, const char * a
 	dogyeom.agi = 62;			//순발력
 	dogyeom.ten = 62;			//사기
 	dogyeom.movingCount = 6;	//이동력
+	//아이템
+	dogyeom.weaponName = ITEMMANAGER->getWeapon()[1].name;
+	dogyeom.armorName = ITEMMANAGER->getArmor()[0].name;
+	dogyeom.weaponImg = ITEMMANAGER->getWeapon()[1].itemImage;
+	dogyeom.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	dogyeom.addAtk = ITEMMANAGER->getWeapon()[1].power;
+	dogyeom.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -370,6 +377,8 @@ void Dogyeom::friendMenu()
 	{
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
+			SOUNDMANAGER->stop("cMove");
+
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
 				atkList.clear();

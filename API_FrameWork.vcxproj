@@ -38,7 +38,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -120,7 +120,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -166,6 +166,7 @@
     <ClInclude Include="FriendlyBase.h" />
     <ClInclude Include="FriendlyManager.h" />
     <ClInclude Include="gameNode.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Gwanu.h" />
     <ClInclude Include="Hahudon.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="Infantry.h" />
     <ClInclude Include="Interface.h" />
+    <ClInclude Include="ItemManager.h" />
     <ClInclude Include="Iyu.h" />
     <ClInclude Include="Jangbi.h" />
     <ClInclude Include="Jangje.h" />
@@ -225,6 +227,7 @@
     <ClCompile Include="FriendlyBase.cpp" />
     <ClCompile Include="FriendlyManager.cpp" />
     <ClCompile Include="gameNode.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Gwanu.cpp" />
     <ClCompile Include="Hahudon.cpp" />
@@ -234,6 +237,7 @@
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="Infantry.cpp" />
     <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="Iyu.cpp" />
     <ClCompile Include="Jangbi.cpp" />
     <ClCompile Include="Jangje.cpp" />

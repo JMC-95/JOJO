@@ -35,6 +35,13 @@ HRESULT Archer::init(const char * moveImg, const char * mAtkImg, const char * aR
 	archer.agi = 32;			//순발력
 	archer.ten = 43;			//사기
 	archer.movingCount = 4;		//이동력
+	//아이템
+	archer.weaponName = ITEMMANAGER->getWeapon()[2].name;
+	archer.armorName = ITEMMANAGER->getArmor()[0].name;
+	archer.weaponImg = ITEMMANAGER->getWeapon()[2].itemImage;
+	archer.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	archer.addAtk = ITEMMANAGER->getWeapon()[2].power;
+	archer.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

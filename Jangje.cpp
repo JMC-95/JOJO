@@ -34,6 +34,13 @@ HRESULT Jangje::init(const char * moveImg, const char * mAtkImg, const char * aR
 	jangje.agi = 60;			//순발력
 	jangje.ten = 60;			//사기
 	jangje.movingCount = 6;		//이동력
+	//아이템
+	jangje.weaponName = ITEMMANAGER->getWeapon()[1].name;
+	jangje.armorName = ITEMMANAGER->getArmor()[0].name;
+	jangje.weaponImg = ITEMMANAGER->getWeapon()[1].itemImage;
+	jangje.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	jangje.addAtk = ITEMMANAGER->getWeapon()[1].power;
+	jangje.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

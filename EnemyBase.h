@@ -18,6 +18,9 @@ struct EnemyInfo
 	image* img;				//캐릭터 이미지
 	image* atkImg;			//공격 이미지
 	image* blockImg;		//방어 및 피격 이미지
+	image* weaponImg;		//무기 이미지
+	image* armorImg;		//갑옷 이미지
+	image* asstImg;			//보조 이미지
 
 	RECT rc;				//캐릭터 렉트
 	RECT rcAtk[8];			//공격용 렉트
@@ -26,8 +29,10 @@ struct EnemyInfo
 	int hp;					//체력
 	int mp;					//마력
 	int atk;				//공격력
+	int addAtk;				//추가 공격력
 	int will;				//정신력
 	int def;				//방어력
+	int addDef;				//추가 방어력
 	int agi;				//순발력
 	int ten;				//사기
 	int movingCount;		//이동력
@@ -35,6 +40,9 @@ struct EnemyInfo
 	const char* name;		//이름
 	const char* face;		//얼굴
 	const char* className;	//병과
+	const char* weaponName;	//무기 이름
+	const char* armorName;	//갑옷 이름
+	const char* asstName;	//보조 이름
 };
 
 class EnemyBase

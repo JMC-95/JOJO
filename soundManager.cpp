@@ -19,7 +19,6 @@ HRESULT soundManager::init()
 	//사운드 채널수 생성
 	m_system->init(TOTALSOUNDBUFFER, FMOD_INIT_NORMAL, 0);
 
-
 	m_sound = new Sound *[TOTALSOUNDBUFFER];
 	m_channel = new Channel *[TOTALSOUNDBUFFER];
 

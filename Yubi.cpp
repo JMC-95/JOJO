@@ -34,6 +34,13 @@ HRESULT Yubi::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	yubi.agi = 51;			//순발력
 	yubi.ten = 65;			//사기
 	yubi.movingCount = 6;	//이동력
+	//아이템
+	yubi.weaponName = ITEMMANAGER->getWeapon()[3].name;
+	yubi.armorName = ITEMMANAGER->getArmor()[0].name;
+	yubi.weaponImg = ITEMMANAGER->getWeapon()[3].itemImage;
+	yubi.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	yubi.addAtk = ITEMMANAGER->getWeapon()[3].power;
+	yubi.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -325,6 +332,8 @@ void Yubi::friendMenu()
 	{
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
+			SOUNDMANAGER->stop("cMove");
+
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
 				atkList.clear();

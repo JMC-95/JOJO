@@ -15,6 +15,7 @@ private:
 	vector<EnemyBase*> vEnemy;
 
 	bool eTurn;
+	bool isClear;
 
 public:
 	EnemyManager();
@@ -28,6 +29,7 @@ public:
 	void enemyTurn();
 
 	bool getEturn() { return eTurn; }
+	bool getIsClear() { return isClear; }
 
 	//베이스 클래스의 벡터를 반환하는 함수
 	vector<EnemyBase*>& getEnemy() { return vEnemy; }

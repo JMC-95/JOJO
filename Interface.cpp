@@ -104,6 +104,8 @@ void Interface::friendInformation(HDC hdc)
 			friendly->getProgressBarHp()->render(hdc);
 			friendly->getProgressBarMp()->render(hdc);
 			friendly->getProgressBarExp()->render(hdc);
+			friendInfo.weaponImg->render(hdc, 965, 456);
+			friendInfo.armorImg->render(hdc, 1047, 456);
 
 			HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñÃ¼");
 			HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
@@ -114,9 +116,9 @@ void Interface::friendInformation(HDC hdc)
 			TextOut(hdc, 1040, 220, str, strlen(str));
 			sprintf_s(str, "%d", friendInfo.level);
 			TextOut(hdc, 1057, 243, str, strlen(str));
-			sprintf_s(str, "%d", friendInfo.atk);
+			sprintf_s(str, "%d", friendInfo.atk + friendInfo.addAtk);
 			TextOut(hdc, 1005, 343, str, strlen(str));
-			sprintf_s(str, "%d", friendInfo.def);
+			sprintf_s(str, "%d", friendInfo.def + friendInfo.addDef);
 			TextOut(hdc, 1097, 343, str, strlen(str));
 			sprintf_s(str, "%d", friendInfo.ten);
 			TextOut(hdc, 1170, 343, str, strlen(str));
@@ -134,6 +136,22 @@ void Interface::friendInformation(HDC hdc)
 			TextOut(hdc, 1095, 243, str, strlen(str));
 			SelectObject(hdc, oldFont);
 			DeleteObject(myFont);
+
+			HFONT myFont2 = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñÃ¼");
+			HFONT oldFont2 = (HFONT)SelectObject(hdc, myFont2);
+			SetTextColor(hdc, RGB(0, 0, 0));
+			sprintf_s(str, friendInfo.weaponName);
+			TextOut(hdc, 960, 438, str, strlen(str));
+			sprintf_s(str, friendInfo.armorName);
+			TextOut(hdc, 1040, 438, str, strlen(str));
+			sprintf_s(str, "¾øÀ½");
+			TextOut(hdc, 1130, 438, str, strlen(str));
+			sprintf_s(str, "+%d", friendInfo.addAtk);
+			TextOut(hdc, 1002, 491, str, strlen(str));
+			sprintf_s(str, "+%d", friendInfo.addDef);
+			TextOut(hdc, 1084, 491, str, strlen(str));
+			SelectObject(hdc, oldFont2);
+			DeleteObject(myFont2);
 		}
 	}
 }
@@ -158,6 +176,9 @@ void Interface::enemyInformation(HDC hdc)
 			enemy->getProgressBarHp()->render(hdc);
 			enemy->getProgressBarMp()->render(hdc);
 			enemy->getProgressBarExp()->render(hdc);
+			enemyInfo.weaponImg->render(hdc, 965, 456);
+			enemyInfo.armorImg->render(hdc, 1047, 456);
+			if (i == 4) enemyInfo.asstImg->render(hdc, 1134, 453);
 
 			HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñÃ¼");
 			HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
@@ -168,9 +189,9 @@ void Interface::enemyInformation(HDC hdc)
 			TextOut(hdc, 1040, 220, str, strlen(str));
 			sprintf_s(str, "%d", enemyInfo.level);
 			TextOut(hdc, 1057, 243, str, strlen(str));
-			sprintf_s(str, "%d", enemyInfo.atk);
+			sprintf_s(str, "%d", enemyInfo.atk + enemyInfo.addAtk);
 			TextOut(hdc, 1005, 343, str, strlen(str));
-			sprintf_s(str, "%d", enemyInfo.def);
+			sprintf_s(str, "%d", enemyInfo.def + enemyInfo.addDef);
 			TextOut(hdc, 1097, 343, str, strlen(str));
 			sprintf_s(str, "%d", enemyInfo.ten);
 			TextOut(hdc, 1170, 343, str, strlen(str));
@@ -188,6 +209,32 @@ void Interface::enemyInformation(HDC hdc)
 			TextOut(hdc, 1095, 243, str, strlen(str));
 			SelectObject(hdc, oldFont);
 			DeleteObject(myFont);
+
+			HFONT myFont2 = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñÃ¼");
+			HFONT oldFont2 = (HFONT)SelectObject(hdc, myFont2);
+			SetTextColor(hdc, RGB(0, 0, 0));
+			sprintf_s(str, enemyInfo.weaponName);
+			TextOut(hdc, 960, 438, str, strlen(str));
+			sprintf_s(str, enemyInfo.armorName);
+			TextOut(hdc, 1040, 438, str, strlen(str));
+			if (i == 4)
+			{
+				sprintf_s(str, enemyInfo.asstName);
+				TextOut(hdc, 1128, 438, str, strlen(str));
+				sprintf_s(str, "µ¹ÆÄ°ø°Ý +35");
+				TextOut(hdc, 1125, 491, str, strlen(str));
+			}
+			else
+			{
+				sprintf_s(str, "¾øÀ½");
+				TextOut(hdc, 1130, 438, str, strlen(str));
+			}
+			sprintf_s(str, "+%d", enemyInfo.addAtk);
+			TextOut(hdc, 1002, 491, str, strlen(str));
+			sprintf_s(str, "+%d", enemyInfo.addDef);
+			TextOut(hdc, 1084, 491, str, strlen(str));
+			SelectObject(hdc, oldFont2);
+			DeleteObject(myFont2);
 		}
 	}
 }

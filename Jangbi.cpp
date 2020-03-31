@@ -34,6 +34,13 @@ HRESULT Jangbi::init(const char * moveImg, const char * mAtkImg, const char * aR
 	jangbi.agi = 49;		//순발력
 	jangbi.ten = 64;		//사기
 	jangbi.movingCount = 6;	//이동력
+	//아이템
+	jangbi.weaponName = ITEMMANAGER->getWeapon()[1].name;
+	jangbi.armorName = ITEMMANAGER->getArmor()[0].name;
+	jangbi.weaponImg = ITEMMANAGER->getWeapon()[1].itemImage;
+	jangbi.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	jangbi.addAtk = ITEMMANAGER->getWeapon()[1].power;
+	jangbi.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -325,6 +332,8 @@ void Jangbi::friendMenu()
 	{
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
+			SOUNDMANAGER->stop("cMove");
+
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
 				atkList.clear();

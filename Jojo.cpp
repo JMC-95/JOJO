@@ -95,11 +95,6 @@ void Jojo::update()
 
 	playerAnimation();
 	playerState();
-
-	if (KEYMANAGER->isOnceKeyDown('4'))
-	{
-		currentHp -= 50;
-	}
 }
 
 void Jojo::render(HDC hdc)

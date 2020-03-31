@@ -32,6 +32,7 @@ HRESULT gameNode::init(bool managerInit)
 		ANIMATIONMANAGER->init();
 		EFFECTMANAGER->init();
 		TXTDATA->init();
+		ITEMMANAGER->init();
 	}
 
 	return S_OK;
@@ -51,6 +52,7 @@ void gameNode::release()
 		SOUNDMANAGER->release();
 		ANIMATIONMANAGER->release();
 		EFFECTMANAGER->release();
+		IMAGEMANAGER->release();
 
 		KEYMANAGER->releaseSingleton();
 		IMAGEMANAGER->releaseSingleton();
@@ -61,6 +63,7 @@ void gameNode::release()
 		EFFECTMANAGER->releaseSingleton();
 		RND->releaseSingleton();
 		TXTDATA->releaseSingleton();
+		ITEMMANAGER->releaseSingleton();
 	}
 
 	ReleaseDC(m_hWnd, _hdc);

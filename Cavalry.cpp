@@ -35,6 +35,13 @@ HRESULT Cavalry::init(const char * moveImg, const char * mAtkImg, const char * a
 	cavalry.agi = 32;			//순발력
 	cavalry.ten = 32;			//사기
 	cavalry.movingCount = 6;	//이동력
+	//아이템
+	cavalry.weaponName = ITEMMANAGER->getWeapon()[1].name;
+	cavalry.armorName = ITEMMANAGER->getArmor()[0].name;
+	cavalry.weaponImg = ITEMMANAGER->getWeapon()[1].itemImage;
+	cavalry.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	cavalry.addAtk = ITEMMANAGER->getWeapon()[1].power;
+	cavalry.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

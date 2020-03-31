@@ -17,10 +17,7 @@ HRESULT TitleScene::init()
 		SOUNDMANAGER->stop("mapToolSound");
 		SOUNDMANAGER->play("titleSound", 1.0f);
 	}
-	else
-	{
-		SOUNDMANAGER->stop("titleSound");
-	}
+	else SOUNDMANAGER->stop("titleSound");
 
 	listRect[0] = RectMake(237, 177, 173, 27);
 	listRect[1] = RectMake(237, 207, 173, 27);

@@ -34,6 +34,13 @@ HRESULT Beonju::init(const char * moveImg, const char * mAtkImg, const char * aR
 	beonju.agi = 62;			//순발력
 	beonju.ten = 50;			//사기
 	beonju.movingCount = 6;		//이동력
+	//아이템
+	beonju.weaponName = ITEMMANAGER->getWeapon()[1].name;
+	beonju.armorName = ITEMMANAGER->getArmor()[0].name;
+	beonju.weaponImg = ITEMMANAGER->getWeapon()[1].itemImage;
+	beonju.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	beonju.addAtk = ITEMMANAGER->getWeapon()[1].power;
+	beonju.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

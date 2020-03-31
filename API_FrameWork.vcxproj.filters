@@ -255,6 +255,12 @@
     <ClInclude Include="PreferencesScene.h">
       <Filter>mainGame\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>mainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemManager.h">
+      <Filter>Manager\addManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -415,6 +421,12 @@
     </ClCompile>
     <ClCompile Include="PreferencesScene.cpp">
       <Filter>mainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>mainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemManager.cpp">
+      <Filter>Manager\addManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

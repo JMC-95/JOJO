@@ -35,6 +35,13 @@ HRESULT Infantry::init(const char * moveImg, const char * mAtkImg, const char * 
 	infantry.agi = 32;			//순발력
 	infantry.ten = 32;			//사기
 	infantry.movingCount = 4;	//이동력
+	//아이템
+	infantry.weaponName = ITEMMANAGER->getWeapon()[0].name;
+	infantry.armorName = ITEMMANAGER->getArmor()[0].name;
+	infantry.weaponImg = ITEMMANAGER->getWeapon()[0].itemImage;
+	infantry.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	infantry.addAtk = ITEMMANAGER->getWeapon()[0].power;
+	infantry.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

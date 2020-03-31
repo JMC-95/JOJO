@@ -34,6 +34,13 @@ HRESULT Iyu::init(const char * moveImg, const char * mAtkImg, const char * aRngI
 	iyu.agi = 50;			//순발력
 	iyu.ten = 50;			//사기
 	iyu.movingCount = 4;	//이동력
+	//아이템
+	iyu.weaponName = ITEMMANAGER->getWeapon()[0].name;
+	iyu.armorName = ITEMMANAGER->getArmor()[0].name;
+	iyu.weaponImg = ITEMMANAGER->getWeapon()[0].itemImage;
+	iyu.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	iyu.addAtk = ITEMMANAGER->getWeapon()[0].power;
+	iyu.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;

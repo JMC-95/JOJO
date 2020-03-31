@@ -34,6 +34,13 @@ HRESULT Gwanu::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	gwanu.agi = 61;			//순발력
 	gwanu.ten = 61;			//사기
 	gwanu.movingCount = 6;	//이동력
+	//아이템
+	gwanu.weaponName = ITEMMANAGER->getWeapon()[1].name;
+	gwanu.armorName = ITEMMANAGER->getArmor()[0].name;
+	gwanu.weaponImg = ITEMMANAGER->getWeapon()[1].itemImage;
+	gwanu.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
+	gwanu.addAtk = ITEMMANAGER->getWeapon()[1].power;
+	gwanu.addDef = ITEMMANAGER->getArmor()[0].power;
 
 	//HP ProgressBar
 	_Hp = new progressBar;
@@ -325,6 +332,8 @@ void Gwanu::friendMenu()
 	{
 		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 		{
+			SOUNDMANAGER->stop("cMove");
+
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
 				atkList.clear();

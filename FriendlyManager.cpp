@@ -43,12 +43,12 @@ void FriendlyManager::release()
 
 void FriendlyManager::update()
 {
+	friendTurn();
+
 	for (int i = 0; i < vFriend.size(); i++)
 	{
 		vFriend[i]->update();
 	}
-
-	friendTurn();
 }
 
 void FriendlyManager::render(HDC hdc)

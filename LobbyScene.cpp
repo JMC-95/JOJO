@@ -17,28 +17,30 @@ HRESULT LobbyScene::init()
 	if (isSound)
 	{
 		SOUNDMANAGER->stop("titleSound");
-		//SOUNDMANAGER->play("lobbySound", 1.0f);
+		SOUNDMANAGER->play("lobbySound", 1.0f);
 	}
-	else
-	{
-		SOUNDMANAGER->stop("lobbySound");
-	}
+	else SOUNDMANAGER->stop("lobbySound");
 
 	for (int i = 0; i < 4; i++)
 	{
-		menuRect[0] = RectMake(441, 411, 50, 50);
-		menuRect[1] = RectMake(491, 411, 50, 50);
-		menuRect[2] = RectMake(541, 411, 50, 50);
-		menuRect[3] = RectMake(591, 411, 50, 50);
+		menuRect[i] = RectMake(441 + 50 * i, 411, 50, 50);
 		vMenu.push_back(menuRect[i]);
 	}
 
+	//¾ÆÀÌÅÛ º¤ÅÍ
+	vWeapon = ITEMMANAGER->getWeapon();
+	vArmor = ITEMMANAGER->getArmor();
+	vAssistant = ITEMMANAGER->getAssistant();
+	vPotion = ITEMMANAGER->getPotion();
+	vAllItem = ITEMMANAGER->getAllItem();
+
+	money = 30000;
 	playerCount = 0;
 
-	isOut = false;
-	isEquipment = false;
-	isBuy = false;
-	isSell = false;
+	isBattle = false;
+	isInventory = false;
+	isBuyShop = false;
+	isSellShop = false;
 
 	return S_OK;
 }
@@ -56,10 +58,10 @@ void LobbyScene::update()
 			vMenu.clear();
 
 			SOUNDMANAGER->play("click", 1.0f);
-			isOut = true;
-			isEquipment = false;
-			isBuy = false;
-			isSell = false;
+			isBattle = true;
+			isInventory = false;
+			isBuyShop = false;
+			isSellShop = false;
 
 			playerNum = 0;
 
@@ -82,10 +84,10 @@ void LobbyScene::update()
 			vMenu.clear();
 
 			SOUNDMANAGER->play("click", 1.0f);
-			isOut = false;
-			isEquipment = true;
-			isBuy = false;
-			isSell = false;
+			isBattle = false;
+			isInventory = true;
+			isBuyShop = false;
+			isSellShop = false;
 
 			playerNum = 0;
 
@@ -96,16 +98,22 @@ void LobbyScene::update()
 				equipRect[2] = RectMake(488, 378, 75, 20);
 				vEquipment.push_back(equipRect[i]);
 			}
+
+			for (int i = 0; i < 13; i++)
+			{
+				itemRect[i] = RectMake(38, 99 + 20 * i, 325, 20);
+				vEquipment.push_back(itemRect[i]);
+			}
 		}
 		else if (PtInRect(&menuRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			vMenu.clear();
 
 			SOUNDMANAGER->play("click", 1.0f);
-			isOut = false;
-			isEquipment = false;
-			isBuy = true;
-			isSell = false;
+			isBattle = false;
+			isInventory = false;
+			isBuyShop = true;
+			isSellShop = false;
 
 			playerNum = 0;
 			frameX = 0;
@@ -119,16 +127,22 @@ void LobbyScene::update()
 				buyRect[4] = RectMake(108, 80, 70, 20);
 				vBuy.push_back(buyRect[i]);
 			}
+
+			for (int i = 0; i < 4; i++)
+			{
+				itemRect[i] = RectMake(38, 123 + 20 * i, 348, 20);
+				vBuy.push_back(itemRect[i]);
+			}
 		}
 		else if (PtInRect(&menuRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			vMenu.clear();
 
 			SOUNDMANAGER->play("click", 1.0f);
-			isOut = false;
-			isEquipment = false;
-			isBuy = false;
-			isSell = true;
+			isBattle = false;
+			isInventory = false;
+			isBuyShop = false;
+			isSellShop = true;
 
 			frameX = 0;
 
@@ -142,188 +156,15 @@ void LobbyScene::update()
 		}
 	}
 
-	if (isOut)
-	{
-		if (PtInRect(&outRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			if (playerCount == 7)
-			{
-				SOUNDMANAGER->play("start", 1.0f);
-				SCENEMANAGER->changeScene("GameScene");
-			}
-			else SOUNDMANAGER->play("noStart", 1.0f);
-		}
-		else if (PtInRect(&outRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			isOut = false;
-			vOut.clear();
-
-			for (int i = 0; i < 4; i++)
-			{
-				menuRect[0] = RectMake(441, 411, 50, 50);
-				menuRect[1] = RectMake(491, 411, 50, 50);
-				menuRect[2] = RectMake(541, 411, 50, 50);
-				menuRect[3] = RectMake(591, 411, 50, 50);
-				vMenu.push_back(menuRect[i]);
-			}
-		}
-		else if (PtInRect(&outRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//Á¶Á¶
-		{
-			SOUNDMANAGER->play("pSelect", 1.0f);
-
-			playerCount += 1;
-			playerNum = 0;
-			outRect[2] = RectMake(22, 333, 48, 48);
-		}
-		else if (PtInRect(&outRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//ÇÏÈÄµ·
-		{
-			SOUNDMANAGER->play("pSelect", 1.0f);
-
-			playerCount += 1;
-			playerNum = 1;
-			outRect[3] = RectMake(72, 333, 48, 48);
-		}
-		else if (PtInRect(&outRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//ÇÏÈÄ¿¬
-		{
-			SOUNDMANAGER->play("pSelect", 1.0f);
-
-			playerCount += 1;
-			playerNum = 2;
-			outRect[4] = RectMake(120, 333, 48, 48);
-		}
-		else if (PtInRect(&outRect[5], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//Á¶ÀÎ
-		{
-			SOUNDMANAGER->play("pSelect", 1.0f);
-
-			playerCount += 1;
-			playerNum = 3;
-			outRect[5] = RectMake(170, 333, 48, 48);
-		}
-		else if (PtInRect(&outRect[6], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//¾ÇÁø
-		{
-			SOUNDMANAGER->play("pSelect", 1.0f);
-
-			playerCount += 1;
-			playerNum = 4;
-			outRect[6] = RectMake(220, 333, 48, 48);
-		}
-		else if (PtInRect(&outRect[7], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//ÀÌÀü
-		{
-			SOUNDMANAGER->play("pSelect", 1.0f);
-
-			playerCount += 1;
-			playerNum = 5;
-			outRect[7] = RectMake(270, 333, 48, 48);
-		}
-		else if (PtInRect(&outRect[8], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//Á¶È«
-		{
-			SOUNDMANAGER->play("pSelect", 1.0f);
-
-			playerCount += 1;
-			playerNum = 6;
-			outRect[8] = RectMake(320, 333, 48, 48);
-		}
-	}
-	else if (isEquipment)
-	{
-		if (PtInRect(&equipRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			isEquipment = false;
-			vEquipment.clear();
-
-			for (int i = 0; i < 4; i++)
-			{
-				menuRect[0] = RectMake(441, 411, 50, 50);
-				menuRect[1] = RectMake(491, 411, 50, 50);
-				menuRect[2] = RectMake(541, 411, 50, 50);
-				menuRect[3] = RectMake(591, 411, 50, 50);
-				vMenu.push_back(menuRect[i]);
-			}
-		}
-		else if (PtInRect(&equipRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			if (playerNum != 0) playerNum -= 1;
-		}
-		else if (PtInRect(&equipRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			if (playerNum < 6) playerNum += 1;
-		}
-	}
-	else if (isBuy)
-	{
-		if (PtInRect(&buyRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			isBuy = false;
-			vBuy.clear();
-
-			for (int i = 0; i < 4; i++)
-			{
-				menuRect[0] = RectMake(441, 411, 50, 50);
-				menuRect[1] = RectMake(491, 411, 50, 50);
-				menuRect[2] = RectMake(541, 411, 50, 50);
-				menuRect[3] = RectMake(591, 411, 50, 50);
-				vMenu.push_back(menuRect[i]);
-			}
-		}
-		else if (PtInRect(&buyRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			if (playerNum != 0) playerNum -= 1;
-		}
-		else if (PtInRect(&buyRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			if (playerNum < 6) playerNum += 1;
-		}
-		else if (PtInRect(&buyRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			frameX = 0;
-		}
-		else if (PtInRect(&buyRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			frameX = 1;
-		}
-	}
-	else if (isSell)
-	{
-		if (PtInRect(&sellRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			isSell = false;
-			vSell.clear();
-
-			for (int i = 0; i < 4; i++)
-			{
-				menuRect[0] = RectMake(441, 411, 50, 50);
-				menuRect[1] = RectMake(491, 411, 50, 50);
-				menuRect[2] = RectMake(541, 411, 50, 50);
-				menuRect[3] = RectMake(591, 411, 50, 50);
-				vMenu.push_back(menuRect[i]);
-			}
-		}
-		else if (PtInRect(&sellRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			frameX = 0;
-		}
-		else if (PtInRect(&sellRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("click", 1.0f);
-			frameX = 1;
-		}
-	}
+	battle();
+	equipment();
+	buyShop();
+	sellShop();
 }
 
 void LobbyScene::render()
 {
-	if (isOut)
+	if (isBattle)
 	{
 		auto& player = PLAYERMANAGER->getPlayer()[playerNum];
 		auto& playerInfo = PLAYERMANAGER->getPlayer()[playerNum]->getPlayerInfo();
@@ -375,13 +216,18 @@ void LobbyScene::render()
 		SelectObject(getMemDC(), oldFont);
 		DeleteObject(myFont);
 	}
-	else if (isEquipment)
+	else if (isInventory)
 	{
 		auto& player = PLAYERMANAGER->getPlayer()[playerNum];
 		auto& playerInfo = PLAYERMANAGER->getPlayer()[playerNum]->getPlayerInfo();
 
 		IMAGEMANAGER->render("equipment", getMemDC());
 		IMAGEMANAGER->render(playerInfo.face, getMemDC(), 415, 100);
+
+		for (int i = 0; i < 13; i++)
+		{
+			Rectangle(getMemDC(), itemRect[i].left, itemRect[i].top, itemRect[i].right, itemRect[i].bottom);
+		}
 
 		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñÃ¼");
 		HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
@@ -415,7 +261,7 @@ void LobbyScene::render()
 		SelectObject(getMemDC(), oldFont);
 		DeleteObject(myFont);
 	}
-	else if (isBuy)
+	else if (isBuyShop)
 	{
 		auto& player = PLAYERMANAGER->getPlayer()[playerNum];
 		auto& playerInfo = PLAYERMANAGER->getPlayer()[playerNum]->getPlayerInfo();
@@ -423,9 +269,19 @@ void LobbyScene::render()
 		IMAGEMANAGER->frameRender("buy", getMemDC(), 0, 0, frameX, 0);
 		IMAGEMANAGER->render(playerInfo.face, getMemDC(), 413, 98);
 
+		if (frameX == 0)
+		{
+			vWeapon[0].itemImage->render(getMemDC(), itemRect[0].left - 2, itemRect[0].top - 2, 24, 24);
+			vWeapon[1].itemImage->render(getMemDC(), itemRect[1].left, itemRect[1].top, 22, 22);
+			vWeapon[2].itemImage->render(getMemDC(), itemRect[2].left, itemRect[2].top - 1, 22, 22);
+			vArmor[0].itemImage->render(getMemDC(), itemRect[3].left + 1, itemRect[3].top, 20, 20);
+		}
+		else vPotion[0].itemImage->render(getMemDC(), itemRect[0].left + 1, itemRect[0].top, 20, 20);
+
 		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñÃ¼");
 		HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
 		SetTextColor(getMemDC(), RGB(0, 0, 0));
+		//ÀÎÅÍÆäÀÌ½º
 		sprintf_s(str, "ÀÌÀü");
 		TextOut(getMemDC(), 430, 384, str, strlen(str));
 		sprintf_s(str, "´ÙÀ½");
@@ -452,12 +308,126 @@ void LobbyScene::render()
 		TextOut(getMemDC(), 448, 192, str, strlen(str));
 		sprintf_s(str, "%d", player->getMaxMp());
 		TextOut(getMemDC(), 449, 213, str, strlen(str));
+		sprintf_s(str, "%d", money);
+		TextOut(getMemDC(), 277, 388, str, strlen(str));
+
+		//¾ÆÀÌÅÛ
+		if (frameX == 0)
+		{
+			//´Ü°Ë
+			sprintf_s(str, vWeapon[0].name);
+			TextOut(getMemDC(), itemRect[0].left + 20, itemRect[0].top + 4, str, strlen(str));
+			sprintf_s(str, vWeapon[0].attribute);
+			TextOut(getMemDC(), itemRect[0].left + 135, itemRect[0].top + 4, str, strlen(str));
+			if (playerNum == 0 || playerNum == 4 || playerNum == 5 || playerNum == 6)
+			{
+				sprintf_s(str, "O");
+				TextOut(getMemDC(), itemRect[0].left + 170, itemRect[0].top + 4, str, strlen(str));
+			}
+			else
+			{
+				sprintf_s(str, "X");
+				TextOut(getMemDC(), itemRect[0].left + 170, itemRect[0].top + 4, str, strlen(str));
+			}
+			sprintf_s(str, "+%d", vWeapon[0].power);
+			TextOut(getMemDC(), itemRect[0].left + 206, itemRect[0].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vWeapon[0].stock);
+			TextOut(getMemDC(), itemRect[0].left + 253, itemRect[0].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vWeapon[0].count);
+			TextOut(getMemDC(), itemRect[0].left + 293, itemRect[0].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vWeapon[0].price);
+			TextOut(getMemDC(), itemRect[0].left + 315, itemRect[0].top + 4, str, strlen(str));
+			//´ÜÃ¢
+			sprintf_s(str, vWeapon[1].name);
+			TextOut(getMemDC(), itemRect[1].left + 21, itemRect[1].top + 4, str, strlen(str));
+			sprintf_s(str, vWeapon[1].attribute);
+			TextOut(getMemDC(), itemRect[1].left + 135, itemRect[1].top + 4, str, strlen(str));
+			if (playerNum == 1 || playerNum == 3)
+			{
+				sprintf_s(str, "O");
+				TextOut(getMemDC(), itemRect[1].left + 170, itemRect[1].top + 4, str, strlen(str));
+			}
+			else
+			{
+				sprintf_s(str, "X");
+				TextOut(getMemDC(), itemRect[1].left + 170, itemRect[1].top + 4, str, strlen(str));
+			}
+			sprintf_s(str, "+%d", vWeapon[1].power);
+			TextOut(getMemDC(), itemRect[1].left + 206, itemRect[1].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vWeapon[1].stock);
+			TextOut(getMemDC(), itemRect[1].left + 253, itemRect[1].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vWeapon[1].count);
+			TextOut(getMemDC(), itemRect[1].left + 293, itemRect[1].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vWeapon[1].price);
+			TextOut(getMemDC(), itemRect[1].left + 315, itemRect[1].top + 4, str, strlen(str));
+			//¹Ý±Ã
+			sprintf_s(str, vWeapon[2].name);
+			TextOut(getMemDC(), itemRect[2].left + 22, itemRect[2].top + 4, str, strlen(str));
+			sprintf_s(str, vWeapon[2].attribute);
+			TextOut(getMemDC(), itemRect[2].left + 135, itemRect[2].top + 4, str, strlen(str));
+			if (playerNum == 2)
+			{
+				sprintf_s(str, "O");
+				TextOut(getMemDC(), itemRect[2].left + 170, itemRect[2].top + 4, str, strlen(str));
+			}
+			else
+			{
+				sprintf_s(str, "X");
+				TextOut(getMemDC(), itemRect[2].left + 170, itemRect[2].top + 4, str, strlen(str));
+			}
+			sprintf_s(str, "+%d", vWeapon[2].power);
+			TextOut(getMemDC(), itemRect[2].left + 206, itemRect[2].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vWeapon[2].stock);
+			TextOut(getMemDC(), itemRect[2].left + 253, itemRect[2].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vWeapon[2].count);
+			TextOut(getMemDC(), itemRect[2].left + 293, itemRect[2].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vWeapon[2].price);
+			TextOut(getMemDC(), itemRect[2].left + 315, itemRect[2].top + 4, str, strlen(str));
+			//°¡Á×°©¿Ê
+			sprintf_s(str, vArmor[0].name);
+			TextOut(getMemDC(), itemRect[3].left + 22, itemRect[3].top + 4, str, strlen(str));
+			sprintf_s(str, vArmor[0].attribute);
+			TextOut(getMemDC(), itemRect[3].left + 122, itemRect[3].top + 4, str, strlen(str));
+			sprintf_s(str, "O");
+			TextOut(getMemDC(), itemRect[3].left + 170, itemRect[3].top + 4, str, strlen(str));
+			sprintf_s(str, "+%d", vArmor[0].power);
+			TextOut(getMemDC(), itemRect[3].left + 206, itemRect[3].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vArmor[0].stock);
+			TextOut(getMemDC(), itemRect[3].left + 253, itemRect[3].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vArmor[0].count);
+			TextOut(getMemDC(), itemRect[3].left + 293, itemRect[3].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vArmor[0].price);
+			TextOut(getMemDC(), itemRect[3].left + 315, itemRect[3].top + 4, str, strlen(str));
+		}
+		else
+		{
+			//È¸º¹ÀÇ Äá
+			sprintf_s(str, vPotion[0].name);
+			TextOut(getMemDC(), itemRect[0].left + 22, itemRect[0].top + 4, str, strlen(str));
+			sprintf_s(str, vPotion[0].attribute);
+			TextOut(getMemDC(), itemRect[0].left + 150, itemRect[0].top + 4, str, strlen(str));
+			sprintf_s(str, "+%d", vPotion[0].power);
+			TextOut(getMemDC(), itemRect[0].left + 245, itemRect[0].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vPotion[0].stock);
+			TextOut(getMemDC(), itemRect[0].left + 290, itemRect[0].top + 4, str, strlen(str));
+			sprintf_s(str, "%d", vPotion[0].price);
+			TextOut(getMemDC(), itemRect[0].left + 320, itemRect[0].top + 4, str, strlen(str));
+		}
 		SelectObject(getMemDC(), oldFont);
 		DeleteObject(myFont);
 	}
-	else if (isSell)
+	else if (isSellShop)
 	{
 		IMAGEMANAGER->frameRender("sell", getMemDC(), 0, 0, frameX, 0);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñÃ¼");
+		HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
+		SetTextColor(getMemDC(), RGB(0, 0, 0));
+		//ÀÎÅÍÆäÀÌ½º
+		sprintf_s(str, "%d", money);
+		TextOut(getMemDC(), 450, 387, str, strlen(str));
+		SelectObject(getMemDC(), oldFont);
+		DeleteObject(myFont);
 	}
 	else
 	{
@@ -466,4 +436,274 @@ void LobbyScene::render()
 
 	sprintf_s(str, "%d,%d", m_ptMouse.x, m_ptMouse.y);
 	TextOut(getMemDC(), 900, 300, str, strlen(str));
+}
+
+void LobbyScene::battle()
+{
+	if (isBattle)
+	{
+		if (PtInRect(&outRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			if (playerCount == 7)
+			{
+				SOUNDMANAGER->play("start", 1.0f);
+				SCENEMANAGER->changeScene("GameScene");
+			}
+			else SOUNDMANAGER->play("noStart", 1.0f);
+		}
+		else if (PtInRect(&outRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			isBattle = false;
+			vOut.clear();
+			playerCount = 0;
+
+			for (int i = 0; i < 4; i++)
+			{
+				menuRect[0] = RectMake(441, 411, 50, 50);
+				menuRect[1] = RectMake(491, 411, 50, 50);
+				menuRect[2] = RectMake(541, 411, 50, 50);
+				menuRect[3] = RectMake(591, 411, 50, 50);
+				vMenu.push_back(menuRect[i]);
+			}
+		}
+		else if (PtInRect(&outRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//Á¶Á¶
+		{
+			playerNum = 0;
+
+			if (playerCount < 7)
+			{
+				SOUNDMANAGER->play("pSelect", 1.0f);
+				playerCount += 1;
+				outRect[2] = RectMake(22, 333, 48, 48);
+			}
+			else SOUNDMANAGER->play("click", 1.0f);
+		}
+		else if (PtInRect(&outRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//ÇÏÈÄµ·
+		{
+			playerNum = 1;
+
+			if (playerCount < 7)
+			{
+				SOUNDMANAGER->play("pSelect", 1.0f);
+				playerCount += 1;
+				outRect[3] = RectMake(72, 333, 48, 48);
+			}
+			else SOUNDMANAGER->play("click", 1.0f);
+		}
+		else if (PtInRect(&outRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//ÇÏÈÄ¿¬
+		{
+			playerNum = 2;
+
+			if (playerCount < 7)
+			{
+				SOUNDMANAGER->play("pSelect", 1.0f);
+				playerCount += 1;
+				outRect[4] = RectMake(120, 333, 48, 48);
+			}
+			else SOUNDMANAGER->play("click", 1.0f);
+		}
+		else if (PtInRect(&outRect[5], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//Á¶ÀÎ
+		{
+			playerNum = 3;
+
+			if (playerCount < 7)
+			{
+				SOUNDMANAGER->play("pSelect", 1.0f);
+				playerCount += 1;
+				outRect[5] = RectMake(170, 333, 48, 48);
+			}
+			else SOUNDMANAGER->play("click", 1.0f);
+		}
+		else if (PtInRect(&outRect[6], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//¾ÇÁø
+		{
+			playerNum = 4;
+
+			if (playerCount < 7)
+			{
+				SOUNDMANAGER->play("pSelect", 1.0f);
+				playerCount += 1;
+				outRect[6] = RectMake(220, 333, 48, 48);
+			}
+			else SOUNDMANAGER->play("click", 1.0f);
+		}
+		else if (PtInRect(&outRect[7], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//ÀÌÀü
+		{
+			playerNum = 5;
+
+			if (playerCount < 7)
+			{
+				SOUNDMANAGER->play("pSelect", 1.0f);
+				playerCount += 1;
+				outRect[7] = RectMake(270, 333, 48, 48);
+			}
+			else SOUNDMANAGER->play("click", 1.0f);
+		}
+		else if (PtInRect(&outRect[8], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))		//Á¶È«
+		{
+			playerNum = 6;
+
+			if (playerCount < 7)
+			{
+				SOUNDMANAGER->play("pSelect", 1.0f);
+				playerCount += 1;
+				outRect[8] = RectMake(320, 333, 48, 48);
+			}
+			else SOUNDMANAGER->play("click", 1.0f);
+		}
+	}
+}
+
+void LobbyScene::equipment()
+{
+	if (isInventory)
+	{
+		if (PtInRect(&equipRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			isInventory = false;
+			vEquipment.clear();
+
+			for (int i = 0; i < 4; i++)
+			{
+				menuRect[0] = RectMake(441, 411, 50, 50);
+				menuRect[1] = RectMake(491, 411, 50, 50);
+				menuRect[2] = RectMake(541, 411, 50, 50);
+				menuRect[3] = RectMake(591, 411, 50, 50);
+				vMenu.push_back(menuRect[i]);
+			}
+		}
+		else if (PtInRect(&equipRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			if (playerNum != 0) playerNum -= 1;
+		}
+		else if (PtInRect(&equipRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			if (playerNum < 6) playerNum += 1;
+		}
+	}
+}
+
+void LobbyScene::buyShop()
+{
+	if (isBuyShop)
+	{
+		if (PtInRect(&buyRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			isBuyShop = false;
+			vBuy.clear();
+
+			for (int i = 0; i < 4; i++)
+			{
+				menuRect[0] = RectMake(441, 411, 50, 50);
+				menuRect[1] = RectMake(491, 411, 50, 50);
+				menuRect[2] = RectMake(541, 411, 50, 50);
+				menuRect[3] = RectMake(591, 411, 50, 50);
+				vMenu.push_back(menuRect[i]);
+			}
+		}
+		else if (PtInRect(&buyRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			if (playerNum != 0) playerNum -= 1;
+		}
+		else if (PtInRect(&buyRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			if (playerNum < 6) playerNum += 1;
+		}
+		else if (PtInRect(&buyRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			frameX = 0;
+		}
+		else if (PtInRect(&buyRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			frameX = 1;
+		}
+
+		if (frameX == 0)
+		{
+			if (money >= 1000)
+			{
+				if (PtInRect(&itemRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					SOUNDMANAGER->play("buy", 1.0f);
+					vWeapon[0].stock += 1;
+					vWeapon[0].count += 1;
+					money -= 1000;
+				}
+				else if (PtInRect(&itemRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					SOUNDMANAGER->play("buy", 1.0f);
+					vWeapon[1].stock += 1;
+					vWeapon[1].count += 1;
+					money -= 1000;
+				}
+				else if (PtInRect(&itemRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					SOUNDMANAGER->play("buy", 1.0f);
+					vWeapon[2].stock += 1;
+					vWeapon[2].count += 1;
+					money -= 1000;
+				}
+				else if (PtInRect(&itemRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					SOUNDMANAGER->play("buy", 1.0f);
+					vArmor[0].stock += 1;
+					vArmor[0].count += 1;
+					money -= 1000;
+				}
+			}
+		}
+		else
+		{
+			if (money >= 100)
+			{
+
+				if (PtInRect(&itemRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					SOUNDMANAGER->play("buy", 1.0f);
+					vPotion[0].stock += 1;
+					money -= 100;
+				}
+			}
+		}
+	}
+}
+
+void LobbyScene::sellShop()
+{
+	if (isSellShop)
+	{
+		if (PtInRect(&sellRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			isSellShop = false;
+			vSell.clear();
+
+			for (int i = 0; i < 4; i++)
+			{
+				menuRect[0] = RectMake(441, 411, 50, 50);
+				menuRect[1] = RectMake(491, 411, 50, 50);
+				menuRect[2] = RectMake(541, 411, 50, 50);
+				menuRect[3] = RectMake(591, 411, 50, 50);
+				vMenu.push_back(menuRect[i]);
+			}
+		}
+		else if (PtInRect(&sellRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			frameX = 0;
+		}
+		else if (PtInRect(&sellRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			frameX = 1;
+		}
+	}
 }

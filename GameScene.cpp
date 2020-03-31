@@ -17,10 +17,7 @@ HRESULT GameScene::init()
 		SOUNDMANAGER->stop("lobbySound");
 		SOUNDMANAGER->play("gameSound", 1.0f);
 	}
-	else
-	{
-		SOUNDMANAGER->stop("gameSound");
-	}
+	else SOUNDMANAGER->stop("gameSound");
 
 	//턴 초기화
 	pTurn = 0;
@@ -192,11 +189,6 @@ void GameScene::render()
 			DeleteObject(myFont2);
 		}
 	}
-
-	if (isGameOver)
-	{
-		IMAGEMANAGER->render("gameOver", getMemDC(), 240, 280);
-	}
 }
 
 void GameScene::gameTurn()
@@ -237,8 +229,8 @@ void GameScene::gameTurn()
 	}
 	else if (!ENEMYMANAGER->getEturn()) eTurnCount = 0;
 
-	if (PLAYERMANAGER->getPlayer()[0]->getCurrentHp() <= 0)
-	{
-		isGameOver = true;
-	}
+	//게임 클리어
+	if (ENEMYMANAGER->getIsClear()) SCENEMANAGER->changeScene("GameOver");
+	//게임 오버
+	else if (PLAYERMANAGER->getPlayer()[0]->getCurrentHp() <= 0) SCENEMANAGER->changeScene("GameOver");
 }
