@@ -89,14 +89,13 @@ void LobbyScene::update()
 
 			playerNum = 0;
 
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 5; i++)
 			{
 				equipRect[0] = RectMake(323, 378, 60, 20);
 				equipRect[1] = RectMake(410, 378, 75, 20);
 				equipRect[2] = RectMake(488, 378, 75, 20);
 				equipRect[3] = RectMake(512, 122, 32, 32);
 				equipRect[4] = RectMake(512, 220, 32, 32);
-				equipRect[5] = RectMake(512, 317, 32, 32);
 				vEquipment.push_back(equipRect[i]);
 			}
 
@@ -205,11 +204,11 @@ void LobbyScene::render()
 		TextOut(getMemDC(), 597, 168, str, strlen(str));
 		sprintf_s(str, "%d", player->getCurrentExp());
 		TextOut(getMemDC(), 597, 204, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.atk + playerInfo.addAtk);
+		sprintf_s(str, "%d", playerInfo.atk);
 		TextOut(getMemDC(), 597, 238, str, strlen(str));
 		sprintf_s(str, "%d", playerInfo.will);
 		TextOut(getMemDC(), 597, 273, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.def + playerInfo.addDef);
+		sprintf_s(str, "%d", playerInfo.def);
 		TextOut(getMemDC(), 597, 307, str, strlen(str));
 		sprintf_s(str, "%d", playerInfo.agi);
 		TextOut(getMemDC(), 597, 342, str, strlen(str));
@@ -232,6 +231,40 @@ void LobbyScene::render()
 		IMAGEMANAGER->render("equipment", getMemDC());
 		IMAGEMANAGER->render(playerInfo.face, getMemDC(), 415, 100);
 
+		//인터페이스
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
+		SetTextColor(getMemDC(), RGB(0, 0, 0));
+		sprintf_s(str, "이전 장수로");
+		TextOut(getMemDC(), 412, 382, str, strlen(str));
+		sprintf_s(str, "다음 장수로");
+		TextOut(getMemDC(), 492, 382, str, strlen(str));
+		sprintf_s(str, playerInfo.name);
+		TextOut(getMemDC(), 428, 76, str, strlen(str));
+		sprintf_s(str, playerInfo.className);
+		TextOut(getMemDC(), 493, 76, str, strlen(str));
+		sprintf_s(str, "%d", playerInfo.level);
+		TextOut(getMemDC(), 585, 74, str, strlen(str));
+		sprintf_s(str, "%d", playerInfo.atk);
+		TextOut(getMemDC(), 451, 244, str, strlen(str));
+		sprintf_s(str, "%d", playerInfo.will);
+		TextOut(getMemDC(), 451, 265, str, strlen(str));
+		sprintf_s(str, "%d", playerInfo.def);
+		TextOut(getMemDC(), 451, 286, str, strlen(str));
+		sprintf_s(str, "%d", playerInfo.agi);
+		TextOut(getMemDC(), 451, 308, str, strlen(str));
+		sprintf_s(str, "%d", playerInfo.ten);
+		TextOut(getMemDC(), 451, 329, str, strlen(str));
+		sprintf_s(str, "%d", playerInfo.movingCount);
+		TextOut(getMemDC(), 451, 351, str, strlen(str));
+		sprintf_s(str, "%d", player->getMaxHp());
+		TextOut(getMemDC(), 450, 192, str, strlen(str));
+		sprintf_s(str, "%d", player->getMaxMp());
+		TextOut(getMemDC(), 451, 213, str, strlen(str));
+		SelectObject(getMemDC(), oldFont);
+		DeleteObject(myFont);
+
+		//장비 목록
 		for (int i = 0; i < vAllItem.size(); i++)
 		{
 			if (PtInRect(&itemRect[i], m_ptMouse)) IMAGEMANAGER->alphaRender("equipSelect", getMemDC(), itemRect[i].left, itemRect[i].top, 100);
@@ -241,7 +274,6 @@ void LobbyScene::render()
 			else if (vAllItem[i].name == "반궁") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left, itemRect[i].top - 1, 22, 22);
 			else if (vAllItem[i].name == "가죽갑옷") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left + 1, itemRect[i].top, 20, 20);
 
-			//아이템 설명
 			HFONT myFont2 = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 			HFONT oldFont2 = (HFONT)SelectObject(getMemDC(), myFont2);
 			SetTextColor(getMemDC(), RGB(0, 0, 0));
@@ -311,38 +343,18 @@ void LobbyScene::render()
 			DeleteObject(myFont2);
 		}
 
-		//인터페이스
-		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
-		HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
-		SetTextColor(getMemDC(), RGB(0, 0, 0));
-		sprintf_s(str, "이전 장수로");
-		TextOut(getMemDC(), 412, 382, str, strlen(str));
-		sprintf_s(str, "다음 장수로");
-		TextOut(getMemDC(), 492, 382, str, strlen(str));
-		sprintf_s(str, playerInfo.name);
-		TextOut(getMemDC(), 428, 76, str, strlen(str));
-		sprintf_s(str, playerInfo.className);
-		TextOut(getMemDC(), 493, 76, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.level);
-		TextOut(getMemDC(), 585, 74, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.atk);
-		TextOut(getMemDC(), 451, 244, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.will);
-		TextOut(getMemDC(), 451, 265, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.def);
-		TextOut(getMemDC(), 451, 286, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.agi);
-		TextOut(getMemDC(), 451, 308, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.ten);
-		TextOut(getMemDC(), 451, 329, str, strlen(str));
-		sprintf_s(str, "%d", playerInfo.movingCount);
-		TextOut(getMemDC(), 451, 351, str, strlen(str));
-		sprintf_s(str, "%d", player->getMaxHp());
-		TextOut(getMemDC(), 450, 192, str, strlen(str));
-		sprintf_s(str, "%d", player->getMaxMp());
-		TextOut(getMemDC(), 451, 213, str, strlen(str));
-		SelectObject(getMemDC(), oldFont);
-		DeleteObject(myFont);
+		//착용중인 장비
+		for (int j = 0; j < vEquipItem.size(); j++)
+		{
+			if (vEquipItem[j].itemKind == ITEM_WEAPON)
+			{
+				vEquipItem[j].itemImage->render(getMemDC(), equipRect[3].left, equipRect[3].top);
+			}
+			else
+			{
+				vEquipItem[j].itemImage->render(getMemDC(), equipRect[4].left, equipRect[4].top);
+			}
+		}
 	}
 	else if (isBuyShop)
 	{
@@ -672,14 +684,84 @@ void LobbyScene::equipment()
 		else if (PtInRect(&equipRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipItem.size(); i++)
+			{
+				if (vEquipItem[i].itemKind == ITEM_WEAPON)
+				{
+					isWeapon = false;
+					vAllItem.push_back(vEquipItem[i]);
+					vEquipItem.erase(vEquipItem.begin() + i);
+				}
+			}
 		}
 		else if (PtInRect(&equipRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipItem.size(); i++)
+			{
+				if (vEquipItem[i].itemKind == ITEM_ARMOR)
+				{
+					isArmor = false;
+					vAllItem.push_back(vArmor[0]);
+					vEquipItem.erase(vEquipItem.begin() + i);
+				}
+			}
 		}
-		else if (PtInRect(&equipRect[5], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+
+		if (vAllItem.size() != 0)
 		{
-			SOUNDMANAGER->play("noStart", 1.0f);
+			for (int i = 0; i < vAllItem.size(); i++)
+			{
+				if (PtInRect(&itemRect[i], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+				{
+					if (vAllItem[i].itemKind == ITEM_WEAPON)
+					{
+						if (vAllItem[i].name == "단검")
+						{
+							if (playerNum == 0 || playerNum == 4 || playerNum == 5 || playerNum == 6)
+							{
+								SOUNDMANAGER->play("buy", 1.0f);
+								isWeapon = true;
+								vWeapon[0].stock -= 1;
+								vEquipItem.push_back(vAllItem[i]);
+								vAllItem.erase(vAllItem.begin() + i);
+							}
+						}
+						else if (vAllItem[i].name == "단창")
+						{
+							if (playerNum == 1 || playerNum == 3)
+							{
+								SOUNDMANAGER->play("buy", 1.0f);
+								isWeapon = true;
+								vWeapon[1].stock -= 1;
+								vEquipItem.push_back(vAllItem[i]);
+								vAllItem.erase(vAllItem.begin() + i);
+							}
+						}
+						else if (vAllItem[i].name == "반궁")
+						{
+							if (playerNum == 2)
+							{
+								SOUNDMANAGER->play("buy", 1.0f);
+								isWeapon = true;
+								vWeapon[2].stock -= 1;
+								vEquipItem.push_back(vAllItem[i]);
+								vAllItem.erase(vAllItem.begin() + i);
+							}
+						}
+					}
+					else if (vAllItem[i].itemKind == ITEM_ARMOR)
+					{
+						SOUNDMANAGER->play("buy", 1.0f);
+						isArmor = true;
+						vArmor[0].stock -= 1;
+						vEquipItem.push_back(vAllItem[i]);
+						vAllItem.erase(vAllItem.begin() + i);
+					}
+				}
+			}
 		}
 	}
 }
