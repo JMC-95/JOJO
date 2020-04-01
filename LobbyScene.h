@@ -16,7 +16,7 @@ private:
 	vector<ItemInfo> vArmor;		//갑옷
 	vector<ItemInfo> vPotion;		//물약
 	vector<ItemInfo> vAllItem;		//모든 아이템
-	vector<ItemInfo> vEquipItem;	//모든 아이템
+	vector<ItemInfo> vSellPotion;	//판매용물약
 
 	//캐릭터 장비창 벡터
 	vector<ItemInfo> vEquipJj;	//조조
@@ -50,6 +50,7 @@ private:
 	bool isBuyShop;		//구입
 	bool isSellShop;	//매각
 
+	bool isEquip;		//장비를 착용했는지 체크
 	bool isSell;		//아이템을 판매했는지 체크
 
 public:
@@ -67,4 +68,5 @@ public:
 	void sellShop();
 	void equip();
 	void equipRelease();
+	void sellItem();
 };

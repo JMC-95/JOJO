@@ -105,7 +105,7 @@ void mainGame::images()
 	//선택
 	IMAGEMANAGER->addImage("equipSelect", "images/UI/Lobby/EquipSelect.bmp", 325, 20, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addImage("buySelect", "images/UI/Lobby/BuySelect.bmp", 348, 20, true, RGB(247, 0, 255));
-	//IMAGEMANAGER->addImage("sellSelect", "images/UI/Lobby/SellSelect.bmp", 313, 20, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("sellSelect", "images/UI/Lobby/SellSelect.bmp", 568, 20, true, RGB(247, 0, 255));
 	//출진
 	IMAGEMANAGER->addImage("outgoing", "images/UI/Lobby/출진.bmp", 642, 462, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("o조조", "images/UI/Lobby/조조.bmp", 193, 427, true, RGB(255, 0, 255));
