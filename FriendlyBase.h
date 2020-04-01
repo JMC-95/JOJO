@@ -99,6 +99,7 @@ protected:	//AI¿ë º¯¼ö
 	int enemyNum;
 	int positionX, positionY;
 	int friendTile, enemyTile;
+	int sX, sY, sTile;
 
 public:
 	FriendlyBase();

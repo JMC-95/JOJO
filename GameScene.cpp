@@ -30,7 +30,7 @@ HRESULT GameScene::init()
 	_interface = new Interface;
 
 	//아군
-	//PLAYERMANAGER->init(); 로비에서 init을 하고 넘어온다.
+	PLAYERMANAGER->init(); //로비에서 init을 하고 넘어온다.
 	for (int i = 0; i < PLAYERMANAGER->getPlayer().size(); i++)
 	{
 		PLAYERMANAGER->getPlayer()[i]->setMapMemoryAdress(_mainMap);

@@ -89,7 +89,6 @@ void Dogyeom::update()
 	{
 		//if (!PLAYERMANAGER->getPturn()) friendAi();
 		friendAi();
-		//ÀûÀÌ Á×¾úÀ»¶§ ¸ØÃã ¹ö±×
 	}
 
 	friendAnimation();
@@ -188,39 +187,36 @@ void Dogyeom::friendAi()
 
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			if (mainMap->getMap()[i].flood)
+			for (int k = 0; k < PLAYERMANAGER->getPlayer().size(); ++k)
 			{
-				for (int k = 0; k < PLAYERMANAGER->getPlayer().size(); ++k)
-				{
-					auto& rc = mainMap->getMap()[i].rc;
-					auto& playerRect = PLAYERMANAGER->getPlayer()[k]->getPlayerInfo().rc;
+				auto& rc = mainMap->getMap()[i].rc;
+				auto& playerRect = PLAYERMANAGER->getPlayer()[k]->getPlayerInfo().rc;
 
-					if (IntersectRect(&temp, &rc, &playerRect))
-					{
-						mainMap->getMap()[i].flood = false;
-					}
+				if (IntersectRect(&temp, &rc, &playerRect))
+				{
+					mainMap->getMap()[i].flood = false;
 				}
+			}
 
-				for (int k = 0; k < FRIENDMANAGER->getFriend().size(); ++k)
+			for (int k = 0; k < FRIENDMANAGER->getFriend().size(); ++k)
+			{
+				auto& rc = mainMap->getMap()[i].rc;
+				auto& friendRect = FRIENDMANAGER->getFriend()[k]->getFriendInfo().rc;
+
+				if (IntersectRect(&temp, &rc, &friendRect))
 				{
-					auto& rc = mainMap->getMap()[i].rc;
-					auto& friendRect = FRIENDMANAGER->getFriend()[k]->getFriendInfo().rc;
-
-					if (IntersectRect(&temp, &rc, &friendRect))
-					{
-						mainMap->getMap()[i].flood = false;
-					}
+					mainMap->getMap()[i].flood = false;
 				}
+			}
 
-				for (int k = 4; k < 18; ++k)
+			for (int k = 4; k < 18; ++k)
+			{
+				auto& rc = mainMap->getMap()[i].rc;
+				auto& enemyRect = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc;
+
+				if (IntersectRect(&temp, &rc, &enemyRect))
 				{
-					auto& rc = mainMap->getMap()[i].rc;
-					auto& enemyRect = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc;
-
-					if (IntersectRect(&temp, &rc, &enemyRect))
-					{
-						mainMap->getMap()[i].flood = false;
-					}
+					mainMap->getMap()[i].flood = false;
 				}
 			}
 		}
@@ -258,10 +254,7 @@ void Dogyeom::friendAi()
 
 		for (int i = 0; i < TILE_X * TILE_Y; i++)
 		{
-			if (mainMap->getMap()[i].flood)
-			{
-				mainMap->getMap()[i].flood = false;
-			}
+			if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
 		}
 	}
 
@@ -274,6 +267,10 @@ void Dogyeom::friendMove()
 {
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
+
+	sX = optimalPath.top().rc.left / TILE_WIDTH;
+	sY = optimalPath.top().rc.top / TILE_HEIGHT;
+	sTile = sX + (sY * TILE_Y);
 
 	if (friendX > stackX)
 	{

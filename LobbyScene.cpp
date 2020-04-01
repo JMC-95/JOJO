@@ -11,13 +11,13 @@ LobbyScene::~LobbyScene()
 
 HRESULT LobbyScene::init()
 {
-	PLAYERMANAGER->init(); //로비에서 init을 하고 GameScene으로 넘겨준다.
+	//PLAYERMANAGER->init(); //로비에서 init을 하고 GameScene으로 넘겨준다.
 
 	//BGM
 	if (isSound)
 	{
 		SOUNDMANAGER->stop("titleSound");
-		//SOUNDMANAGER->play("lobbySound", 1.0f);
+		SOUNDMANAGER->play("lobbySound", 1.0f);
 	}
 	else SOUNDMANAGER->stop("lobbySound");
 
@@ -620,6 +620,26 @@ void LobbyScene::render()
 
 		SelectObject(getMemDC(), oldFont);
 		DeleteObject(myFont);
+
+		for (int i = 0; i < vAllItem.size(); i++)
+		{
+			if (vAllItem[i].name == "단검")
+			{
+				if (PtInRect(&itemRect[i], m_ptMouse) && KEYMANAGER->isToggleKey(VK_RBUTTON)) IMAGEMANAGER->render("검info", getMemDC(), 200, 100);
+			}
+			else if (vAllItem[i].name == "단창")
+			{
+				if (PtInRect(&itemRect[i], m_ptMouse) && KEYMANAGER->isToggleKey(VK_RBUTTON)) IMAGEMANAGER->render("창info", getMemDC(), 200, 100);
+			}
+			else if (vAllItem[i].name == "반궁")
+			{
+				if (PtInRect(&itemRect[i], m_ptMouse) && KEYMANAGER->isToggleKey(VK_RBUTTON)) IMAGEMANAGER->render("활info", getMemDC(), 200, 100);
+			}
+			else if (vAllItem[i].name == "가죽갑옷")
+			{
+				if (PtInRect(&itemRect[i], m_ptMouse) && KEYMANAGER->isToggleKey(VK_RBUTTON)) IMAGEMANAGER->render("갑옷info", getMemDC(), 200, 100);
+			}
+		}
 	}
 	else if (isBuyShop)
 	{
@@ -1029,6 +1049,18 @@ void LobbyScene::render()
 			}
 		}
 
+		if (frameX == 0)
+		{
+			if (PtInRect(&itemRect[0], m_ptMouse) && KEYMANAGER->isToggleKey(VK_RBUTTON)) IMAGEMANAGER->render("검info", getMemDC(), 200, 100);
+			else if (PtInRect(&itemRect[1], m_ptMouse) && KEYMANAGER->isToggleKey(VK_RBUTTON)) IMAGEMANAGER->render("창info", getMemDC(), 200, 100);
+			else if (PtInRect(&itemRect[2], m_ptMouse) && KEYMANAGER->isToggleKey(VK_RBUTTON)) IMAGEMANAGER->render("활info", getMemDC(), 200, 100);
+			else if (PtInRect(&itemRect[3], m_ptMouse) && KEYMANAGER->isToggleKey(VK_RBUTTON)) IMAGEMANAGER->render("갑옷info", getMemDC(), 200, 100);
+		}
+		else
+		{
+			if (PtInRect(&itemRect[0], m_ptMouse) && KEYMANAGER->isToggleKey(VK_RBUTTON)) IMAGEMANAGER->render("콩info", getMemDC(), 200, 100);
+		}
+
 		SelectObject(getMemDC(), oldFont);
 		DeleteObject(myFont);
 	}
@@ -1048,7 +1080,7 @@ void LobbyScene::render()
 			{
 				if (PtInRect(&itemRect[i], m_ptMouse))
 				{
-					IMAGEMANAGER->alphaRender("sellSelect", getMemDC(), itemRect[i].left - 23, itemRect[i].top, 100);
+					IMAGEMANAGER->alphaRender("sellSelect2", getMemDC(), itemRect[i].left, itemRect[i].top, 100);
 				}
 
 				if (vAllItem[i].name == "단검") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left - 2, itemRect[i].top - 2, 24, 24);

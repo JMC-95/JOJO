@@ -34,7 +34,7 @@ HRESULT mainGame::init()
 	SCENEMANAGER->addScene("GameOver", new GameOver);
 
 	//현재 씬
-	SCENEMANAGER->changeScene("LobbyScene");
+	SCENEMANAGER->changeScene("GameScene");
 
 	return S_OK;
 }
@@ -106,6 +106,7 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("equipSelect", "images/UI/Lobby/EquipSelect.bmp", 325, 20, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addImage("buySelect", "images/UI/Lobby/BuySelect.bmp", 348, 20, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addImage("sellSelect", "images/UI/Lobby/SellSelect.bmp", 568, 20, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("sellSelect2", "images/UI/Lobby/SellSelect2.bmp", 545, 20, true, RGB(247, 0, 255));
 	//출진
 	IMAGEMANAGER->addImage("outgoing", "images/UI/Lobby/출진.bmp", 642, 462, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("o조조", "images/UI/Lobby/조조.bmp", 193, 427, true, RGB(255, 0, 255));
@@ -126,6 +127,11 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("equipment", "images/UI/Lobby/장비.bmp", 642, 462, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("empty", "images/UI/Lobby/없음.bmp", 30, 18, true, RGB(255, 0, 255));
 	IMAGEMANAGER->addImage("erase", "images/UI/Lobby/삭제.bmp", 22, 13, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("검info", "images/UI/Item/검Info.bmp", 390, 280, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("창info", "images/UI/Item/창Info.bmp", 390, 280, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("활info", "images/UI/Item/활Info.bmp", 390, 280, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("갑옷info", "images/UI/Item/갑옷Info.bmp", 390, 280, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("콩info", "images/UI/Item/콩Info.bmp", 390, 280, true, RGB(255, 0, 255));
 	//구입
 	IMAGEMANAGER->addFrameImage("buy", "images/UI/Lobby/구입.bmp", 1284, 462, 2, 1, true, RGB(255, 0, 255));
 	//매각
