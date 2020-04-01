@@ -151,8 +151,6 @@ public:
 	void setIsAtk(bool atk) { isAtk = atk; }
 	void setIsHit(bool hit) { isHit = hit; }
 
-	void setDirection(PlayerDirection direction) { pDirection = direction; }
-
 	//프로그레스바
 	progressBar* getProgressBarHp() { return _Hp; }
 	progressBar* getProgressBarMp() { return _Mp; }

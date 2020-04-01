@@ -231,10 +231,10 @@ void LobbyScene::render()
 		IMAGEMANAGER->render("equipment", getMemDC());
 		IMAGEMANAGER->render(playerInfo.face, getMemDC(), 415, 100);
 
-		//인터페이스
 		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 		HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
 		SetTextColor(getMemDC(), RGB(0, 0, 0));
+		//인터페이스
 		sprintf_s(str, "이전 장수로");
 		TextOut(getMemDC(), 412, 382, str, strlen(str));
 		sprintf_s(str, "다음 장수로");
@@ -261,22 +261,24 @@ void LobbyScene::render()
 		TextOut(getMemDC(), 450, 192, str, strlen(str));
 		sprintf_s(str, "%d", player->getMaxMp());
 		TextOut(getMemDC(), 451, 213, str, strlen(str));
-		SelectObject(getMemDC(), oldFont);
-		DeleteObject(myFont);
+		sprintf_s(str, "없음");
+		TextOut(getMemDC(), 544, 102, str, strlen(str));
+		sprintf_s(str, "없음");
+		TextOut(getMemDC(), 556, 199, str, strlen(str));
 
 		//장비 목록
 		for (int i = 0; i < vAllItem.size(); i++)
 		{
-			if (PtInRect(&itemRect[i], m_ptMouse)) IMAGEMANAGER->alphaRender("equipSelect", getMemDC(), itemRect[i].left, itemRect[i].top, 100);
+			if (PtInRect(&itemRect[i], m_ptMouse))
+			{
+				IMAGEMANAGER->alphaRender("equipSelect", getMemDC(), itemRect[i].left, itemRect[i].top, 100);
+			}
 
 			if (vAllItem[i].name == "단검") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left - 2, itemRect[i].top - 2, 24, 24);
 			else if (vAllItem[i].name == "단창") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left, itemRect[i].top, 22, 22);
 			else if (vAllItem[i].name == "반궁") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left, itemRect[i].top - 1, 22, 22);
 			else if (vAllItem[i].name == "가죽갑옷") vAllItem[i].itemImage->render(getMemDC(), itemRect[i].left + 1, itemRect[i].top, 20, 20);
 
-			HFONT myFont2 = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
-			HFONT oldFont2 = (HFONT)SelectObject(getMemDC(), myFont2);
-			SetTextColor(getMemDC(), RGB(0, 0, 0));
 			sprintf_s(str, vAllItem[i].name);
 			TextOut(getMemDC(), itemRect[i].left + 22, itemRect[i].top + 4, str, strlen(str));
 			if (vAllItem[i].itemKind == ITEM_ARMOR)
@@ -301,6 +303,12 @@ void LobbyScene::render()
 				{
 					sprintf_s(str, "O");
 					TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+
+					if (PtInRect(&itemRect[i], m_ptMouse))
+					{
+						sprintf_s(str, "+10");
+						TextOut(getMemDC(), 477, 244, str, strlen(str));
+					}
 				}
 				else
 				{
@@ -314,6 +322,12 @@ void LobbyScene::render()
 				{
 					sprintf_s(str, "O");
 					TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+
+					if (PtInRect(&itemRect[i], m_ptMouse))
+					{
+						sprintf_s(str, "+12");
+						TextOut(getMemDC(), 477, 244, str, strlen(str));
+					}
 				}
 				else
 				{
@@ -327,6 +341,12 @@ void LobbyScene::render()
 				{
 					sprintf_s(str, "O");
 					TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+
+					if (PtInRect(&itemRect[i], m_ptMouse))
+					{
+						sprintf_s(str, "+8");
+						TextOut(getMemDC(), 477, 244, str, strlen(str));
+					}
 				}
 				else
 				{
@@ -338,23 +358,257 @@ void LobbyScene::render()
 			{
 				sprintf_s(str, "O");
 				TextOut(getMemDC(), itemRect[i].left + 303, itemRect[i].top + 4, str, strlen(str));
+
+				if (PtInRect(&itemRect[i], m_ptMouse))
+				{
+					sprintf_s(str, "+10");
+					TextOut(getMemDC(), 477, 286, str, strlen(str));
+				}
 			}
-			SelectObject(getMemDC(), oldFont2);
-			DeleteObject(myFont2);
 		}
 
 		//착용중인 장비
-		for (int j = 0; j < vEquipItem.size(); j++)
+		if (playerNum == 0)
 		{
-			if (vEquipItem[j].itemKind == ITEM_WEAPON)
+			for (int j = 0; j < vEquipJj.size(); j++)
 			{
-				vEquipItem[j].itemImage->render(getMemDC(), equipRect[3].left, equipRect[3].top);
-			}
-			else
-			{
-				vEquipItem[j].itemImage->render(getMemDC(), equipRect[4].left, equipRect[4].top);
+				if (vEquipJj[j].itemKind == ITEM_WEAPON)
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 542, 100);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 244);
+					vEquipJj[j].itemImage->render(getMemDC(), equipRect[3].left, equipRect[3].top);
+					sprintf_s(str, vEquipJj[j].name);
+					TextOut(getMemDC(), 544, 102, str, strlen(str));
+					sprintf_s(str, "공격력");
+					TextOut(getMemDC(), 511, 160, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipJj[j].power);
+					TextOut(getMemDC(), 560, 159, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.atk + vEquipJj[j].power);
+					TextOut(getMemDC(), 451, 244, str, strlen(str));
+				}
+				else
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 554, 197);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 287);
+					vEquipJj[j].itemImage->render(getMemDC(), equipRect[4].left, equipRect[4].top - 1);
+					sprintf_s(str, vEquipJj[j].name);
+					TextOut(getMemDC(), 556, 199, str, strlen(str));
+					sprintf_s(str, "방어력");
+					TextOut(getMemDC(), 511, 260, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipJj[j].power);
+					TextOut(getMemDC(), 560, 259, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.def + vEquipJj[j].power);
+					TextOut(getMemDC(), 451, 286, str, strlen(str));
+				}
 			}
 		}
+		else if (playerNum == 1)
+		{
+			for (int j = 0; j < vEquipHd.size(); j++)
+			{
+				if (vEquipHd[j].itemKind == ITEM_WEAPON)
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 542, 100);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 244);
+					vEquipHd[j].itemImage->render(getMemDC(), equipRect[3].left, equipRect[3].top);
+					sprintf_s(str, vEquipHd[j].name);
+					TextOut(getMemDC(), 544, 102, str, strlen(str));
+					sprintf_s(str, "공격력");
+					TextOut(getMemDC(), 511, 160, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipHd[j].power);
+					TextOut(getMemDC(), 560, 159, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.atk + vEquipHd[j].power);
+					TextOut(getMemDC(), 451, 244, str, strlen(str));
+				}
+				else
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 554, 197);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 287);
+					vEquipHd[j].itemImage->render(getMemDC(), equipRect[4].left, equipRect[4].top);
+					sprintf_s(str, vEquipHd[j].name);
+					TextOut(getMemDC(), 556, 199, str, strlen(str));
+					sprintf_s(str, "방어력");
+					TextOut(getMemDC(), 511, 260, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipHd[j].power);
+					TextOut(getMemDC(), 560, 259, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.def + vEquipHd[j].power);
+					TextOut(getMemDC(), 451, 286, str, strlen(str));
+				}
+			}
+		}
+		else if (playerNum == 2)
+		{
+			for (int j = 0; j < vEquipHy.size(); j++)
+			{
+				if (vEquipHy[j].itemKind == ITEM_WEAPON)
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 542, 100);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 244);
+					vEquipHy[j].itemImage->render(getMemDC(), equipRect[3].left, equipRect[3].top);
+					sprintf_s(str, vEquipHy[j].name);
+					TextOut(getMemDC(), 544, 102, str, strlen(str));
+					sprintf_s(str, "공격력");
+					TextOut(getMemDC(), 511, 160, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipHy[j].power);
+					TextOut(getMemDC(), 560, 159, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.atk + vEquipHy[j].power);
+					TextOut(getMemDC(), 451, 244, str, strlen(str));
+				}
+				else
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 554, 197);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 287);
+					vEquipHy[j].itemImage->render(getMemDC(), equipRect[4].left, equipRect[4].top);
+					sprintf_s(str, vEquipHy[j].name);
+					TextOut(getMemDC(), 556, 199, str, strlen(str));
+					sprintf_s(str, "방어력");
+					TextOut(getMemDC(), 511, 260, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipHy[j].power);
+					TextOut(getMemDC(), 560, 259, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.def + vEquipHy[j].power);
+					TextOut(getMemDC(), 451, 286, str, strlen(str));
+				}
+			}
+		}
+		else if (playerNum == 3)
+		{
+			for (int j = 0; j < vEquipJi.size(); j++)
+			{
+				if (vEquipJi[j].itemKind == ITEM_WEAPON)
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 542, 100);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 244);
+					vEquipJi[j].itemImage->render(getMemDC(), equipRect[3].left, equipRect[3].top);
+					sprintf_s(str, vEquipJi[j].name);
+					TextOut(getMemDC(), 544, 102, str, strlen(str));
+					sprintf_s(str, "공격력");
+					TextOut(getMemDC(), 511, 160, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipJi[j].power);
+					TextOut(getMemDC(), 560, 159, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.atk + vEquipJi[j].power);
+					TextOut(getMemDC(), 451, 244, str, strlen(str));
+				}
+				else
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 554, 197);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 287);
+					vEquipJi[j].itemImage->render(getMemDC(), equipRect[4].left, equipRect[4].top);
+					sprintf_s(str, vEquipJi[j].name);
+					TextOut(getMemDC(), 556, 199, str, strlen(str));
+					sprintf_s(str, "방어력");
+					TextOut(getMemDC(), 511, 260, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipJi[j].power);
+					TextOut(getMemDC(), 560, 259, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.def + vEquipJi[j].power);
+					TextOut(getMemDC(), 451, 286, str, strlen(str));
+				}
+			}
+		}
+		else if (playerNum == 4)
+		{
+			for (int j = 0; j < vEquipAj.size(); j++)
+			{
+				if (vEquipAj[j].itemKind == ITEM_WEAPON)
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 542, 100);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 244);
+					vEquipAj[j].itemImage->render(getMemDC(), equipRect[3].left, equipRect[3].top);
+					sprintf_s(str, vEquipAj[j].name);
+					TextOut(getMemDC(), 544, 102, str, strlen(str));
+					sprintf_s(str, "공격력");
+					TextOut(getMemDC(), 511, 160, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipAj[j].power);
+					TextOut(getMemDC(), 560, 159, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.atk + vEquipAj[j].power);
+					TextOut(getMemDC(), 451, 244, str, strlen(str));
+				}
+				else
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 554, 197);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 287);
+					vEquipAj[j].itemImage->render(getMemDC(), equipRect[4].left, equipRect[4].top);
+					sprintf_s(str, vEquipAj[j].name);
+					TextOut(getMemDC(), 556, 199, str, strlen(str));
+					sprintf_s(str, "방어력");
+					TextOut(getMemDC(), 511, 260, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipAj[j].power);
+					TextOut(getMemDC(), 560, 259, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.def + vEquipAj[j].power);
+					TextOut(getMemDC(), 451, 286, str, strlen(str));
+				}
+			}
+		}
+		else if (playerNum == 5)
+		{
+			for (int j = 0; j < vEquipIj.size(); j++)
+			{
+				if (vEquipIj[j].itemKind == ITEM_WEAPON)
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 542, 100);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 244);
+					vEquipIj[j].itemImage->render(getMemDC(), equipRect[3].left, equipRect[3].top);
+					sprintf_s(str, vEquipIj[j].name);
+					TextOut(getMemDC(), 544, 102, str, strlen(str));
+					sprintf_s(str, "공격력");
+					TextOut(getMemDC(), 511, 160, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipIj[j].power);
+					TextOut(getMemDC(), 560, 159, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.atk + vEquipIj[j].power);
+					TextOut(getMemDC(), 451, 244, str, strlen(str));
+				}
+				else
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 554, 197);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 287);
+					vEquipIj[j].itemImage->render(getMemDC(), equipRect[4].left, equipRect[4].top);
+					sprintf_s(str, vEquipIj[j].name);
+					TextOut(getMemDC(), 556, 199, str, strlen(str));
+					sprintf_s(str, "방어력");
+					TextOut(getMemDC(), 511, 260, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipIj[j].power);
+					TextOut(getMemDC(), 560, 259, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.def + vEquipIj[j].power);
+					TextOut(getMemDC(), 451, 286, str, strlen(str));
+				}
+			}
+		}
+		else if (playerNum == 6)
+		{
+			for (int j = 0; j < vEquipJh.size(); j++)
+			{
+				if (vEquipJh[j].itemKind == ITEM_WEAPON)
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 542, 100);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 244);
+					vEquipJh[j].itemImage->render(getMemDC(), equipRect[3].left, equipRect[3].top);
+					sprintf_s(str, vEquipJh[j].name);
+					TextOut(getMemDC(), 544, 102, str, strlen(str));
+					sprintf_s(str, "공격력");
+					TextOut(getMemDC(), 511, 160, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipJh[j].power);
+					TextOut(getMemDC(), 560, 159, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.atk + vEquipJh[j].power);
+					TextOut(getMemDC(), 451, 244, str, strlen(str));
+				}
+				else
+				{
+					IMAGEMANAGER->render("empty", getMemDC(), 554, 197);
+					IMAGEMANAGER->render("erase", getMemDC(), 451, 287);
+					vEquipJh[j].itemImage->render(getMemDC(), equipRect[4].left, equipRect[4].top);
+					sprintf_s(str, vEquipJh[j].name);
+					TextOut(getMemDC(), 556, 199, str, strlen(str));
+					sprintf_s(str, "방어력");
+					TextOut(getMemDC(), 511, 260, str, strlen(str));
+					sprintf_s(str, "+%d", vEquipJh[j].power);
+					TextOut(getMemDC(), 560, 259, str, strlen(str));
+					sprintf_s(str, "%d", playerInfo.def + vEquipJh[j].power);
+					TextOut(getMemDC(), 451, 286, str, strlen(str));
+				}
+			}
+		}
+
+		SelectObject(getMemDC(), oldFont);
+		DeleteObject(myFont);
 	}
 	else if (isBuyShop)
 	{
@@ -674,95 +928,18 @@ void LobbyScene::equipment()
 		else if (PtInRect(&equipRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			SOUNDMANAGER->play("click", 1.0f);
+
 			if (playerNum != 0) playerNum -= 1;
 		}
 		else if (PtInRect(&equipRect[2], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			SOUNDMANAGER->play("click", 1.0f);
+
 			if (playerNum < 6) playerNum += 1;
 		}
-		else if (PtInRect(&equipRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("noStart", 1.0f);
 
-			for (int i = 0; i < vEquipItem.size(); i++)
-			{
-				if (vEquipItem[i].itemKind == ITEM_WEAPON)
-				{
-					isWeapon = false;
-					vAllItem.push_back(vEquipItem[i]);
-					vEquipItem.erase(vEquipItem.begin() + i);
-				}
-			}
-		}
-		else if (PtInRect(&equipRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-		{
-			SOUNDMANAGER->play("noStart", 1.0f);
-
-			for (int i = 0; i < vEquipItem.size(); i++)
-			{
-				if (vEquipItem[i].itemKind == ITEM_ARMOR)
-				{
-					isArmor = false;
-					vAllItem.push_back(vArmor[0]);
-					vEquipItem.erase(vEquipItem.begin() + i);
-				}
-			}
-		}
-
-		if (vAllItem.size() != 0)
-		{
-			for (int i = 0; i < vAllItem.size(); i++)
-			{
-				if (PtInRect(&itemRect[i], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
-				{
-					if (vAllItem[i].itemKind == ITEM_WEAPON)
-					{
-						if (vAllItem[i].name == "단검")
-						{
-							if (playerNum == 0 || playerNum == 4 || playerNum == 5 || playerNum == 6)
-							{
-								SOUNDMANAGER->play("buy", 1.0f);
-								isWeapon = true;
-								vWeapon[0].stock -= 1;
-								vEquipItem.push_back(vAllItem[i]);
-								vAllItem.erase(vAllItem.begin() + i);
-							}
-						}
-						else if (vAllItem[i].name == "단창")
-						{
-							if (playerNum == 1 || playerNum == 3)
-							{
-								SOUNDMANAGER->play("buy", 1.0f);
-								isWeapon = true;
-								vWeapon[1].stock -= 1;
-								vEquipItem.push_back(vAllItem[i]);
-								vAllItem.erase(vAllItem.begin() + i);
-							}
-						}
-						else if (vAllItem[i].name == "반궁")
-						{
-							if (playerNum == 2)
-							{
-								SOUNDMANAGER->play("buy", 1.0f);
-								isWeapon = true;
-								vWeapon[2].stock -= 1;
-								vEquipItem.push_back(vAllItem[i]);
-								vAllItem.erase(vAllItem.begin() + i);
-							}
-						}
-					}
-					else if (vAllItem[i].itemKind == ITEM_ARMOR)
-					{
-						SOUNDMANAGER->play("buy", 1.0f);
-						isArmor = true;
-						vArmor[0].stock -= 1;
-						vEquipItem.push_back(vAllItem[i]);
-						vAllItem.erase(vAllItem.begin() + i);
-					}
-				}
-			}
-		}
+		equip();
+		equipRelease();
 	}
 }
 
@@ -885,3 +1062,325 @@ void LobbyScene::sellShop()
 		}
 	}
 }
+
+void LobbyScene::equip()
+{
+	if (vAllItem.size() != 0)
+	{
+		for (int i = 0; i < vAllItem.size(); i++)
+		{
+			if (PtInRect(&itemRect[i], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				if (vAllItem[i].itemKind == ITEM_WEAPON)
+				{
+					if (vAllItem[i].name == "단검")
+					{
+						if (playerNum == 0)
+						{
+							SOUNDMANAGER->play("buy", 1.0f);
+							vEquipJj.push_back(vAllItem[i]);
+							vEquipItem.push_back(vAllItem[i]);
+							vAllItem.erase(vAllItem.begin() + i);
+						}
+						else if (playerNum == 4)
+						{
+							SOUNDMANAGER->play("buy", 1.0f);
+							vEquipAj.push_back(vAllItem[i]);
+							vAllItem.erase(vAllItem.begin() + i);
+						}
+						else if (playerNum == 5)
+						{
+							SOUNDMANAGER->play("buy", 1.0f);
+							vEquipIj.push_back(vAllItem[i]);
+							vAllItem.erase(vAllItem.begin() + i);
+						}
+						else if (playerNum == 6)
+						{
+							SOUNDMANAGER->play("buy", 1.0f);
+							vEquipJh.push_back(vAllItem[i]);
+							vAllItem.erase(vAllItem.begin() + i);
+						}
+					}
+					else if (vAllItem[i].name == "단창")
+					{
+						if (playerNum == 1)
+						{
+							SOUNDMANAGER->play("buy", 1.0f);
+							vEquipHd.push_back(vAllItem[i]);
+							vEquipItem.push_back(vAllItem[i]);
+							vAllItem.erase(vAllItem.begin() + i);
+						}
+						else if (playerNum == 3)
+						{
+							SOUNDMANAGER->play("buy", 1.0f);
+							vEquipJi.push_back(vAllItem[i]);
+							vAllItem.erase(vAllItem.begin() + i);
+						}
+					}
+					else
+					{
+						if (playerNum == 2)
+						{
+							SOUNDMANAGER->play("buy", 1.0f);
+							vEquipHy.push_back(vAllItem[i]);
+							vAllItem.erase(vAllItem.begin() + i);
+						}
+					}
+				}
+				else
+				{
+					if (playerNum == 0)
+					{
+						SOUNDMANAGER->play("buy", 1.0f);
+						vEquipJj.push_back(vAllItem[i]);
+						vAllItem.erase(vAllItem.begin() + i);
+					}
+					else if (playerNum == 1)
+					{
+						SOUNDMANAGER->play("buy", 1.0f);
+						vEquipHd.push_back(vAllItem[i]);
+						vAllItem.erase(vAllItem.begin() + i);
+					}
+					else if (playerNum == 2)
+					{
+						SOUNDMANAGER->play("buy", 1.0f);
+						vEquipHy.push_back(vAllItem[i]);
+						vAllItem.erase(vAllItem.begin() + i);
+					}
+					else if (playerNum == 3)
+					{
+						SOUNDMANAGER->play("buy", 1.0f);
+						vEquipJi.push_back(vAllItem[i]);
+						vAllItem.erase(vAllItem.begin() + i);
+					}
+					else if (playerNum == 4)
+					{
+						SOUNDMANAGER->play("buy", 1.0f);
+						vEquipAj.push_back(vAllItem[i]);
+						vAllItem.erase(vAllItem.begin() + i);
+					}
+					else if (playerNum == 5)
+					{
+						SOUNDMANAGER->play("buy", 1.0f);
+						vEquipIj.push_back(vAllItem[i]);
+						vAllItem.erase(vAllItem.begin() + i);
+					}
+					else if (playerNum == 6)
+					{
+						SOUNDMANAGER->play("buy", 1.0f);
+						vEquipJh.push_back(vAllItem[i]);
+						vAllItem.erase(vAllItem.begin() + i);
+					}
+				}
+			}
+		}
+	}
+}
+
+void LobbyScene::equipRelease()
+{
+	if (playerNum == 0)
+	{
+		if (PtInRect(&equipRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipJj.size(); i++)
+			{
+				if (vEquipJj[i].itemKind == ITEM_WEAPON)
+				{
+					vAllItem.push_back(vEquipJj[i]);
+					vEquipJj.erase(vEquipJj.begin() + i);
+				}
+			}
+		}
+		else if (PtInRect(&equipRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipJj.size(); i++)
+			{
+				if (vEquipJj[i].itemKind == ITEM_ARMOR)
+				{
+					vAllItem.push_back(vEquipJj[i]);
+					vEquipJj.erase(vEquipJj.begin() + i);
+				}
+			}
+		}
+	}
+	else if (playerNum == 1)
+	{
+		if (PtInRect(&equipRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipHd.size(); i++)
+			{
+				if (vEquipHd[i].itemKind == ITEM_WEAPON)
+				{
+					vAllItem.push_back(vEquipHd[i]);
+					vEquipHd.erase(vEquipHd.begin() + i);
+				}
+			}
+		}
+		else if (PtInRect(&equipRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipHd.size(); i++)
+			{
+				if (vEquipHd[i].itemKind == ITEM_ARMOR)
+				{
+					vAllItem.push_back(vEquipHd[i]);
+					vEquipHd.erase(vEquipHd.begin() + i);
+				}
+			}
+		}
+	}
+	else if (playerNum == 2)
+	{
+		if (PtInRect(&equipRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipHy.size(); i++)
+			{
+				if (vEquipHy[i].itemKind == ITEM_WEAPON)
+				{
+					vAllItem.push_back(vEquipHy[i]);
+					vEquipHy.erase(vEquipHy.begin() + i);
+				}
+			}
+		}
+		else if (PtInRect(&equipRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipHy.size(); i++)
+			{
+				if (vEquipHy[i].itemKind == ITEM_ARMOR)
+				{
+					vAllItem.push_back(vEquipHy[i]);
+					vEquipHy.erase(vEquipHy.begin() + i);
+				}
+			}
+		}
+	}
+	else if (playerNum == 3)
+	{
+		if (PtInRect(&equipRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipJi.size(); i++)
+			{
+				if (vEquipJi[i].itemKind == ITEM_WEAPON)
+				{
+					vAllItem.push_back(vEquipJi[i]);
+					vEquipJi.erase(vEquipJi.begin() + i);
+				}
+			}
+		}
+		else if (PtInRect(&equipRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipJi.size(); i++)
+			{
+				if (vEquipJi[i].itemKind == ITEM_ARMOR)
+				{
+					vAllItem.push_back(vEquipJi[i]);
+					vEquipJi.erase(vEquipJi.begin() + i);
+				}
+			}
+		}
+	}
+	else if (playerNum == 4)
+	{
+		if (PtInRect(&equipRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipAj.size(); i++)
+			{
+				if (vEquipAj[i].itemKind == ITEM_WEAPON)
+				{
+					vAllItem.push_back(vEquipAj[i]);
+					vEquipAj.erase(vEquipAj.begin() + i);
+				}
+			}
+		}
+		else if (PtInRect(&equipRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipAj.size(); i++)
+			{
+				if (vEquipAj[i].itemKind == ITEM_ARMOR)
+				{
+					vAllItem.push_back(vEquipAj[i]);
+					vEquipAj.erase(vEquipAj.begin() + i);
+				}
+			}
+		}
+	}
+	else if (playerNum == 5)
+	{
+		if (PtInRect(&equipRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipIj.size(); i++)
+			{
+				if (vEquipIj[i].itemKind == ITEM_WEAPON)
+				{
+					vAllItem.push_back(vEquipIj[i]);
+					vEquipIj.erase(vEquipIj.begin() + i);
+				}
+			}
+		}
+		else if (PtInRect(&equipRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipIj.size(); i++)
+			{
+				if (vEquipIj[i].itemKind == ITEM_ARMOR)
+				{
+					vAllItem.push_back(vEquipIj[i]);
+					vEquipIj.erase(vEquipIj.begin() + i);
+				}
+			}
+		}
+	}
+	else if (playerNum == 6)
+	{
+		if (PtInRect(&equipRect[3], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipJh.size(); i++)
+			{
+				if (vEquipJh[i].itemKind == ITEM_WEAPON)
+				{
+					vAllItem.push_back(vEquipJh[i]);
+					vEquipJh.erase(vEquipJh.begin() + i);
+				}
+			}
+		}
+		else if (PtInRect(&equipRect[4], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("noStart", 1.0f);
+
+			for (int i = 0; i < vEquipJh.size(); i++)
+			{
+				if (vEquipJh[i].itemKind == ITEM_ARMOR)
+				{
+					vAllItem.push_back(vEquipJh[i]);
+					vEquipJh.erase(vEquipJh.begin() + i);
+				}
+			}
+		}
+	}
+}
+

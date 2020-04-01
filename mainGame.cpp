@@ -124,6 +124,8 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("n조홍", "images/UI/Lobby/조홍name.bmp", 45, 13, true, RGB(255, 0, 255));
 	//장비
 	IMAGEMANAGER->addImage("equipment", "images/UI/Lobby/장비.bmp", 642, 462, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("empty", "images/UI/Lobby/없음.bmp", 30, 18, true, RGB(255, 0, 255));
+	IMAGEMANAGER->addImage("erase", "images/UI/Lobby/삭제.bmp", 22, 13, true, RGB(255, 0, 255));
 	//구입
 	IMAGEMANAGER->addFrameImage("buy", "images/UI/Lobby/구입.bmp", 1284, 462, 2, 1, true, RGB(255, 0, 255));
 	//매각

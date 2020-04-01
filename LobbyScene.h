@@ -5,18 +5,27 @@ class LobbyScene : public gameNode
 {
 private:
 	//로비에서 사용되는 렉트를 담아두는 벡터
-	vector<RECT> vMenu;			//로비
-	vector<RECT> vOut;			//출진
-	vector<RECT> vEquipment;	//장비
-	vector<RECT> vBuy;			//구입
-	vector<RECT> vSell;			//매각
+	vector<RECT> vMenu;				//로비
+	vector<RECT> vOut;				//출진
+	vector<RECT> vEquipment;		//장비
+	vector<RECT> vBuy;				//구입
+	vector<RECT> vSell;				//매각
 
 	//아이템 벡터
-	vector<ItemInfo> vWeapon;	//무기
-	vector<ItemInfo> vArmor;	//갑옷
-	vector<ItemInfo> vPotion;	//물약
-	vector<ItemInfo> vAllItem;	//모든 아이템
-	vector<ItemInfo> vEquipItem;//장비창 아이템
+	vector<ItemInfo> vWeapon;		//무기
+	vector<ItemInfo> vArmor;		//갑옷
+	vector<ItemInfo> vPotion;		//물약
+	vector<ItemInfo> vAllItem;		//모든 아이템
+	vector<ItemInfo> vEquipItem;	//모든 아이템
+
+	//캐릭터 장비창 벡터
+	vector<ItemInfo> vEquipJj;	//조조
+	vector<ItemInfo> vEquipHd;	//하후돈
+	vector<ItemInfo> vEquipHy;	//하후연
+	vector<ItemInfo> vEquipJi;	//조인
+	vector<ItemInfo> vEquipAj;	//악진
+	vector<ItemInfo> vEquipIj;	//이전
+	vector<ItemInfo> vEquipJh;	//조홍
 
 private:
 	//로비에서 사용되는 렉트
@@ -27,15 +36,12 @@ private:
 	RECT sellRect[3];	//매각
 
 	//아이템 렉트
-	RECT weaponRect[7];
-	RECT armorRect[7];
 	RECT itemRect[13];
 
 	int money;			//돈
 	int playerNum;		//캐릭터 넘버
 	int playerCount;	//캐릭터 카운트
 	int frameX;			//이미지 프레임
-	int addAtk, addDef;	//추가 공격력 및 방어력
 
 	char str[128];
 
@@ -44,8 +50,6 @@ private:
 	bool isBuyShop;		//구입
 	bool isSellShop;	//매각
 
-	bool isWeapon;		//무기를 착용했는지 체크
-	bool isArmor;		//갑옷을 착용했는지 체크
 	bool isSell;		//아이템을 판매했는지 체크
 
 public:
@@ -61,4 +65,6 @@ public:
 	void equipment();
 	void buyShop();
 	void sellShop();
+	void equip();
+	void equipRelease();
 };
