@@ -83,6 +83,10 @@ protected:	//일반 변수
 	bool isAtkRng;			//적이 있다면 공격 버튼을 활성화해주는 변수
 	bool isAtk;				//적을 공격할 때 체크해주는 변수
 	bool isHit;				//피격시 체크해주는 변수
+	bool isSkill;			//책략 메뉴
+	bool isSkillCheck;		//책략 체크
+	bool isHeal;			//소보급
+	bool isHealCheck;		//소보급 체크
 
 protected:	//A*용 변수
 	int saveTile;			//시작 타일을 저장하는 변수
@@ -117,7 +121,9 @@ public:
 	//A* 및 FloodFill
 	void aStar();
 	void floodFill(int tile, int moveCount);
+	void skillFill(int tile, int moveCount);
 	void hitDamage(int _damage);
+	void HealDamage(int _damage);
 
 	//맵의 주소
 	void setMapMemoryAdress(MainMap* map) { mainMap = map; }
@@ -141,6 +147,9 @@ public:
 	bool getIsAtk() { return isAtk; }
 	bool getIsHit() { return isHit; }
 	bool getIsClick() { return isClick; }
+	bool getIsSkill() { return isSkill; }
+	bool getIsSkillCheck() { return isSkillCheck; }
+	bool getIsHeal() { return isHeal; }
 
 	//Setter
 	void setIsTurn(bool turn) { isTurn = turn; }
@@ -150,6 +159,9 @@ public:
 	void setIsAtkRng(bool atkRng) { isAtkRng = atkRng; }
 	void setIsAtk(bool atk) { isAtk = atk; }
 	void setIsHit(bool hit) { isHit = hit; }
+	void setIsSkill(bool skill) { isSkill = skill; }
+	void setIsSkillCheck(bool skillCheck) { isSkillCheck = skillCheck; }
+	void setIsHeal(bool heal) { isHeal = heal; }
 
 	//프로그레스바
 	progressBar* getProgressBarHp() { return _Hp; }

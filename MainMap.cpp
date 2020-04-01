@@ -119,6 +119,15 @@ void MainMap::playerDraw(HDC hdc)
 	//캐릭터의 이동 범위와 공격 범위를 보여준다.
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
+		if (tiles[i].skill)
+		{
+			//조조 스킬 범위
+			if (PLAYERMANAGER->getPlayer()[0]->getIsSkillCheck())
+			{
+				PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+			}
+		}
+
 		if (tiles[i].flood)
 		{
 			//기병 + 궁병

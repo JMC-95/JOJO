@@ -81,12 +81,20 @@ void Ijeon::update()
 {
 	if (isTurn)
 	{
-		if (!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
+		if (!PLAYERMANAGER->getPlayer()[0]->getIsSkill() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsSkillCheck() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[1]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[1]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[2]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[3]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
 			!ENEMYMANAGER->getEturn())
 		{
 			mouseMove();
@@ -119,7 +127,14 @@ void Ijeon::render(HDC hdc)
 		}
 		else
 		{
-			ijeon.img->aniRender(hdc, ijeon.rc.left, ijeon.rc.top, playerAni);
+			if (isHeal)
+			{
+				ijeon.blockImg->frameRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, 5);
+			}
+			else
+			{
+				ijeon.img->aniRender(hdc, ijeon.rc.left, ijeon.rc.top, playerAni);
+			}
 		}
 	}
 	else
@@ -138,7 +153,14 @@ void Ijeon::render(HDC hdc)
 		}
 		else
 		{
-			ijeon.img->frameAlphaRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, frameY, 100);
+			if (isHeal)
+			{
+				ijeon.blockImg->frameRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, 5);
+			}
+			else
+			{
+				ijeon.img->frameAlphaRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, frameY, 100);
+			}
 		}
 	}
 }
@@ -235,7 +257,7 @@ void Ijeon::mouseMove()
 				}
 				else
 				{
-					SOUNDMANAGER->play("clickMiss", 1.0f);
+					if (!isClick) SOUNDMANAGER->play("clickMiss", 1.0f);
 					isSelect = false;
 				}
 
@@ -376,7 +398,7 @@ void Ijeon::playerMenu()
 	//¸Þ´º
 	if (isClick)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			SOUNDMANAGER->stop("move");
 			SOUNDMANAGER->stop("clickMiss");
@@ -563,6 +585,7 @@ void Ijeon::playerState()
 	_Exp->setGauge(currentExp, maxExp);
 
 	if (currentHp < 0) currentHp = 0;
+	if (currentHp > maxHp) currentHp = maxHp;
 }
 
 void Ijeon::setPosition(RECT rc)

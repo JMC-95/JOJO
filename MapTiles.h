@@ -50,6 +50,7 @@ struct tagTile
 	int node;			//Astar에서 사용되는 노드
 
 	bool flood;			//floodFill에서 사용되는 변수
+	bool skill;			//skillFill에서 사용되는 변수
 };
 
 //이미지 타일 구조체

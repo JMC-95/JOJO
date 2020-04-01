@@ -226,7 +226,31 @@ void PlayerBase::floodFill(int tile, int moveCount)
 	}
 }
 
+void PlayerBase::skillFill(int tile, int moveCount)
+{
+	if (mainMap->getMap()[tile].obj != OBJ_CASTLEWALLS &&
+		mainMap->getMap()[tile].obj != OBJ_ROCKMOUNTAIN &&
+		mainMap->getMap()[tile].obj != OBJ_MOUNTAIN &&
+		mainMap->getMap()[tile].obj != OBJ_CASTLEGATE)
+	{
+		if (moveCount >= 0 && tile % TILE_X)
+		{
+			skillFill(tile - 1, moveCount - 1);
+			skillFill(tile + 1, moveCount - 1);
+			skillFill(tile - 20, moveCount - 1);
+			skillFill(tile + 20, moveCount - 1);
+
+			mainMap->getMap()[tile].skill = true;
+		}
+	}
+}
+
 void PlayerBase::hitDamage(int _damage)
 {
 	currentHp -= _damage;
+}
+
+void PlayerBase::HealDamage(int _damage)
+{
+	currentHp += _damage;
 }

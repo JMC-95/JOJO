@@ -6,6 +6,15 @@ class Jojo : public PlayerBase
 private:
 	PlayerInfo jojo;
 
+private: //스킬
+	vector<RECT> vSkill;
+
+	RECT skillRect[2];
+
+	int skillCount;		//스킬 이미지를 돌리기 위한 카운트
+	int frameCount;		//프레임 이미지를 돌리기 위한 카운트
+	int playerNumber;	//캐릭터 넘버
+
 public:
 	Jojo();
 	~Jojo();

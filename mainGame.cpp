@@ -91,6 +91,8 @@ void mainGame::sounds()
 	SOUNDMANAGER->addSound("noStart", "sound/effect/NoStart.wav", false, false);
 	SOUNDMANAGER->addSound("buy", "sound/effect/Buy.wav", false, false);
 	SOUNDMANAGER->addSound("sell", "sound/effect/Sell.wav", false, false);
+	SOUNDMANAGER->addSound("skillStart", "sound/effect/SkillStart.wav", false, false);
+	SOUNDMANAGER->addSound("healStart", "sound/effect/HealStart.wav", false, false);
 }
 
 void mainGame::images()
@@ -179,6 +181,10 @@ void mainGame::images()
 
 	//정보창 이미지
 	IMAGEMANAGER->addImage("정보창", "images/UI/Info/Status.bmp", 240, 305, true, RGB(247, 0, 255));
+
+	//스킬
+	IMAGEMANAGER->addImage("skillMenu", "images/UI/InGame/Skill.bmp", 203, 158, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("소보급", "images/UI/Skill/소보급.bmp", 99, 50, true, RGB(247, 0, 255));
 
 	//플레이어 이미지
 	IMAGEMANAGER->addFrameImage("메뉴", "images/UI/InGame/Menu.bmp", 176, 242, 2, 2, true, RGB(247, 0, 255));

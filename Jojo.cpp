@@ -41,7 +41,7 @@ HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRng
 	jojo.armorImg = ITEMMANAGER->getArmor()[0].itemImage;
 	jojo.addAtk = ITEMMANAGER->getWeapon()[0].power;
 	jojo.addDef = ITEMMANAGER->getArmor()[0].power;
-	
+
 	//HP ProgressBar
 	_Hp = new progressBar;
 	_Hp->init("images/UI/Info/HP.bmp", "images/UI/Info/Back_P.bmp", 1056, 289, 84, 12);
@@ -90,14 +90,16 @@ void Jojo::update()
 			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[1]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[2]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[3]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
 			!ENEMYMANAGER->getEturn())
 		{
 			mouseMove();
 		}
-	}
-	else
-	{
-		isHit = false;
 	}
 
 	playerAnimation();
@@ -126,7 +128,14 @@ void Jojo::render(HDC hdc)
 		}
 		else
 		{
-			jojo.img->aniRender(hdc, jojo.rc.left, jojo.rc.top, playerAni);
+			if (isHeal)
+			{
+				jojo.blockImg->frameRender(hdc, jojo.rc.left, jojo.rc.top, 0, 5);
+			}
+			else
+			{
+				jojo.img->aniRender(hdc, jojo.rc.left, jojo.rc.top, playerAni);
+			}
 		}
 	}
 	else
@@ -238,7 +247,7 @@ void Jojo::mouseMove()
 				}
 				else
 				{
-					SOUNDMANAGER->play("clickMiss", 1.0f);
+					if (!isClick) SOUNDMANAGER->play("clickMiss", 1.0f);
 					isSelect = false;
 				}
 
@@ -375,7 +384,7 @@ void Jojo::playerMenu()
 	//메뉴
 	if (isClick)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			SOUNDMANAGER->stop("cMove");
 			SOUNDMANAGER->stop("clickMiss");
@@ -394,14 +403,18 @@ void Jojo::playerMenu()
 				atkList.clear();
 				menuList.clear();
 
-				//isClick = false;
+				skillRect[0] = RectMake(jojo.rc.left - 88, jojo.rc.top + 83, 73, 19);
+				skillRect[1] = RectMake(jojo.rc.left - 204, jojo.rc.top - 9, 189, 18);
+				vSkill.push_back(skillRect[0]);
+				vSkill.push_back(skillRect[1]);
+
+				isSkill = true;
+				isClick = false;
 			}
 			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 			{
@@ -434,6 +447,84 @@ void Jojo::playerMenu()
 				isClick = false;
 			}
 		}
+	}
+
+	//스킬
+	if (isSkill)
+	{
+		if (PtInRect(&skillRect[0], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			vSkill.clear();
+			isSkill = false;
+			isClick = true;
+		}
+		else if (PtInRect(&skillRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		{
+			SOUNDMANAGER->play("click", 1.0f);
+			vSkill.clear();
+			isSkill = false;
+			isSkillCheck = true;
+
+			int positionX = jojo.rc.left / TILE_WIDTH;
+			int positionY = jojo.rc.top / TILE_HEIGHT;
+			int playerTile = positionX + (positionY * TILE_Y);
+
+			skillFill(playerTile, 4);
+		}
+	}
+
+	if (isSkillCheck)
+	{
+		for (int i = 1; i < PLAYERMANAGER->getPlayer().size(); i++)
+		{
+			auto& player = PLAYERMANAGER->getPlayer()[i];
+			auto& playerRect = PLAYERMANAGER->getPlayer()[i]->getPlayerInfo().rc;
+
+			if (PtInRect(&playerRect, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				SOUNDMANAGER->play("skillStart", 1.0f);
+				isHeal = true;
+				playerNumber = i;
+
+				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				{
+					mainMap->getMap()[i].skill = false;
+				}
+			}
+		}
+
+		if (isHeal)
+		{
+			skillCount++;
+
+			if (skillCount > 50)
+			{
+				isHealCheck = true;
+				isHeal = false;
+			}
+		}
+		else skillCount = 0;
+
+		if (isHealCheck)
+		{
+			auto& player = PLAYERMANAGER->getPlayer()[playerNumber];
+
+			player->setIsHeal(true);
+			frameCount++;
+
+			if (frameCount < 2) SOUNDMANAGER->play("healStart", 1.0f);
+			else if (frameCount > 50)
+			{
+				player->setIsHeal(false);
+				player->HealDamage(30);
+				isHealCheck = false;
+				isMove = true;
+				isTurn = false;
+				isSelect = false;
+			}
+		}
+		else frameCount = 0;
 	}
 }
 
@@ -562,6 +653,7 @@ void Jojo::playerState()
 	_Exp->setGauge(currentExp, maxExp);
 
 	if (currentHp < 0) currentHp = 0;
+	if (currentHp > maxHp) currentHp = maxHp;
 }
 
 void Jojo::setPosition(RECT rc)

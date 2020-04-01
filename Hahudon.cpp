@@ -81,12 +81,20 @@ void Hahudon::update()
 {
 	if (isTurn)
 	{
-		if (!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
+		if (!PLAYERMANAGER->getPlayer()[0]->getIsSkill() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsSkillCheck() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[2]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[3]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
 			!ENEMYMANAGER->getEturn())
 		{
 			mouseMove();
@@ -119,7 +127,14 @@ void Hahudon::render(HDC hdc)
 		}
 		else
 		{
-			hahudon.img->aniRender(hdc, hahudon.rc.left, hahudon.rc.top, playerAni);
+			if (isHeal)
+			{
+				hahudon.blockImg->frameRender(hdc, hahudon.rc.left, hahudon.rc.top, 0, 5);
+			}
+			else
+			{
+				hahudon.img->aniRender(hdc, hahudon.rc.left, hahudon.rc.top, playerAni);
+			}
 		}
 	}
 	else
@@ -138,7 +153,14 @@ void Hahudon::render(HDC hdc)
 		}
 		else
 		{
-			hahudon.img->frameAlphaRender(hdc, hahudon.rc.left, hahudon.rc.top, 0, frameY, 100);
+			if (isHeal)
+			{
+				hahudon.blockImg->frameRender(hdc, hahudon.rc.left, hahudon.rc.top, 0, 5);
+			}
+			else
+			{
+				hahudon.img->frameAlphaRender(hdc, hahudon.rc.left, hahudon.rc.top, 0, frameY, 100);
+			}
 		}
 	}
 }
@@ -231,7 +253,7 @@ void Hahudon::mouseMove()
 				}
 				else
 				{
-					SOUNDMANAGER->play("clickMiss", 1.0f);
+					if (!isClick) SOUNDMANAGER->play("clickMiss", 1.0f);
 					isSelect = false;
 				}
 
@@ -368,7 +390,7 @@ void Hahudon::playerMenu()
 	//¸Þ´º
 	if (isClick)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			SOUNDMANAGER->stop("cMove");
 			SOUNDMANAGER->stop("clickMiss");
@@ -555,6 +577,7 @@ void Hahudon::playerState()
 	_Exp->setGauge(currentExp, maxExp);
 
 	if (currentHp < 0) currentHp = 0;
+	if (currentHp > maxHp) currentHp = maxHp;
 }
 
 void Hahudon::setPosition(RECT rc)

@@ -81,12 +81,20 @@ void Join::update()
 {
 	if (isTurn)
 	{
-		if (!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
+		if (!PLAYERMANAGER->getPlayer()[0]->getIsSkill() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsSkillCheck() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[1]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[1]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[2]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
 			!ENEMYMANAGER->getEturn())
 		{
 			mouseMove();
@@ -119,7 +127,14 @@ void Join::render(HDC hdc)
 		}
 		else
 		{
-			join.img->aniRender(hdc, join.rc.left, join.rc.top, playerAni);
+			if (isHeal)
+			{
+				join.blockImg->frameRender(hdc, join.rc.left, join.rc.top, 0, 5);
+			}
+			else
+			{
+				join.img->aniRender(hdc, join.rc.left, join.rc.top, playerAni);
+			}
 		}
 	}
 	else
@@ -138,7 +153,14 @@ void Join::render(HDC hdc)
 		}
 		else
 		{
-			join.img->frameAlphaRender(hdc, join.rc.left, join.rc.top, 0, frameY, 100);
+			if (isHeal)
+			{
+				join.blockImg->frameRender(hdc, join.rc.left, join.rc.top, 0, 5);
+			}
+			else
+			{
+				join.img->frameAlphaRender(hdc, join.rc.left, join.rc.top, 0, frameY, 100);
+			}
 		}
 	}
 }
@@ -231,7 +253,7 @@ void Join::mouseMove()
 				}
 				else
 				{
-					SOUNDMANAGER->play("clickMiss", 1.0f);
+					if (!isClick) SOUNDMANAGER->play("clickMiss", 1.0f);
 					isSelect = false;
 				}
 
@@ -368,7 +390,7 @@ void Join::playerMenu()
 	//¸Þ´º
 	if (isClick)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			SOUNDMANAGER->stop("cMove");
 			SOUNDMANAGER->stop("clickMiss");
@@ -555,6 +577,7 @@ void Join::playerState()
 	_Exp->setGauge(currentExp, maxExp);
 
 	if (currentHp < 0) currentHp = 0;
+	if (currentHp > maxHp) currentHp = maxHp;
 }
 
 void Join::setPosition(RECT rc)

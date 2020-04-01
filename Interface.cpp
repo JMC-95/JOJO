@@ -19,10 +19,25 @@ void Interface::render(HDC hdc)
 
 void Interface::playerMenu(HDC hdc)
 {
-	if (PLAYERMANAGER->getPlayer()[0]->getIsClick())
+	auto& jojo = PLAYERMANAGER->getPlayer()[0];
+	auto& jojoInfo = PLAYERMANAGER->getPlayer()[0]->getPlayerInfo();
+
+	if (jojo->getIsClick()) IMAGEMANAGER->frameRender("메뉴", hdc, jojoInfo.rc.left - 100, jojoInfo.rc.top - 35, jojo->getFrameX(), 1);
+
+	if (jojo->getIsSkill())
 	{
-		IMAGEMANAGER->frameRender("메뉴", hdc, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rc.left - 100, PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().rc.top - 35, PLAYERMANAGER->getPlayer()[0]->getFrameX(), 1);
+		IMAGEMANAGER->render("skillMenu", hdc, jojoInfo.rc.left - 210, jojoInfo.rc.top - 50);
+
+		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
+		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
+		SetTextColor(hdc, RGB(0, 0, 255));
+		sprintf_s(str, "%d/%d", jojo->getCurrentMp(), jojo->getMaxMp());
+		TextOut(hdc, jojoInfo.rc.left - 100, jojoInfo.rc.top - 45, str, strlen(str));
+		SelectObject(hdc, oldFont);
+		DeleteObject(myFont);
 	}
+
+	if (jojo->getIsHeal()) IMAGEMANAGER->render("소보급", hdc, 500, 400);
 
 	for (int j = 1; j < PLAYERMANAGER->getPlayer().size(); j++)
 	{

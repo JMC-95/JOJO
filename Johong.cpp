@@ -81,12 +81,20 @@ void Johong::update()
 {
 	if (isTurn)
 	{
-		if (!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
+		if (!PLAYERMANAGER->getPlayer()[0]->getIsSkill() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsSkillCheck() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[1]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
+			!PLAYERMANAGER->getPlayer()[0]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[1]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[2]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[3]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
+			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
 			!ENEMYMANAGER->getEturn())
 		{
 			mouseMove();
@@ -119,7 +127,14 @@ void Johong::render(HDC hdc)
 		}
 		else
 		{
-			johong.img->aniRender(hdc, johong.rc.left, johong.rc.top, playerAni);
+			if (isHeal)
+			{
+				johong.blockImg->frameRender(hdc, johong.rc.left, johong.rc.top, 0, 5);
+			}
+			else
+			{
+				johong.img->aniRender(hdc, johong.rc.left, johong.rc.top, playerAni);
+			}
 		}
 	}
 	else
@@ -138,7 +153,14 @@ void Johong::render(HDC hdc)
 		}
 		else
 		{
-			johong.img->frameAlphaRender(hdc, johong.rc.left, johong.rc.top, 0, frameY, 100);
+			if (isHeal)
+			{
+				johong.blockImg->frameRender(hdc, johong.rc.left, johong.rc.top, 0, 5);
+			}
+			else
+			{
+				johong.img->frameAlphaRender(hdc, johong.rc.left, johong.rc.top, 0, frameY, 100);
+			}
 		}
 	}
 }
@@ -235,7 +257,7 @@ void Johong::mouseMove()
 				}
 				else
 				{
-					SOUNDMANAGER->play("clickMiss", 1.0f);
+					if (!isClick) SOUNDMANAGER->play("clickMiss", 1.0f);
 					isSelect = false;
 				}
 
@@ -376,7 +398,7 @@ void Johong::playerMenu()
 	//¸Þ´º
 	if (isClick)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			SOUNDMANAGER->stop("move");
 			SOUNDMANAGER->stop("clickMiss");
@@ -563,6 +585,7 @@ void Johong::playerState()
 	_Exp->setGauge(currentExp, maxExp);
 
 	if (currentHp < 0) currentHp = 0;
+	if (currentHp > maxHp) currentHp = maxHp;
 }
 
 void Johong::setPosition(RECT rc)
