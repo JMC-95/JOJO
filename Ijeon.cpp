@@ -9,13 +9,16 @@ Ijeon::~Ijeon()
 {
 }
 
-HRESULT Ijeon::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
+HRESULT Ijeon::init(const char* skillImg, const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//이름 및 얼굴
 	ijeon.name = "이전";
 	ijeon.face = "이전Face";
 	ijeon.className = "경보병";
 	//이미지 및 애니메이션
+	ijeon.skillImg = IMAGEMANAGER->findImage(skillImg);		//스킬 이미지
+	ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+	skillAni = ANIMATIONMANAGER->findAnimation("healImg");
 	ijeon.moveRngImg = IMAGEMANAGER->findImage(moveImg);	//캐릭터 클릭시 이동범위 이미지
 	ijeon.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
 	ijeon.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
@@ -95,7 +98,7 @@ void Ijeon::update()
 			!PLAYERMANAGER->getPlayer()[3]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
-			!ENEMYMANAGER->getEturn())
+			PLAYERMANAGER->getPturn())
 		{
 			mouseMove();
 		}
@@ -130,6 +133,8 @@ void Ijeon::render(HDC hdc)
 			if (isHeal)
 			{
 				ijeon.blockImg->frameRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, 5);
+				ijeon.skillImg->aniRender(hdc, ijeon.rc.left - 8, ijeon.rc.top - 8, skillAni);
+
 			}
 			else
 			{
@@ -156,6 +161,8 @@ void Ijeon::render(HDC hdc)
 			if (isHeal)
 			{
 				ijeon.blockImg->frameRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, 5);
+				ijeon.skillImg->aniRender(hdc, ijeon.rc.left - 8, ijeon.rc.top - 8, skillAni);
+
 			}
 			else
 			{
@@ -400,8 +407,6 @@ void Ijeon::playerMenu()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			SOUNDMANAGER->stop("move");
-			SOUNDMANAGER->stop("clickMiss");
 			SOUNDMANAGER->play("click", 1.0f);
 
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
@@ -416,15 +421,11 @@ void Ijeon::playerMenu()
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 			{
@@ -553,6 +554,13 @@ void Ijeon::playerAnimation()
 				playerAni = ANIMATIONMANAGER->findAnimation("playerHp");
 				ANIMATIONMANAGER->resume("playerHp");
 			}
+
+			if (isHeal)
+			{
+				ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+				skillAni = ANIMATIONMANAGER->findAnimation("healImg");
+				ANIMATIONMANAGER->resume("healImg");
+			}
 		}
 	}
 	else
@@ -572,6 +580,13 @@ void Ijeon::playerAnimation()
 			frameY = 8;
 			break;
 		}
+
+		if (isHeal)
+		{
+			ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+			skillAni = ANIMATIONMANAGER->findAnimation("healImg");
+			ANIMATIONMANAGER->resume("healImg");
+		}
 	}
 }
 
@@ -584,8 +599,40 @@ void Ijeon::playerState()
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
 
+	//HP
 	if (currentHp < 0) currentHp = 0;
 	if (currentHp > maxHp) currentHp = maxHp;
+
+	//MP
+	if (currentMp < 0) currentMp = 0;
+
+	//EXP
+	if (currentExp >= 100)
+	{
+		currentExp -= 100;
+
+		ijeon.level += 1;		//레벨
+		maxHp += 3;				//체력
+		maxMp += 3;				//마력
+		ijeon.atk += 3;			//공격력
+		ijeon.will += 3;		//정신력
+		ijeon.def += 3;			//방어력
+		ijeon.agi += 3;			//순발력
+
+		isLevelUp = true;
+	}
+
+	//Level
+	if (isLevelUp)
+	{
+		levelCount++;
+
+		if (levelCount > 50)
+		{
+			levelCount = 0;
+			isLevelUp = false;
+		}
+	}
 }
 
 void Ijeon::setPosition(RECT rc)

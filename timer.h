@@ -14,7 +14,7 @@ private :
 	unsigned long _FPSFrameCount;		//FPS카운트
 
 
-	float _FPStimeElapsed;					//FPS마지막 시간과 현재시간의 경과량
+	float _FPStimeElapsed;				//FPS마지막 시간과 현재시간의 경과량
 	float _worldTime;					//전체시간 경과량
 
 public:

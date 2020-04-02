@@ -84,7 +84,7 @@ void Wonso::update()
 {
 	if (isTurn)
 	{
-		if (!PLAYERMANAGER->getPturn()) friendAi();
+		if (FRIENDMANAGER->getFturn()) friendAi();
 	}
 
 	friendAnimation();
@@ -176,10 +176,10 @@ void Wonso::friendAi()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 			{
-				SOUNDMANAGER->play("cMove", 1.0f);
-
 				if (mainMap->getMap()[i].flood)
 				{
+					SOUNDMANAGER->play("cMove", 1.0f);
+
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
 					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
@@ -330,10 +330,8 @@ void Wonso::friendMenu()
 	//메뉴
 	if (isClick)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			SOUNDMANAGER->stop("cMove");
-
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
 				atkList.clear();
@@ -346,15 +344,11 @@ void Wonso::friendMenu()
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 			{

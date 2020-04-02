@@ -87,7 +87,7 @@ void Dogyeom::update()
 {
 	if (isTurn)
 	{
-		//if (!PLAYERMANAGER->getPturn()) friendAi();
+		//if (FRIENDMANAGER->getFturn()) friendAi();
 		friendAi();
 	}
 
@@ -373,10 +373,8 @@ void Dogyeom::friendMenu()
 	//메뉴
 	if (isClick)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			SOUNDMANAGER->stop("cMove");
-
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
 				atkList.clear();
@@ -389,15 +387,11 @@ void Dogyeom::friendMenu()
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 			{

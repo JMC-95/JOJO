@@ -9,13 +9,16 @@ Agjin::~Agjin()
 {
 }
 
-HRESULT Agjin::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
+HRESULT Agjin::init(const char* skillImg, const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//이름 및 얼굴
 	agjin.name = "악진";
 	agjin.face = "악진Face";
 	agjin.className = "경보병";
 	//이미지 및 애니메이션
+	agjin.skillImg = IMAGEMANAGER->findImage(skillImg);		//스킬 이미지
+	ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+	skillAni = ANIMATIONMANAGER->findAnimation("healImg");
 	agjin.moveRngImg = IMAGEMANAGER->findImage(moveImg);	//캐릭터 클릭시 이동범위 이미지
 	agjin.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
 	agjin.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
@@ -95,7 +98,7 @@ void Agjin::update()
 			!PLAYERMANAGER->getPlayer()[3]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
-			!ENEMYMANAGER->getEturn())
+			PLAYERMANAGER->getPturn())
 		{
 			mouseMove();
 		}
@@ -130,6 +133,7 @@ void Agjin::render(HDC hdc)
 			if (isHeal)
 			{
 				agjin.blockImg->frameRender(hdc, agjin.rc.left, agjin.rc.top, 0, 5);
+				agjin.skillImg->aniRender(hdc, agjin.rc.left - 8, agjin.rc.top - 8, skillAni);
 			}
 			else
 			{
@@ -156,6 +160,7 @@ void Agjin::render(HDC hdc)
 			if (isHeal)
 			{
 				agjin.blockImg->frameRender(hdc, agjin.rc.left, agjin.rc.top, 0, 5);
+				agjin.skillImg->aniRender(hdc, agjin.rc.left - 8, agjin.rc.top - 8, skillAni);
 			}
 			else
 			{
@@ -431,8 +436,6 @@ void Agjin::playerMenu()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			SOUNDMANAGER->stop("move");
-			SOUNDMANAGER->stop("clickMiss");
 			SOUNDMANAGER->play("click", 1.0f);
 
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
@@ -447,15 +450,11 @@ void Agjin::playerMenu()
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 			{
@@ -553,6 +552,13 @@ void Agjin::playerAnimation()
 				playerAni = ANIMATIONMANAGER->findAnimation("playerHp");
 				ANIMATIONMANAGER->resume("playerHp");
 			}
+			
+			if (isHeal)
+			{
+				ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+				skillAni = ANIMATIONMANAGER->findAnimation("healImg");
+				ANIMATIONMANAGER->resume("healImg");
+			}
 		}
 	}
 	else
@@ -572,6 +578,13 @@ void Agjin::playerAnimation()
 			frameY = 8;
 			break;
 		}
+
+		if (isHeal)
+		{
+			ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+			skillAni = ANIMATIONMANAGER->findAnimation("healImg");
+			ANIMATIONMANAGER->resume("healImg");
+		}
 	}
 }
 
@@ -584,8 +597,40 @@ void Agjin::playerState()
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
 
+	//HP
 	if (currentHp < 0) currentHp = 0;
 	if (currentHp > maxHp) currentHp = maxHp;
+
+	//MP
+	if (currentMp < 0) currentMp = 0;
+
+	//EXP
+	if (currentExp >= 100)
+	{
+		currentExp -= 100;
+
+		agjin.level += 1;		//레벨
+		maxHp += 3;				//체력
+		maxMp += 3;				//마력
+		agjin.atk += 3;			//공격력
+		agjin.will += 3;		//정신력
+		agjin.def += 3;			//방어력
+		agjin.agi += 3;			//순발력
+
+		isLevelUp = true;
+	}
+
+	//Level
+	if (isLevelUp)
+	{
+		levelCount++;
+
+		if (levelCount > 50)
+		{
+			levelCount = 0;
+			isLevelUp = false;
+		}
+	}
 }
 
 void Agjin::setPosition(RECT rc)

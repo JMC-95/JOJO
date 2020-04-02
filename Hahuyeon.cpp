@@ -9,13 +9,16 @@ Hahuyeon::~Hahuyeon()
 {
 }
 
-HRESULT Hahuyeon::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
+HRESULT Hahuyeon::init(const char* skillImg, const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//이름 및 얼굴
 	hahuyeon.name = "하후연";
 	hahuyeon.face = "하후연Face";
 	hahuyeon.className = "궁기병";
 	//이미지 및 애니메이션
+	hahuyeon.skillImg = IMAGEMANAGER->findImage(skillImg);		//스킬 이미지
+	ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+	skillAni = ANIMATIONMANAGER->findAnimation("healImg");
 	hahuyeon.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	hahuyeon.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
 	hahuyeon.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
@@ -95,7 +98,7 @@ void Hahuyeon::update()
 			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
-			!ENEMYMANAGER->getEturn())
+			PLAYERMANAGER->getPturn())
 		{
 			mouseMove();
 		}
@@ -130,6 +133,7 @@ void Hahuyeon::render(HDC hdc)
 			if (isHeal)
 			{
 				hahuyeon.blockImg->frameRender(hdc, hahuyeon.rc.left, hahuyeon.rc.top, 0, 5);
+				hahuyeon.skillImg->aniRender(hdc, hahuyeon.rc.left - 8, hahuyeon.rc.top - 8, skillAni);
 			}
 			else
 			{
@@ -156,6 +160,7 @@ void Hahuyeon::render(HDC hdc)
 			if (isHeal)
 			{
 				hahuyeon.blockImg->frameRender(hdc, hahuyeon.rc.left, hahuyeon.rc.top, 0, 5);
+				hahuyeon.skillImg->aniRender(hdc, hahuyeon.rc.left - 8, hahuyeon.rc.top - 8, skillAni);
 			}
 			else
 			{
@@ -392,8 +397,6 @@ void Hahuyeon::playerMenu()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			SOUNDMANAGER->stop("cMove");
-			SOUNDMANAGER->stop("clickMiss");
 			SOUNDMANAGER->play("click", 1.0f);
 
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
@@ -408,15 +411,11 @@ void Hahuyeon::playerMenu()
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 			{
@@ -545,6 +544,13 @@ void Hahuyeon::playerAnimation()
 				playerAni = ANIMATIONMANAGER->findAnimation("playerHp");
 				ANIMATIONMANAGER->resume("playerHp");
 			}
+
+			if (isHeal)
+			{
+				ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+				skillAni = ANIMATIONMANAGER->findAnimation("healImg");
+				ANIMATIONMANAGER->resume("healImg");
+			}
 		}
 	}
 	else
@@ -564,6 +570,13 @@ void Hahuyeon::playerAnimation()
 			frameY = 8;
 			break;
 		}
+
+		if (isHeal)
+		{
+			ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+			skillAni = ANIMATIONMANAGER->findAnimation("healImg");
+			ANIMATIONMANAGER->resume("healImg");
+		}
 	}
 }
 
@@ -576,8 +589,40 @@ void Hahuyeon::playerState()
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
 
+	//HP
 	if (currentHp < 0) currentHp = 0;
 	if (currentHp > maxHp) currentHp = maxHp;
+
+	//MP
+	if (currentMp < 0) currentMp = 0;
+
+	//EXP
+	if (currentExp >= 100)
+	{
+		currentExp -= 100;
+
+		hahuyeon.level += 1;	//레벨
+		maxHp += 3;				//체력
+		maxMp += 3;				//마력
+		hahuyeon.atk += 3;		//공격력
+		hahuyeon.will += 3;		//정신력
+		hahuyeon.def += 3;		//방어력
+		hahuyeon.agi += 3;		//순발력
+
+		isLevelUp = true;
+	}
+
+	//Level
+	if (isLevelUp)
+	{
+		levelCount++;
+
+		if (levelCount > 50)
+		{
+			levelCount = 0;
+			isLevelUp = false;
+		}
+	}
 }
 
 void Hahuyeon::setPosition(RECT rc)

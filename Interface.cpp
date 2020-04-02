@@ -50,6 +50,13 @@ void Interface::playerMenu(HDC hdc)
 			IMAGEMANAGER->frameRender("메뉴", hdc, playerInfo.rc.left - 100, playerInfo.rc.top - 35, playerX, 0);
 		}
 	}
+
+	for (int j = 0; j < PLAYERMANAGER->getPlayer().size(); j++)
+	{
+		auto& player = PLAYERMANAGER->getPlayer()[j];
+
+		if (player->getIsLevelUp()) IMAGEMANAGER->render("up", hdc, 500, 400);
+	}
 }
 
 void Interface::playerInformation(HDC hdc)
@@ -120,15 +127,12 @@ void Interface::playerInformation(HDC hdc)
 
 void Interface::friendInformation(HDC hdc)
 {
-	if (FRIENDMANAGER->getFriend()[0]->getIsClick())
-	{
-		IMAGEMANAGER->frameRender("메뉴", hdc, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rc.left - 100, FRIENDMANAGER->getFriend()[0]->getFriendInfo().rc.top - 35, FRIENDMANAGER->getFriend()[0]->getFrameX(), 1);
-	}
-
 	for (int i = 0; i < FRIENDMANAGER->getFriend().size(); i++)
 	{
 		auto& friendly = FRIENDMANAGER->getFriend()[i];
 		auto& friendInfo = FRIENDMANAGER->getFriend()[i]->getFriendInfo();
+
+		if (friendly->getIsClick()) IMAGEMANAGER->frameRender("메뉴", hdc, friendInfo.rc.left - 100, friendInfo.rc.top - 35, friendly->getFrameX(), 0);
 
 		if (PtInRect(&friendInfo.rc, m_ptMouse))
 		{
@@ -191,16 +195,12 @@ void Interface::friendInformation(HDC hdc)
 
 void Interface::enemyInformation(HDC hdc)
 {
-	//여포
-	if (ENEMYMANAGER->getEnemy()[4]->getIsClick())
-	{
-		IMAGEMANAGER->frameRender("메뉴", hdc, ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc.left - 100, ENEMYMANAGER->getEnemy()[4]->getEnemyInfo().rc.top - 35, ENEMYMANAGER->getEnemy()[4]->getFrameX(), 0);
-	}
-
 	for (int i = 0; i < ENEMYMANAGER->getEnemy().size(); i++)
 	{
 		auto& enemy = ENEMYMANAGER->getEnemy()[i];
 		auto& enemyInfo = ENEMYMANAGER->getEnemy()[i]->getEnemyInfo();
+
+		if (enemy->getIsClick()) IMAGEMANAGER->frameRender("메뉴", hdc, enemyInfo.rc.left - 100, enemyInfo.rc.top - 35, enemy->getFrameX(), 0);
 
 		if (PtInRect(&enemyInfo.rc, m_ptMouse))
 		{
@@ -211,7 +211,7 @@ void Interface::enemyInformation(HDC hdc)
 			enemy->getProgressBarExp()->render(hdc);
 			enemyInfo.weaponImg->render(hdc, 965, 456);
 			enemyInfo.armorImg->render(hdc, 1047, 456);
-			if (i == 4) enemyInfo.asstImg->render(hdc, 1134, 453);
+			if (enemyInfo.name == "여포") enemyInfo.asstImg->render(hdc, 1134, 453);
 
 			HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "나눔고딕체");
 			HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
@@ -250,7 +250,7 @@ void Interface::enemyInformation(HDC hdc)
 			TextOut(hdc, 960, 438, str, strlen(str));
 			sprintf_s(str, enemyInfo.armorName);
 			TextOut(hdc, 1040, 438, str, strlen(str));
-			if (i == 4)
+			if (enemyInfo.name == "여포")
 			{
 				sprintf_s(str, enemyInfo.asstName);
 				TextOut(hdc, 1128, 438, str, strlen(str));

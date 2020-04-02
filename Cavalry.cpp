@@ -67,8 +67,8 @@ HRESULT Cavalry::init(const char * moveImg, const char * mAtkImg, const char * a
 	startTile = endTile = -1;
 	speed = 12;	//속도
 
+	isTurn = true;
 	isMove = true;
-	isTurn = false;
 	isSelect = false;
 
 	return S_OK;
@@ -85,11 +85,12 @@ void Cavalry::update()
 {
 	if (isTurn)
 	{
-		mouseMove();
+		if (ENEMYMANAGER->getEturn()) enemyAi();
 	}
 
 	enemyAnimation();
 	enemyState();
+	mouseMove();
 }
 
 void Cavalry::render(HDC hdc)
@@ -138,7 +139,7 @@ void Cavalry::render(HDC hdc)
 	}
 }
 
-void Cavalry::mouseMove()
+void Cavalry::enemyAi()
 {
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
@@ -178,6 +179,8 @@ void Cavalry::mouseMove()
 			{
 				if (mainMap->getMap()[i].flood)
 				{
+					SOUNDMANAGER->play("cMove", 1.0f);
+
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
 					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
@@ -220,27 +223,76 @@ void Cavalry::mouseMove()
 	enemyCollision();
 }
 
+void Cavalry::mouseMove()
+{
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && PtInRect(&cavalry.rc, m_ptMouse))
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+			{
+				//선택한 타일 (캐릭터)
+				startTile = i;
+
+				//캐릭터 클릭
+				isSelect = true;
+
+				//공격범위
+				for (int j = 0; j < 4; j++)
+				{
+					cavalry.rcAtk[0] = RectMake(cavalry.rc.left - 48, cavalry.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					cavalry.rcAtk[1] = RectMake(cavalry.rc.left + 48, cavalry.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					cavalry.rcAtk[2] = RectMake(cavalry.rc.left, cavalry.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					cavalry.rcAtk[3] = RectMake(cavalry.rc.left, cavalry.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(cavalry.rcAtk[j]);
+				}
+
+				//이동범위
+				if (isMove) floodFill(startTile, cavalry.movingCount);
+			}
+		}
+
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				//캐릭터 클릭
+				isSelect = false;
+
+				//공격범위
+				atkList.clear();
+
+				//이동범위
+				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				{
+					if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+				}
+			}
+		}
+	}
+}
+
 void Cavalry::enemyMove()
 {
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
-		if (enemyX > stackX)
-		{
-			eDirection = ENEMY_LEFT;
-		}
-		else if (enemyX < stackX)
-		{
-			eDirection = ENEMY_RIGHT;
-		}
-		else if (enemyY > stackY)
-		{
-			eDirection = ENEMY_UP;
-		}
-		else if (enemyY < stackY)
-		{
-			eDirection = ENEMY_DOWN;
-		}
+	if (enemyX > stackX)
+	{
+		eDirection = ENEMY_LEFT;
+	}
+	else if (enemyX < stackX)
+	{
+		eDirection = ENEMY_RIGHT;
+	}
+	else if (enemyY > stackY)
+	{
+		eDirection = ENEMY_UP;
+	}
+	else if (enemyY < stackY)
+	{
+		eDirection = ENEMY_DOWN;
+	}
 
 	if (cavalry.rc.left > 0 || cavalry.rc.right < WINSIZEY ||
 		cavalry.rc.top > 0 || cavalry.rc.bottom < WINSIZEY)
@@ -305,17 +357,20 @@ void Cavalry::enemyAstar()
 				cavalry.rcAtk[3] = RectMake(cavalry.rc.left, cavalry.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
 				atkList.push_back(cavalry.rcAtk[j]);
 			}
+		}
+	}
 
-			//메뉴선택 렉트
-			for (int j = 0; j < 5; j++)
-			{
-				rcMenu[0] = RectMake(cavalry.rc.left - 97, cavalry.rc.top - 30, 82, 20);
-				rcMenu[1] = RectMake(cavalry.rc.left - 97, cavalry.rc.top - 9, 82, 20);
-				rcMenu[2] = RectMake(cavalry.rc.left - 97, cavalry.rc.top + 12, 82, 20);
-				rcMenu[3] = RectMake(cavalry.rc.left - 97, cavalry.rc.top + 38, 82, 20);
-				rcMenu[4] = RectMake(cavalry.rc.left - 97, cavalry.rc.top + 63, 82, 20);
-				menuList.push_back(rcMenu[j]);
-			}
+	if (isClick)
+	{
+		//메뉴선택 렉트
+		for (int j = 0; j < 5; j++)
+		{
+			rcMenu[0] = RectMake(cavalry.rc.left - 97, cavalry.rc.top - 30, 82, 20);
+			rcMenu[1] = RectMake(cavalry.rc.left - 97, cavalry.rc.top - 9, 82, 20);
+			rcMenu[2] = RectMake(cavalry.rc.left - 97, cavalry.rc.top + 12, 82, 20);
+			rcMenu[3] = RectMake(cavalry.rc.left - 97, cavalry.rc.top + 38, 82, 20);
+			rcMenu[4] = RectMake(cavalry.rc.left - 97, cavalry.rc.top + 63, 82, 20);
+			menuList.push_back(rcMenu[j]);
 		}
 	}
 }
@@ -421,7 +476,7 @@ void Cavalry::enemyMenu()
 	//메뉴
 	if (isClick)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
@@ -435,15 +490,11 @@ void Cavalry::enemyMenu()
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 			{
@@ -470,6 +521,58 @@ void Cavalry::enemyMenu()
 
 void Cavalry::enemyCollision()
 {
+	RECT temp;
+	frameX = 0;
+
+	for (int j = 0; j < PLAYERMANAGER->getPlayer().size(); j++)
+	{
+		auto playerX = PLAYERMANAGER->getPlayer()[j]->getPlayerX();
+		auto playerY = PLAYERMANAGER->getPlayer()[j]->getPlayerY();
+		auto playerHit = PLAYERMANAGER->getPlayer()[j]->getIsHit();
+		auto& playerRect = PLAYERMANAGER->getPlayer()[j]->getPlayerInfo().rc;
+
+		for (int k = 0; k < 4; k++)
+		{
+			if (IntersectRect(&temp, &cavalry.rcAtk[k], &playerRect))
+			{
+				isTarget = true;
+				frameX = 1;
+			}
+		}
+
+		if (playerHit)
+		{
+			if (enemyX > playerX) eDirection = ENEMY_LEFT;
+			else if (enemyX < playerX) eDirection = ENEMY_RIGHT;
+			else if (enemyY > playerY) eDirection = ENEMY_UP;
+			else if (enemyY < playerY) eDirection = ENEMY_DOWN;
+		}
+	}
+
+	for (int j = 0; j < FRIENDMANAGER->getFriend().size(); j++)
+	{
+		auto friendX = FRIENDMANAGER->getFriend()[j]->getFriendX();
+		auto friendY = FRIENDMANAGER->getFriend()[j]->getFriendY();
+		auto friendHit = FRIENDMANAGER->getFriend()[j]->getIsHit();
+		auto& friendRect = FRIENDMANAGER->getFriend()[j]->getFriendInfo().rc;
+
+		for (int k = 0; k < 4; k++)
+		{
+			if (IntersectRect(&temp, &cavalry.rcAtk[k], &friendRect))
+			{
+				isTarget = true;
+				frameX = 1;
+			}
+		}
+
+		if (friendHit)
+		{
+			if (enemyX > friendX) eDirection = ENEMY_LEFT;
+			else if (enemyX < friendX) eDirection = ENEMY_RIGHT;
+			else if (enemyY > friendY) eDirection = ENEMY_UP;
+			else if (enemyY < friendY) eDirection = ENEMY_DOWN;
+		}
+	}
 }
 
 void Cavalry::setPosition(RECT rc)

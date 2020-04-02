@@ -12,6 +12,7 @@ enum PlayerDirection
 
 struct PlayerInfo
 {
+	image* skillImg;		//스킬 이미지
 	image* moveRngImg;		//캐릭터 클릭시 이동범위 이미지
 	image* moveAtkRngImg;	//캐릭터 클릭시 공격범위 이미지
 	image* atkRngImg;		//공격버튼 클릭시 공격범위 이미지
@@ -57,6 +58,7 @@ protected:
 	PlayerDirection sDirection;	//캐릭터 방향 저장용
 	MainMap* mainMap;			//맵을 불러옴
 	animation* playerAni;		//캐릭터 애니메이션
+	animation* skillAni;		//스킬 애니메이션
 	progressBar* _Hp;			//HP Bar
 	progressBar* _Mp;			//MP Bar
 	progressBar* _Exp;			//EXP Bar
@@ -64,6 +66,7 @@ protected:
 	RECT rcMenu[5];				//메뉴 렉트
 
 protected:	//일반 변수
+	int levelCount;			//레벨 카운트
 	int speed;				//스피드
 	int currentHp, maxHp;	//체력
 	int currentMp, maxMp;	//마력
@@ -87,6 +90,7 @@ protected:	//일반 변수
 	bool isSkillCheck;		//책략 체크
 	bool isHeal;			//소보급
 	bool isHealCheck;		//소보급 체크
+	bool isLevelUp;			//레벨업을 했냐?
 
 protected:	//A*용 변수
 	int saveTile;			//시작 타일을 저장하는 변수
@@ -102,8 +106,8 @@ public:
 	PlayerBase();
 	~PlayerBase();
 
-	//이동범위, 이동시 공격범위, 전투시 공격범위, 캐릭터 이미지, 공격시 이미지, 방어 or 피격 이미지
-	virtual HRESULT init(const char* moveImg, const char* mAtkImg, const char* aRngImg, const char* playerImg, const char* atkImg, const char* blockImg);
+	//스킬 이미지, 이동범위, 이동시 공격범위, 전투시 공격범위, 캐릭터 이미지, 공격시 이미지, 방어 or 피격 이미지
+	virtual HRESULT init(const char* skillImg, const char* moveImg, const char* mAtkImg, const char* aRngImg, const char* playerImg, const char* atkImg, const char* blockImg);
 	virtual void release();
 	virtual void update();
 	virtual void render(HDC hdc);
@@ -123,7 +127,8 @@ public:
 	void floodFill(int tile, int moveCount);
 	void skillFill(int tile, int moveCount);
 	void hitDamage(int _damage);
-	void HealDamage(int _damage);
+	void healDamage(int _damage);
+	void expDamaga(int exp);
 
 	//맵의 주소
 	void setMapMemoryAdress(MainMap* map) { mainMap = map; }
@@ -150,6 +155,7 @@ public:
 	bool getIsSkill() { return isSkill; }
 	bool getIsSkillCheck() { return isSkillCheck; }
 	bool getIsHeal() { return isHeal; }
+	bool getIsLevelUp() { return isLevelUp; }
 
 	//Setter
 	void setIsTurn(bool turn) { isTurn = turn; }

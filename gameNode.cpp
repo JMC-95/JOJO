@@ -71,6 +71,7 @@ void gameNode::release()
 
 void gameNode::update()
 {
+	SOUNDMANAGER->update();
 }
 
 void gameNode::render()

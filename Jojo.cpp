@@ -9,13 +9,14 @@ Jojo::~Jojo()
 {
 }
 
-HRESULT Jojo::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
+HRESULT Jojo::init(const char* skillImg, const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//이름 및 얼굴
 	jojo.name = "조조";
 	jojo.face = "조조Face";
 	jojo.className = "군웅";
 	//이미지 및 애니메이션
+	jojo.skillImg = IMAGEMANAGER->findImage(skillImg);		//스킬 이미지
 	jojo.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	jojo.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
 	jojo.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
@@ -96,7 +97,7 @@ void Jojo::update()
 			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
-			!ENEMYMANAGER->getEturn())
+			PLAYERMANAGER->getPturn())
 		{
 			mouseMove();
 		}
@@ -386,8 +387,6 @@ void Jojo::playerMenu()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			SOUNDMANAGER->stop("cMove");
-			SOUNDMANAGER->stop("clickMiss");
 			SOUNDMANAGER->play("click", 1.0f);
 
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
@@ -459,7 +458,7 @@ void Jojo::playerMenu()
 			isSkill = false;
 			isClick = true;
 		}
-		else if (PtInRect(&skillRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+		else if (PtInRect(&skillRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && currentMp >= 6)
 		{
 			SOUNDMANAGER->play("click", 1.0f);
 			vSkill.clear();
@@ -485,6 +484,7 @@ void Jojo::playerMenu()
 			{
 				SOUNDMANAGER->play("skillStart", 1.0f);
 				isHeal = true;
+				currentMp -= 6;
 				playerNumber = i;
 
 				for (int i = 0; i < TILE_X * TILE_Y; i++)
@@ -514,10 +514,11 @@ void Jojo::playerMenu()
 			frameCount++;
 
 			if (frameCount < 2) SOUNDMANAGER->play("healStart", 1.0f);
-			else if (frameCount > 50)
+			else if (frameCount > 40)
 			{
 				player->setIsHeal(false);
-				player->HealDamage(30);
+				player->healDamage(30);
+				isSkillCheck = false;
 				isHealCheck = false;
 				isMove = true;
 				isTurn = false;
@@ -652,8 +653,40 @@ void Jojo::playerState()
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
 
+	//HP
 	if (currentHp < 0) currentHp = 0;
 	if (currentHp > maxHp) currentHp = maxHp;
+
+	//MP
+	if (currentMp < 0) currentMp = 0;
+
+	//EXP
+	if (currentExp >= 100)
+	{
+		currentExp -= 100;
+
+		jojo.level += 1;		//레벨
+		maxHp += 3;				//체력
+		maxMp += 3;				//마력
+		jojo.atk += 3;			//공격력
+		jojo.will += 3;			//정신력
+		jojo.def += 3;			//방어력
+		jojo.agi += 3;			//순발력
+
+		isLevelUp = true;
+	}
+
+	//Level
+	if (isLevelUp)
+	{
+		levelCount++;
+
+		if (levelCount > 50)
+		{
+			levelCount = 0;
+			isLevelUp = false;
+		}
+	}
 }
 
 void Jojo::setPosition(RECT rc)

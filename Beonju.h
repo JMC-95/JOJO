@@ -16,6 +16,7 @@ public:
 	virtual void update();
 	virtual void render(HDC hdc);
 
+	virtual void enemyAi();
 	virtual void mouseMove();
 	virtual void enemyMove();
 	virtual void enemyAstar();

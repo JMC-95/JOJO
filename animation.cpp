@@ -249,6 +249,7 @@ void animation::frameUpdate(float elapsedTime)
 							player->setIsTarget(false);
 							player->setIsAtk(false);
 							player->setIsMove(true);
+							player->expDamaga(10);
 						}
 						else if (!player->getIsAtk())
 						{
@@ -256,6 +257,18 @@ void animation::frameUpdate(float elapsedTime)
 							{
 								ENEMYMANAGER->getEnemy()[i]->setIsHit(false);
 							}
+						}
+
+						if (player->getIsHeal())
+						{
+							_nowPlayIndex = 0;
+							_play = false;
+						}
+
+						if (player->getCurrentExp() >= 100)
+						{
+							_nowPlayIndex = 0;
+							_play = false;
 						}
 					}
 
@@ -342,7 +355,7 @@ void animation::death()
 	}
 
 	//¿ì±º Á×À½
-	auto& friendVector = PLAYERMANAGER->getPlayer();
+	auto& friendVector = FRIENDMANAGER->getFriend();
 
 	for (auto friendly = friendVector.begin(); friendly != friendVector.end(); )
 	{

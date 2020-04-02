@@ -185,6 +185,8 @@ void mainGame::images()
 	//스킬
 	IMAGEMANAGER->addImage("skillMenu", "images/UI/InGame/Skill.bmp", 203, 158, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addImage("소보급", "images/UI/Skill/소보급.bmp", 99, 50, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("up", "images/UI/Skill/레벨업.bmp", 99, 50, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addFrameImage("heal", "images/UI/Skill/Heal.bmp", 64, 1280, 1, 20, true, RGB(247, 0, 255));
 
 	//플레이어 이미지
 	IMAGEMANAGER->addFrameImage("메뉴", "images/UI/InGame/Menu.bmp", 176, 242, 2, 2, true, RGB(247, 0, 255));

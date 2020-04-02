@@ -44,7 +44,6 @@ HRESULT EnemyManager::init()
 		vEnemy[i]->init("eMoveRange", "attackRange", "atkRange", "Àû±Ãº´", "Àû±Ãº´ATK", "Àû±Ãº´BH");
 	}
 
-	eTurn = false;
 	isClear = false;
 
 	return S_OK;
@@ -76,52 +75,28 @@ void EnemyManager::render(HDC hdc)
 
 void EnemyManager::enemyTurn()
 {
-	if (ENEMYMANAGER->getEnemy()[4]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[5]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[6]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[7]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[8]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[9]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[10]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[11]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[12]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[13]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[14]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[15]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[16]->getIsTurn() &&
-		ENEMYMANAGER->getEnemy()[17]->getIsTurn() &&
-		!PLAYERMANAGER->getPturn() && !FRIENDMANAGER->getFturn())
-	{
-		eTurn = true;
-
-		if (eTurn)
-		{
-			for (int i = 0; i < PLAYERMANAGER->getPlayer().size(); i++)
-			{
-				PLAYERMANAGER->getPlayer()[i]->setIsTurn(true);
-			}
-
-			for (int i = 0; i < FRIENDMANAGER->getFriend().size(); i++)
-			{
-				FRIENDMANAGER->getFriend()[i]->setIsTurn(true);
-			}
-		}
-	}
-	else if (!ENEMYMANAGER->getEnemy()[4]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[5]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[6]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[7]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[8]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[9]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[10]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[11]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[12]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[13]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[14]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[15]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[16]->getIsTurn() &&
-		!ENEMYMANAGER->getEnemy()[17]->getIsTurn())
+	if (!PLAYERMANAGER->getPturn() && !FRIENDMANAGER->getFturn())
 	{
 		eTurn = false;
+
+		for (int i = 4; i < 17; i++)
+		{
+			auto& enemy = ENEMYMANAGER->getEnemy()[i];
+
+			if (enemy->getIsTurn())
+			{
+				eTurn = true;
+			}
+		}
+
+		for (int i = 0; i < PLAYERMANAGER->getPlayer().size(); i++)
+		{
+			PLAYERMANAGER->getPlayer()[i]->setIsTurn(true);
+		}
+
+		for (int i = 0; i < FRIENDMANAGER->getFriend().size(); i++)
+		{
+			FRIENDMANAGER->getFriend()[i]->setIsTurn(true);
+		}
 	}
 }

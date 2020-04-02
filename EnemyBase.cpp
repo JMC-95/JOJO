@@ -30,6 +30,14 @@ void EnemyBase::mouseMove()
 {
 }
 
+void EnemyBase::aiAstar()
+{
+}
+
+void EnemyBase::enemyAi()
+{
+}
+
 void EnemyBase::enemyMove()
 {
 }
@@ -225,26 +233,6 @@ void EnemyBase::floodFill(int tile, int moveCount)
 			}
 
 			mainMap->getMap()[tile].flood = true;
-
-			for (int z = 0; z < PLAYERMANAGER->getPlayer().size(); ++z)
-			{
-				auto& playerRect = PLAYERMANAGER->getPlayer()[z]->getPlayerInfo().rc;
-
-				if (IntersectRect(&temp, &playerRect, &rc))
-				{
-					mainMap->getMap()[tile].flood = false;
-				}
-			}
-
-			for (int z = 0; z < FRIENDMANAGER->getFriend().size(); ++z)
-			{
-				auto& friendRect = FRIENDMANAGER->getFriend()[z]->getFriendInfo().rc;
-
-				if (IntersectRect(&temp, &friendRect, &rc))
-				{
-					mainMap->getMap()[tile].flood = false;
-				}
-			}
 		}
 	}
 }

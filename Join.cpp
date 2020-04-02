@@ -9,13 +9,16 @@ Join::~Join()
 {
 }
 
-HRESULT Join::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
+HRESULT Join::init(const char* skillImg, const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//이름 및 얼굴
 	join.name = "조인";
 	join.face = "조인Face";
 	join.className = "경기병";
 	//이미지 및 애니메이션
+	join.skillImg = IMAGEMANAGER->findImage(skillImg);		//스킬 이미지
+	ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+	skillAni = ANIMATIONMANAGER->findAnimation("healImg");
 	join.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	join.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
 	join.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
@@ -95,7 +98,7 @@ void Join::update()
 			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
-			!ENEMYMANAGER->getEturn())
+			PLAYERMANAGER->getPturn())
 		{
 			mouseMove();
 		}
@@ -130,6 +133,7 @@ void Join::render(HDC hdc)
 			if (isHeal)
 			{
 				join.blockImg->frameRender(hdc, join.rc.left, join.rc.top, 0, 5);
+				join.skillImg->aniRender(hdc, join.rc.left - 8, join.rc.top - 8, skillAni);
 			}
 			else
 			{
@@ -156,6 +160,7 @@ void Join::render(HDC hdc)
 			if (isHeal)
 			{
 				join.blockImg->frameRender(hdc, join.rc.left, join.rc.top, 0, 5);
+				join.skillImg->aniRender(hdc, join.rc.left - 8, join.rc.top - 8, skillAni);
 			}
 			else
 			{
@@ -392,8 +397,6 @@ void Join::playerMenu()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			SOUNDMANAGER->stop("cMove");
-			SOUNDMANAGER->stop("clickMiss");
 			SOUNDMANAGER->play("click", 1.0f);
 
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
@@ -408,15 +411,11 @@ void Join::playerMenu()
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 			{
@@ -545,6 +544,13 @@ void Join::playerAnimation()
 				playerAni = ANIMATIONMANAGER->findAnimation("playerHp");
 				ANIMATIONMANAGER->resume("playerHp");
 			}
+
+			if (isHeal)
+			{
+				ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+				skillAni = ANIMATIONMANAGER->findAnimation("healImg");
+				ANIMATIONMANAGER->resume("healImg");
+			}
 		}
 	}
 	else
@@ -564,6 +570,13 @@ void Join::playerAnimation()
 			frameY = 8;
 			break;
 		}
+
+		if (isHeal)
+		{
+			ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+			skillAni = ANIMATIONMANAGER->findAnimation("healImg");
+			ANIMATIONMANAGER->resume("healImg");
+		}
 	}
 }
 
@@ -576,8 +589,40 @@ void Join::playerState()
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
 
+	//HP
 	if (currentHp < 0) currentHp = 0;
 	if (currentHp > maxHp) currentHp = maxHp;
+
+	//MP
+	if (currentMp < 0) currentMp = 0;
+
+	//EXP
+	if (currentExp >= 100)
+	{
+		currentExp -= 100;
+
+		join.level += 1;		//레벨
+		maxHp += 3;				//체력
+		maxMp += 3;				//마력
+		join.atk += 3;			//공격력
+		join.will += 3;			//정신력
+		join.def += 3;			//방어력
+		join.agi += 3;			//순발력
+
+		isLevelUp = true;
+	}
+
+	//Level
+	if (isLevelUp)
+	{
+		levelCount++;
+
+		if (levelCount > 50)
+		{
+			levelCount = 0;
+			isLevelUp = false;
+		}
+	}
 }
 
 void Join::setPosition(RECT rc)

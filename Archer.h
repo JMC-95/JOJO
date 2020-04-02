@@ -16,13 +16,14 @@ public:
 	virtual void update();
 	virtual void render(HDC hdc);
 
-	virtual void mouseMove();
+	virtual void enemyAi();
 	virtual void enemyMove();
 	virtual void enemyAstar();
 	virtual void enemyMenu();
 	virtual void enemyCollision();
 	virtual void enemyAnimation();
 	virtual void enemyState();
+	virtual void mouseMove();
 
 	virtual void setPosition(RECT rc);
 

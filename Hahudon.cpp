@@ -9,13 +9,16 @@ Hahudon::~Hahudon()
 {
 }
 
-HRESULT Hahudon::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
+HRESULT Hahudon::init(const char* skillImg, const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	//이름 및 얼굴
 	hahudon.name = "하후돈";
 	hahudon.face = "하후돈Face";
 	hahudon.className = "경기병";
 	//이미지 및 애니메이션
+	hahudon.skillImg = IMAGEMANAGER->findImage(skillImg);		//스킬 이미지
+	ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+	skillAni = ANIMATIONMANAGER->findAnimation("healImg");
 	hahudon.moveRngImg = IMAGEMANAGER->findImage(moveImg);		//캐릭터 클릭시 이동범위 이미지
 	hahudon.moveAtkRngImg = IMAGEMANAGER->findImage(mAtkImg);	//캐릭터 클릭시 공격범위 이미지
 	hahudon.atkRngImg = IMAGEMANAGER->findImage(aRngImg);		//공격버튼 클릭시 공격범위 이미지
@@ -95,7 +98,7 @@ void Hahudon::update()
 			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
 			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
-			!ENEMYMANAGER->getEturn())
+			PLAYERMANAGER->getPturn())
 		{
 			mouseMove();
 		}
@@ -130,6 +133,7 @@ void Hahudon::render(HDC hdc)
 			if (isHeal)
 			{
 				hahudon.blockImg->frameRender(hdc, hahudon.rc.left, hahudon.rc.top, 0, 5);
+				hahudon.skillImg->aniRender(hdc, hahudon.rc.left - 8, hahudon.rc.top - 8, skillAni);
 			}
 			else
 			{
@@ -156,6 +160,7 @@ void Hahudon::render(HDC hdc)
 			if (isHeal)
 			{
 				hahudon.blockImg->frameRender(hdc, hahudon.rc.left, hahudon.rc.top, 0, 5);
+				hahudon.skillImg->aniRender(hdc, hahudon.rc.left - 8, hahudon.rc.top - 8, skillAni);
 			}
 			else
 			{
@@ -392,8 +397,6 @@ void Hahudon::playerMenu()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
-			SOUNDMANAGER->stop("cMove");
-			SOUNDMANAGER->stop("clickMiss");
 			SOUNDMANAGER->play("click", 1.0f);
 
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
@@ -408,15 +411,11 @@ void Hahudon::playerMenu()
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 			{
@@ -545,6 +544,13 @@ void Hahudon::playerAnimation()
 				playerAni = ANIMATIONMANAGER->findAnimation("playerHp");
 				ANIMATIONMANAGER->resume("playerHp");
 			}
+
+			if (isHeal)
+			{
+				ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+				skillAni = ANIMATIONMANAGER->findAnimation("healImg");
+				ANIMATIONMANAGER->resume("healImg");
+			}
 		}
 	}
 	else
@@ -564,6 +570,13 @@ void Hahudon::playerAnimation()
 			frameY = 8;
 			break;
 		}
+
+		if (isHeal)
+		{
+			ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);
+			skillAni = ANIMATIONMANAGER->findAnimation("healImg");
+			ANIMATIONMANAGER->resume("healImg");
+		}
 	}
 }
 
@@ -576,8 +589,40 @@ void Hahudon::playerState()
 	_Exp->update();
 	_Exp->setGauge(currentExp, maxExp);
 
+	//HP
 	if (currentHp < 0) currentHp = 0;
 	if (currentHp > maxHp) currentHp = maxHp;
+
+	//MP
+	if (currentMp < 0) currentMp = 0;
+
+	//EXP
+	if (currentExp >= 100)
+	{
+		currentExp -= 100;
+
+		hahudon.level += 1;		//레벨
+		maxHp += 3;				//체력
+		maxMp += 3;				//마력
+		hahudon.atk += 3;		//공격력
+		hahudon.will += 3;		//정신력
+		hahudon.def += 3;		//방어력
+		hahudon.agi += 3;		//순발력
+
+		isLevelUp = true;
+	}
+
+	//Level
+	if (isLevelUp)
+	{
+		levelCount++;
+
+		if (levelCount > 50)
+		{
+			levelCount = 0;
+			isLevelUp = false;
+		}
+	}
 }
 
 void Hahudon::setPosition(RECT rc)

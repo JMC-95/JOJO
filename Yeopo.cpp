@@ -68,8 +68,8 @@ HRESULT Yeopo::init(const char * moveImg, const char * mAtkImg, const char * aRn
 	startTile = endTile = -1;
 	speed = 12;	//속도
 
+	isTurn = true;
 	isMove = true;
-	isTurn = false;
 	isSelect = false;
 
 	return S_OK;
@@ -86,11 +86,12 @@ void Yeopo::update()
 {
 	if (isTurn)
 	{
-		mouseMove();
+		if (ENEMYMANAGER->getEturn()) enemyAi();
 	}
 
 	enemyAnimation();
 	enemyState();
+	mouseMove();
 }
 
 void Yeopo::render(HDC hdc)
@@ -139,7 +140,7 @@ void Yeopo::render(HDC hdc)
 	}
 }
 
-void Yeopo::mouseMove()
+void Yeopo::enemyAi()
 {
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
 	{
@@ -179,6 +180,8 @@ void Yeopo::mouseMove()
 			{
 				if (mainMap->getMap()[i].flood)
 				{
+					SOUNDMANAGER->play("cMove", 1.0f);
+
 					//선택한 맵의 x좌표와 y좌표
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
 					mapY = mainMap->getMap()[i].rc.top + (mainMap->getMap()[i].rc.bottom - mainMap->getMap()[i].rc.top) / 2;
@@ -221,27 +224,76 @@ void Yeopo::mouseMove()
 	enemyCollision();
 }
 
+void Yeopo::mouseMove()
+{
+	for (int i = 0; i < TILE_X * TILE_Y; i++)
+	{
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && PtInRect(&yeopo.rc, m_ptMouse))
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
+			{
+				//선택한 타일 (캐릭터)
+				startTile = i;
+
+				//캐릭터 클릭
+				isSelect = true;
+
+				//공격범위
+				for (int j = 0; j < 4; j++)
+				{
+					yeopo.rcAtk[0] = RectMake(yeopo.rc.left - 48, yeopo.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					yeopo.rcAtk[1] = RectMake(yeopo.rc.left + 48, yeopo.rc.top, TILE_WIDTH, TILE_HEIGHT);
+					yeopo.rcAtk[2] = RectMake(yeopo.rc.left, yeopo.rc.top - 48, TILE_WIDTH, TILE_HEIGHT);
+					yeopo.rcAtk[3] = RectMake(yeopo.rc.left, yeopo.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
+					atkList.push_back(yeopo.rcAtk[j]);
+				}
+
+				//이동범위
+				if (isMove) floodFill(startTile, yeopo.movingCount);
+			}
+		}
+
+		if (PtInRect(&mainMap->getMap()[i].rc, m_ptMouse) && isSelect)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+			{
+				//캐릭터 클릭
+				isSelect = false;
+
+				//공격범위
+				atkList.clear();
+
+				//이동범위
+				for (int i = 0; i < TILE_X * TILE_Y; i++)
+				{
+					if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+				}
+			}
+		}
+	}
+}
+
 void Yeopo::enemyMove()
 {
 	stackX = optimalPath.top().rc.left + (optimalPath.top().rc.right - optimalPath.top().rc.left) / 2;
 	stackY = optimalPath.top().rc.top + (optimalPath.top().rc.bottom - optimalPath.top().rc.top) / 2;
 
-		if (enemyX > stackX)
-		{
-			eDirection = ENEMY_LEFT;
-		}
-		else if (enemyX < stackX)
-		{
-			eDirection = ENEMY_RIGHT;
-		}
-		else if (enemyY > stackY)
-		{
-			eDirection = ENEMY_UP;
-		}
-		else if (enemyY < stackY)
-		{
-			eDirection = ENEMY_DOWN;
-		}
+	if (enemyX > stackX)
+	{
+		eDirection = ENEMY_LEFT;
+	}
+	else if (enemyX < stackX)
+	{
+		eDirection = ENEMY_RIGHT;
+	}
+	else if (enemyY > stackY)
+	{
+		eDirection = ENEMY_UP;
+	}
+	else if (enemyY < stackY)
+	{
+		eDirection = ENEMY_DOWN;
+	}
 
 	if (yeopo.rc.left > 0 || yeopo.rc.right < WINSIZEY ||
 		yeopo.rc.top > 0 || yeopo.rc.bottom < WINSIZEY)
@@ -306,17 +358,20 @@ void Yeopo::enemyAstar()
 				yeopo.rcAtk[3] = RectMake(yeopo.rc.left, yeopo.rc.top + 48, TILE_WIDTH, TILE_HEIGHT);
 				atkList.push_back(yeopo.rcAtk[j]);
 			}
+		}
+	}
 
-			//메뉴선택 렉트
-			for (int j = 0; j < 5; j++)
-			{
-				rcMenu[0] = RectMake(yeopo.rc.left - 97, yeopo.rc.top - 30, 82, 20);
-				rcMenu[1] = RectMake(yeopo.rc.left - 97, yeopo.rc.top - 9, 82, 20);
-				rcMenu[2] = RectMake(yeopo.rc.left - 97, yeopo.rc.top + 12, 82, 20);
-				rcMenu[3] = RectMake(yeopo.rc.left - 97, yeopo.rc.top + 38, 82, 20);
-				rcMenu[4] = RectMake(yeopo.rc.left - 97, yeopo.rc.top + 63, 82, 20);
-				menuList.push_back(rcMenu[j]);
-			}
+	if (isClick)
+	{
+		//메뉴선택 렉트
+		for (int j = 0; j < 5; j++)
+		{
+			rcMenu[0] = RectMake(yeopo.rc.left - 97, yeopo.rc.top - 30, 82, 20);
+			rcMenu[1] = RectMake(yeopo.rc.left - 97, yeopo.rc.top - 9, 82, 20);
+			rcMenu[2] = RectMake(yeopo.rc.left - 97, yeopo.rc.top + 12, 82, 20);
+			rcMenu[3] = RectMake(yeopo.rc.left - 97, yeopo.rc.top + 38, 82, 20);
+			rcMenu[4] = RectMake(yeopo.rc.left - 97, yeopo.rc.top + 63, 82, 20);
+			menuList.push_back(rcMenu[j]);
 		}
 	}
 }
@@ -422,7 +477,7 @@ void Yeopo::enemyMenu()
 	//메뉴
 	if (isClick)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
+		if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 		{
 			if (PtInRect(&rcMenu[0], m_ptMouse) && isTarget)	//공격
 			{
@@ -436,15 +491,11 @@ void Yeopo::enemyMenu()
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[2], m_ptMouse))	//도구
 			{
 				atkList.clear();
 				menuList.clear();
-
-				//isClick = false;
 			}
 			if (PtInRect(&rcMenu[3], m_ptMouse))	//대기
 			{
@@ -494,8 +545,8 @@ void Yeopo::enemyCollision()
 		{
 			if (enemyX > playerX) eDirection = ENEMY_LEFT;
 			else if (enemyX < playerX) eDirection = ENEMY_RIGHT;
-			else if (enemyX > playerY) eDirection = ENEMY_UP;
-			else if (enemyX < playerY) eDirection = ENEMY_DOWN;
+			else if (enemyY > playerY) eDirection = ENEMY_UP;
+			else if (enemyY < playerY) eDirection = ENEMY_DOWN;
 		}
 	}
 
@@ -519,8 +570,8 @@ void Yeopo::enemyCollision()
 		{
 			if (enemyX > friendX) eDirection = ENEMY_LEFT;
 			else if (enemyX < friendX) eDirection = ENEMY_RIGHT;
-			else if (enemyX > friendY) eDirection = ENEMY_UP;
-			else if (enemyX < friendY) eDirection = ENEMY_DOWN;
+			else if (enemyY > friendY) eDirection = ENEMY_UP;
+			else if (enemyY < friendY) eDirection = ENEMY_DOWN;
 		}
 	}
 }

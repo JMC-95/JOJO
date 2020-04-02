@@ -9,7 +9,7 @@ PlayerBase::~PlayerBase()
 {
 }
 
-HRESULT PlayerBase::init(const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
+HRESULT PlayerBase::init(const char* skillImg, const char * moveImg, const char * mAtkImg, const char * aRngImg, const char * playerImg, const char * atkImg, const char * blockImg)
 {
 	return S_OK;
 }
@@ -250,7 +250,12 @@ void PlayerBase::hitDamage(int _damage)
 	currentHp -= _damage;
 }
 
-void PlayerBase::HealDamage(int _damage)
+void PlayerBase::healDamage(int _damage)
 {
 	currentHp += _damage;
+}
+
+void PlayerBase::expDamaga(int exp)
+{
+	currentExp += exp;
 }

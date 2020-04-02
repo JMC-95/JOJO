@@ -821,7 +821,7 @@ void image::alphaRender(HDC hdc, int destX, int destY, int sourX, int sourY, int
 
 	}
 }
-void image::aniRender(HDC hdc, int destX, int destY, animation * ani)
+void image::aniRender(HDC hdc, int destX, int destY, animation* ani)
 {
 	render(hdc, destX, destY, ani->getFramePos().x, ani->getFramePos().y, ani->getFrameWidth(), ani->getFrameHeight());
 }

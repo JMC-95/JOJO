@@ -17,7 +17,6 @@ public:
 
 	void playerToEnemyCollision();
 	void enemyToPlayerCollision();
-	void enemyToFriendCollision();
 
 	int getDamage() { return damage; }
 };
