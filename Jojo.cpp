@@ -85,21 +85,30 @@ void Jojo::update()
 {
 	if (isTurn)
 	{
-		if (!PLAYERMANAGER->getPlayer()[1]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[1]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[2]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[3]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
-			PLAYERMANAGER->getPturn())
+		if (PLAYERMANAGER->getPturn())
 		{
-			mouseMove();
+			auto& playerVector = PLAYERMANAGER->getPlayer();
+
+			bool isMouseMove = true;
+
+			for (int i = 0; i < playerVector.size(); ++i)
+			{
+				if (playerVector[i]->getPlayerInfo().name == "Á¶Á¶")
+				{
+					continue;
+				}
+
+				if (playerVector[i]->getIsSelect() || playerVector[i]->getIsClick())
+				{
+					isMouseMove = false;
+					break;
+				}
+			}
+
+			if (isMouseMove)
+			{
+				mouseMove();
+			}
 		}
 	}
 
@@ -197,7 +206,6 @@ void Jojo::mouseMove()
 
 					for (int j = 0; j < TILE_X * TILE_Y; j++)
 					{
-						RECT temp;
 						auto& rc = mainMap->getMap()[j].rc;
 
 						if (mainMap->getMap()[j].flood)
@@ -455,21 +463,21 @@ void Jojo::playerMenu()
 		{
 			SOUNDMANAGER->play("click", 1.0f);
 			vSkill.clear();
-			isSkill = false;
 			isClick = true;
+			isSkill = false;
 		}
 		else if (PtInRect(&skillRect[1], m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON) && currentMp >= 6)
 		{
 			SOUNDMANAGER->play("click", 1.0f);
 			vSkill.clear();
-			isSkill = false;
 			isSkillCheck = true;
+			isSkill = false;
 
 			int positionX = jojo.rc.left / TILE_WIDTH;
 			int positionY = jojo.rc.top / TILE_HEIGHT;
 			int playerTile = positionX + (positionY * TILE_Y);
 
-			skillFill(playerTile, 4);
+			if (isSkillCheck) skillFill(playerTile, 4);
 		}
 	}
 
@@ -489,6 +497,7 @@ void Jojo::playerMenu()
 
 				for (int i = 0; i < TILE_X * TILE_Y; i++)
 				{
+					mainMap->getMap()[i].flood = false;
 					mainMap->getMap()[i].skill = false;
 				}
 			}
@@ -505,33 +514,33 @@ void Jojo::playerMenu()
 			}
 		}
 		else skillCount = 0;
-
-		if (isHealCheck)
-		{
-			auto& player = PLAYERMANAGER->getPlayer()[playerNumber];
-
-			player->setIsHeal(true);
-			frameCount++;
-
-			if (frameCount < 2) SOUNDMANAGER->play("healStart", 1.0f);
-			else if (frameCount > 40)
-			{
-				player->setIsHeal(false);
-				player->healDamage(30);
-				isSkillCheck = false;
-				isHealCheck = false;
-				isMove = true;
-				isTurn = false;
-				isSelect = false;
-			}
-		}
-		else frameCount = 0;
 	}
+
+	if (isHealCheck)
+	{
+		auto& player = PLAYERMANAGER->getPlayer()[playerNumber];
+
+		player->setIsHeal(true);
+		frameCount++;
+
+		if (frameCount < 2) SOUNDMANAGER->play("healStart", 1.0f);
+		else if (frameCount > 40)
+		{
+			player->setIsHeal(false);
+			if (player->getMaxHp() - player->getCurrentHp() < 30) player->healDamage(player->getMaxHp() - player->getCurrentHp());
+			else player->healDamage(30);
+			isMove = true;
+			isTurn = false;
+			isSelect = false;
+			isSkillCheck = false;
+			isHealCheck = false;
+		}
+	}
+	else frameCount = 0;
 }
 
 void Jojo::playerCollision()
 {
-	RECT temp;
 	frameX = 0;
 
 	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)

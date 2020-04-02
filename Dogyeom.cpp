@@ -97,8 +97,9 @@ void Dogyeom::update()
 
 	if (KEYMANAGER->isOnceKeyDown('3'))
 	{
-		isTurn = true;
-		isMove = true;
+		isTurn = false;
+		//isTurn = true;
+		//isMove = true;
 	}
 }
 
@@ -150,8 +151,6 @@ void Dogyeom::render(HDC hdc)
 
 void Dogyeom::friendAi()
 {
-	RECT temp;
-
 	if (KEYMANAGER->isOnceKeyDown('1'))
 	{
 		//턴이 되면 벡터를 초기화 하자.
@@ -209,7 +208,7 @@ void Dogyeom::friendAi()
 				}
 			}
 
-			for (int k = 4; k < 18; ++k)
+			for (int k = 0; k < ENEMYMANAGER->getEnemy().size(); ++k)
 			{
 				auto& rc = mainMap->getMap()[i].rc;
 				auto& enemyRect = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc;
@@ -418,7 +417,6 @@ void Dogyeom::friendMenu()
 
 void Dogyeom::friendCollision()
 {
-	RECT temp;
 	frameX = 0;
 
 	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
@@ -604,7 +602,7 @@ void Dogyeom::aiAstar()
 	//캐릭터의 위치에서 가장 가까운 적의 위치를 찾아내는 Astar
 	for (int i = 0; i < 14; i++)
 	{
-		int enemyNum = i + 4;
+		int enemyNum = i + 9;
 		auto& enemyRect = ENEMYMANAGER->getEnemy()[enemyNum]->getEnemyInfo().rc;
 
 		positionX = dogyeom.rc.left / TILE_WIDTH;
@@ -668,6 +666,6 @@ void Dogyeom::aiAstar()
 
 		if (minNum > vAstar[i]) minNum = vAstar[i];
 
-		if (minNum == distance) enemyNum = i + 4;
+		if (minNum == distance) enemyNum = i + 9;
 	}
 }

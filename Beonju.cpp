@@ -518,7 +518,6 @@ void Beonju::enemyMenu()
 
 void Beonju::enemyCollision()
 {
-	RECT temp;
 	frameX = 0;
 
 	for (int j = 0; j < PLAYERMANAGER->getPlayer().size(); j++)

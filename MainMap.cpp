@@ -121,7 +121,7 @@ void MainMap::playerDraw(HDC hdc)
 	{
 		if (tiles[i].skill)
 		{
-			//조조 스킬 범위
+			//조조의 스킬 범위를 보여준다.
 			if (PLAYERMANAGER->getPlayer()[0]->getIsSkillCheck())
 			{
 				PLAYERMANAGER->getPlayer()[0]->getPlayerInfo().atkRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
@@ -130,93 +130,89 @@ void MainMap::playerDraw(HDC hdc)
 
 		if (tiles[i].flood)
 		{
-			//기병 + 궁병
-			for (int j = 0; j < 4; j++)
+			for (int j = 0; j < PLAYERMANAGER->getPlayer().size(); j++)
 			{
 				auto playerSelect = PLAYERMANAGER->getPlayer()[j]->getIsSelect();
 				auto& playerInfo = PLAYERMANAGER->getPlayer()[j]->getPlayerInfo();
 
-				if (playerSelect)
+				if (playerInfo.className == "군웅" || playerInfo.className == "경기병" || playerInfo.className == "궁기병")
 				{
-					//이동범위
-					playerInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-					//공격범위
-					playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[0].left, playerInfo.rcAtk[0].top);
-					if (playerInfo.rcAtk[1].right <= WINSIZEY)
+					if (playerSelect)
 					{
-						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[1].left, playerInfo.rcAtk[1].top);
-					}
-					playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[2].left, playerInfo.rcAtk[2].top);
-					playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[3].left, playerInfo.rcAtk[3].top);
-				}
-			}
+						//이동범위
+						playerInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
 
-			//보병
-			for (int j = 4; j < PLAYERMANAGER->getPlayer().size(); j++)
-			{
-				auto playerSelect = PLAYERMANAGER->getPlayer()[j]->getIsSelect();
-				auto& playerInfo = PLAYERMANAGER->getPlayer()[j]->getPlayerInfo();
-
-				if (playerSelect)
-				{
-					//이동범위
-					playerInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-					//공격범위
-					playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[0].left, playerInfo.rcAtk[0].top);
-					playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[1].left, playerInfo.rcAtk[1].top);
-					playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[2].left, playerInfo.rcAtk[2].top);
-					if (playerInfo.rcAtk[3].right <= WINSIZEY)
-					{
+						//공격범위
+						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[0].left, playerInfo.rcAtk[0].top);
+						if (playerInfo.rcAtk[1].right <= WINSIZEY)
+						{
+							playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[1].left, playerInfo.rcAtk[1].top);
+						}
+						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[2].left, playerInfo.rcAtk[2].top);
 						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[3].left, playerInfo.rcAtk[3].top);
-						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[4].left, playerInfo.rcAtk[4].top);
-						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[5].left, playerInfo.rcAtk[5].top);
 					}
-					playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[6].left, playerInfo.rcAtk[6].top);
-					playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[7].left, playerInfo.rcAtk[7].top);
+				}
+
+				if (playerInfo.className == "경보병")
+				{
+					if (playerSelect)
+					{
+						//이동범위
+						playerInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+						//공격범위
+						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[0].left, playerInfo.rcAtk[0].top);
+						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[1].left, playerInfo.rcAtk[1].top);
+						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[2].left, playerInfo.rcAtk[2].top);
+						if (playerInfo.rcAtk[3].right <= WINSIZEY)
+						{
+							playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[3].left, playerInfo.rcAtk[3].top);
+							playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[4].left, playerInfo.rcAtk[4].top);
+							playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[5].left, playerInfo.rcAtk[5].top);
+						}
+						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[6].left, playerInfo.rcAtk[6].top);
+						playerInfo.moveAtkRngImg->render(hdc, playerInfo.rcAtk[7].left, playerInfo.rcAtk[7].top);
+					}
 				}
 			}
 		}
 	}
 
-	//기병 + 궁병
-	for (int j = 0; j < 4; j++)
+	for (int j = 0; j < PLAYERMANAGER->getPlayer().size(); j++)
 	{
 		auto playerAtkRng = PLAYERMANAGER->getPlayer()[j]->getIsAtkRng();
 		auto& playerInfo = PLAYERMANAGER->getPlayer()[j]->getPlayerInfo();
 
-		if (playerAtkRng)
+		if (playerInfo.className == "군웅" || playerInfo.className == "경기병" || playerInfo.className == "궁기병")
 		{
-			playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[0].left, playerInfo.rcAtk[0].top);
-			if (playerInfo.rcAtk[1].right <= WINSIZEY)
+			if (playerAtkRng)
 			{
-				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[1].left, playerInfo.rcAtk[1].top);
-			}
-			playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[2].left, playerInfo.rcAtk[2].top);
-			playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[3].left, playerInfo.rcAtk[3].top);
-		}
-	}
-
-	//보병
-	for (int j = 4; j < PLAYERMANAGER->getPlayer().size(); j++)
-	{
-		auto playerAtkRng = PLAYERMANAGER->getPlayer()[j]->getIsAtkRng();
-		auto& playerInfo = PLAYERMANAGER->getPlayer()[j]->getPlayerInfo();
-
-		if (playerAtkRng)
-		{
-			playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[0].left, playerInfo.rcAtk[0].top);
-			playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[1].left, playerInfo.rcAtk[1].top);
-			playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[2].left, playerInfo.rcAtk[2].top);
-			if (playerInfo.rcAtk[3].right <= WINSIZEY)
-			{
+				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[0].left, playerInfo.rcAtk[0].top);
+				if (playerInfo.rcAtk[1].right <= WINSIZEY)
+				{
+					playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[1].left, playerInfo.rcAtk[1].top);
+				}
+				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[2].left, playerInfo.rcAtk[2].top);
 				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[3].left, playerInfo.rcAtk[3].top);
-				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[4].left, playerInfo.rcAtk[4].top);
-				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[5].left, playerInfo.rcAtk[5].top);
 			}
-			playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[6].left, playerInfo.rcAtk[6].top);
-			playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[7].left, playerInfo.rcAtk[7].top);
+		}
+
+		if (playerInfo.className == "경보병")
+		{
+			if (playerAtkRng)
+			{
+				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[0].left, playerInfo.rcAtk[0].top);
+				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[1].left, playerInfo.rcAtk[1].top);
+				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[2].left, playerInfo.rcAtk[2].top);
+				if (playerInfo.rcAtk[3].right <= WINSIZEY)
+				{
+					playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[3].left, playerInfo.rcAtk[3].top);
+					playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[4].left, playerInfo.rcAtk[4].top);
+					playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[5].left, playerInfo.rcAtk[5].top);
+				}
+				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[6].left, playerInfo.rcAtk[6].top);
+				playerInfo.atkRngImg->render(hdc, playerInfo.rcAtk[7].left, playerInfo.rcAtk[7].top);
+			}
 		}
 	}
 }
@@ -228,93 +224,89 @@ void MainMap::friendDraw(HDC hdc)
 	{
 		if (tiles[i].flood)
 		{
-			//기병
-			for (int j = 0; j < 5; j++)
+			for (int j = 0; j < FRIENDMANAGER->getFriend().size(); j++)
 			{
 				auto friendSelect = FRIENDMANAGER->getFriend()[j]->getIsSelect();
 				auto& friendInfo = FRIENDMANAGER->getFriend()[j]->getFriendInfo();
 
-				if (friendSelect)
+				if (friendInfo.className == "군웅" || friendInfo.className == "경기병")
 				{
-					//이동범위
-					friendInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-					//공격범위
-					friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[0].left, friendInfo.rcAtk[0].top);
-					if (friendInfo.rcAtk[1].right <= WINSIZEY)
+					if (friendSelect)
 					{
-						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[1].left, friendInfo.rcAtk[1].top);
-					}
-					friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[2].left, friendInfo.rcAtk[2].top);
-					friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[3].left, friendInfo.rcAtk[3].top);
-				}
-			}
+						//이동범위
+						friendInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
 
-			//보병
-			for (int j = 5; j < FRIENDMANAGER->getFriend().size(); j++)
-			{
-				auto friendSelect = FRIENDMANAGER->getFriend()[j]->getIsSelect();
-				auto& friendInfo = FRIENDMANAGER->getFriend()[j]->getFriendInfo();
-
-				if (friendSelect)
-				{
-					//이동범위
-					friendInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-					//공격범위
-					friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[0].left, friendInfo.rcAtk[0].top);
-					friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[1].left, friendInfo.rcAtk[1].top);
-					friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[2].left, friendInfo.rcAtk[2].top);
-					if (friendInfo.rcAtk[3].right <= WINSIZEY)
-					{
+						//공격범위
+						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[0].left, friendInfo.rcAtk[0].top);
+						if (friendInfo.rcAtk[1].right <= WINSIZEY)
+						{
+							friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[1].left, friendInfo.rcAtk[1].top);
+						}
+						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[2].left, friendInfo.rcAtk[2].top);
 						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[3].left, friendInfo.rcAtk[3].top);
-						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[4].left, friendInfo.rcAtk[4].top);
-						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[5].left, friendInfo.rcAtk[5].top);
 					}
-					friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[6].left, friendInfo.rcAtk[6].top);
-					friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[7].left, friendInfo.rcAtk[7].top);
+				}
+
+				if (friendInfo.className == "경보병")
+				{
+					if (friendSelect)
+					{
+						//이동범위
+						friendInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+						//공격범위
+						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[0].left, friendInfo.rcAtk[0].top);
+						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[1].left, friendInfo.rcAtk[1].top);
+						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[2].left, friendInfo.rcAtk[2].top);
+						if (friendInfo.rcAtk[3].right <= WINSIZEY)
+						{
+							friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[3].left, friendInfo.rcAtk[3].top);
+							friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[4].left, friendInfo.rcAtk[4].top);
+							friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[5].left, friendInfo.rcAtk[5].top);
+						}
+						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[6].left, friendInfo.rcAtk[6].top);
+						friendInfo.moveAtkRngImg->render(hdc, friendInfo.rcAtk[7].left, friendInfo.rcAtk[7].top);
+					}
 				}
 			}
 		}
 	}
 
-	//기병
-	for (int j = 0; j < 5; j++)
+	for (int j = 0; j < FRIENDMANAGER->getFriend().size(); j++)
 	{
 		auto friendAtkrng = FRIENDMANAGER->getFriend()[j]->getIsAtkRng();
 		auto& friendInfo = FRIENDMANAGER->getFriend()[j]->getFriendInfo();
 
-		if (friendAtkrng)
+		if (friendInfo.className == "군웅" || friendInfo.className == "경기병")
 		{
-			friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[0].left, friendInfo.rcAtk[0].top);
-			if (friendInfo.rcAtk[1].right <= WINSIZEY)
+			if (friendAtkrng)
 			{
-				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[1].left, friendInfo.rcAtk[1].top);
-			}
-			friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[2].left, friendInfo.rcAtk[2].top);
-			friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[3].left, friendInfo.rcAtk[3].top);
-		}
-	}
-
-	//보병
-	for (int j = 5; j < FRIENDMANAGER->getFriend().size(); j++)
-	{
-		auto friendAtkrng = FRIENDMANAGER->getFriend()[j]->getIsAtkRng();
-		auto& friendInfo = FRIENDMANAGER->getFriend()[j]->getFriendInfo();
-
-		if (friendAtkrng)
-		{
-			friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[0].left, friendInfo.rcAtk[0].top);
-			friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[1].left, friendInfo.rcAtk[1].top);
-			friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[2].left, friendInfo.rcAtk[2].top);
-			if (friendInfo.rcAtk[3].right <= WINSIZEY)
-			{
+				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[0].left, friendInfo.rcAtk[0].top);
+				if (friendInfo.rcAtk[1].right <= WINSIZEY)
+				{
+					friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[1].left, friendInfo.rcAtk[1].top);
+				}
+				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[2].left, friendInfo.rcAtk[2].top);
 				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[3].left, friendInfo.rcAtk[3].top);
-				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[4].left, friendInfo.rcAtk[4].top);
-				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[5].left, friendInfo.rcAtk[5].top);
 			}
-			friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[6].left, friendInfo.rcAtk[6].top);
-			friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[7].left, friendInfo.rcAtk[7].top);
+		}
+
+		if (friendInfo.className == "경보병")
+		{
+			if (friendAtkrng)
+			{
+				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[0].left, friendInfo.rcAtk[0].top);
+				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[1].left, friendInfo.rcAtk[1].top);
+				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[2].left, friendInfo.rcAtk[2].top);
+				if (friendInfo.rcAtk[3].right <= WINSIZEY)
+				{
+					friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[3].left, friendInfo.rcAtk[3].top);
+					friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[4].left, friendInfo.rcAtk[4].top);
+					friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[5].left, friendInfo.rcAtk[5].top);
+				}
+				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[6].left, friendInfo.rcAtk[6].top);
+				friendInfo.atkRngImg->render(hdc, friendInfo.rcAtk[7].left, friendInfo.rcAtk[7].top);
+			}
 		}
 	}
 }
@@ -326,93 +318,89 @@ void MainMap::enemyDraw(HDC hdc)
 	{
 		if (tiles[i].flood)
 		{
-			//보병 + 궁병 제외
-			for (int j = 0; j < 9; j++)
+			for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
 			{
 				auto enemySelect = ENEMYMANAGER->getEnemy()[j]->getIsSelect();
 				auto& enemyInfo = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo();
 
-				if (enemySelect)
+				if (enemyInfo.className == "군웅" || enemyInfo.className == "경기병" || enemyInfo.className == "책사" || enemyInfo.className == "서량기병")
 				{
-					//이동범위
-					enemyInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-					//공격범위
-					enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[0].left, enemyInfo.rcAtk[0].top);
-					if (enemyInfo.rcAtk[1].right <= WINSIZEY)
+					if (enemySelect)
 					{
-						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[1].left, enemyInfo.rcAtk[1].top);
-					}
-					enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[2].left, enemyInfo.rcAtk[2].top);
-					enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[3].left, enemyInfo.rcAtk[3].top);
-				}
-			}
+						//이동범위
+						enemyInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
 
-			//보병 + 궁병 포함
-			for (int j = 9; j < ENEMYMANAGER->getEnemy().size(); j++)
-			{
-				auto enemySelect = ENEMYMANAGER->getEnemy()[j]->getIsSelect();
-				auto& enemyInfo = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo();
-
-				if (enemySelect)
-				{
-					//이동범위
-					enemyInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
-
-					//공격범위
-					enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[0].left, enemyInfo.rcAtk[0].top);
-					enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[1].left, enemyInfo.rcAtk[1].top);
-					enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[2].left, enemyInfo.rcAtk[2].top);
-					if (enemyInfo.rcAtk[3].right <= WINSIZEY)
-					{
+						//공격범위
+						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[0].left, enemyInfo.rcAtk[0].top);
+						if (enemyInfo.rcAtk[1].right <= WINSIZEY)
+						{
+							enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[1].left, enemyInfo.rcAtk[1].top);
+						}
+						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[2].left, enemyInfo.rcAtk[2].top);
 						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[3].left, enemyInfo.rcAtk[3].top);
-						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[4].left, enemyInfo.rcAtk[4].top);
-						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[5].left, enemyInfo.rcAtk[5].top);
 					}
-					enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[6].left, enemyInfo.rcAtk[6].top);
-					enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[7].left, enemyInfo.rcAtk[7].top);
+				}
+
+				if (enemyInfo.className == "경보병" || enemyInfo.className == "궁병")
+				{
+					if (enemySelect)
+					{
+						//이동범위
+						enemyInfo.moveRngImg->render(hdc, tiles[i].rc.left, tiles[i].rc.top);
+
+						//공격범위
+						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[0].left, enemyInfo.rcAtk[0].top);
+						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[1].left, enemyInfo.rcAtk[1].top);
+						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[2].left, enemyInfo.rcAtk[2].top);
+						if (enemyInfo.rcAtk[3].right <= WINSIZEY)
+						{
+							enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[3].left, enemyInfo.rcAtk[3].top);
+							enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[4].left, enemyInfo.rcAtk[4].top);
+							enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[5].left, enemyInfo.rcAtk[5].top);
+						}
+						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[6].left, enemyInfo.rcAtk[6].top);
+						enemyInfo.moveAtkRngImg->render(hdc, enemyInfo.rcAtk[7].left, enemyInfo.rcAtk[7].top);
+					}
 				}
 			}
 		}
 	}
 
-	//보병 + 궁병 제외
-	for (int j = 0; j < 9; j++)
+	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
 	{
 		auto enemyAtkRng = ENEMYMANAGER->getEnemy()[j]->getIsAtkRng();
 		auto& enemyInfo = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo();
 
-		if (enemyAtkRng)
+		if (enemyInfo.className == "군웅" || enemyInfo.className == "경기병" || enemyInfo.className == "책사" || enemyInfo.className == "서량기병")
 		{
-			enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[0].left, enemyInfo.rcAtk[0].top);
-			if (enemyInfo.rcAtk[1].right <= WINSIZEY)
+			if (enemyAtkRng)
 			{
-				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[1].left, enemyInfo.rcAtk[1].top);
-			}
-			enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[2].left, enemyInfo.rcAtk[2].top);
-			enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[3].left, enemyInfo.rcAtk[3].top);
-		}
-	}
-
-	//보병 + 궁병 포함
-	for (int j = 9; j < ENEMYMANAGER->getEnemy().size(); j++)
-	{
-		auto enemyAtkRng = ENEMYMANAGER->getEnemy()[j]->getIsAtkRng();
-		auto& enemyInfo = ENEMYMANAGER->getEnemy()[j]->getEnemyInfo();
-
-		if (enemyAtkRng)
-		{
-			enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[0].left, enemyInfo.rcAtk[0].top);
-			enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[1].left, enemyInfo.rcAtk[1].top);
-			enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[2].left, enemyInfo.rcAtk[2].top);
-			if (enemyInfo.rcAtk[3].right <= WINSIZEY)
-			{
+				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[0].left, enemyInfo.rcAtk[0].top);
+				if (enemyInfo.rcAtk[1].right <= WINSIZEY)
+				{
+					enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[1].left, enemyInfo.rcAtk[1].top);
+				}
+				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[2].left, enemyInfo.rcAtk[2].top);
 				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[3].left, enemyInfo.rcAtk[3].top);
-				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[4].left, enemyInfo.rcAtk[4].top);
-				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[5].left, enemyInfo.rcAtk[5].top);
 			}
-			enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[6].left, enemyInfo.rcAtk[6].top);
-			enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[7].left, enemyInfo.rcAtk[7].top);
+		}
+
+		if (enemyInfo.className == "경보병" || enemyInfo.className == "궁병")
+		{
+			if (enemyAtkRng)
+			{
+				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[0].left, enemyInfo.rcAtk[0].top);
+				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[1].left, enemyInfo.rcAtk[1].top);
+				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[2].left, enemyInfo.rcAtk[2].top);
+				if (enemyInfo.rcAtk[3].right <= WINSIZEY)
+				{
+					enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[3].left, enemyInfo.rcAtk[3].top);
+					enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[4].left, enemyInfo.rcAtk[4].top);
+					enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[5].left, enemyInfo.rcAtk[5].top);
+				}
+				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[6].left, enemyInfo.rcAtk[6].top);
+				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[7].left, enemyInfo.rcAtk[7].top);
+			}
 		}
 	}
 }

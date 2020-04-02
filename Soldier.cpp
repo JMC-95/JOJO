@@ -173,6 +173,42 @@ void Soldier::friendAi()
 				if (isMove)
 				{
 					floodFill(startTile, soldier.movingCount);
+
+					for (int i = 0; i < TILE_X * TILE_Y; i++)
+					{
+						for (int k = 0; k < PLAYERMANAGER->getPlayer().size(); ++k)
+						{
+							auto& rc = mainMap->getMap()[i].rc;
+							auto& playerRect = PLAYERMANAGER->getPlayer()[k]->getPlayerInfo().rc;
+
+							if (IntersectRect(&temp, &rc, &playerRect))
+							{
+								mainMap->getMap()[i].flood = false;
+							}
+						}
+
+						for (int k = 0; k < FRIENDMANAGER->getFriend().size(); ++k)
+						{
+							auto& rc = mainMap->getMap()[i].rc;
+							auto& friendRect = FRIENDMANAGER->getFriend()[k]->getFriendInfo().rc;
+
+							if (IntersectRect(&temp, &rc, &friendRect))
+							{
+								mainMap->getMap()[i].flood = false;
+							}
+						}
+
+						for (int k = 0; k < ENEMYMANAGER->getEnemy().size(); ++k)
+						{
+							auto& rc = mainMap->getMap()[i].rc;
+							auto& enemyRect = ENEMYMANAGER->getEnemy()[k]->getEnemyInfo().rc;
+
+							if (IntersectRect(&temp, &rc, &enemyRect))
+							{
+								mainMap->getMap()[i].flood = false;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -384,7 +420,6 @@ void Soldier::friendMenu()
 
 void Soldier::friendCollision()
 {
-	RECT temp;
 	frameX = 0;
 
 	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)

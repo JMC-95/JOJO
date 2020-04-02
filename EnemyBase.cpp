@@ -207,7 +207,6 @@ void EnemyBase::aStar()
 
 void EnemyBase::floodFill(int tile, int moveCount)
 {
-	RECT temp;
 	auto& rc = mainMap->getMap()[tile].rc;
 
 	if (mainMap->getMap()[tile].obj != OBJ_CASTLEWALLS &&

@@ -84,23 +84,30 @@ void Agjin::update()
 {
 	if (isTurn)
 	{
-		if (!PLAYERMANAGER->getPlayer()[0]->getIsSkill() &&
-			!PLAYERMANAGER->getPlayer()[0]->getIsSkillCheck() &&
-			!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[1]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[0]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[1]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[2]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[3]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
-			PLAYERMANAGER->getPturn())
+		if (PLAYERMANAGER->getPturn())
 		{
-			mouseMove();
+			auto& playerVector = PLAYERMANAGER->getPlayer();
+
+			bool isMouseMove = true;
+
+			for (int i = 0; i < playerVector.size(); ++i)
+			{
+				if (playerVector[i]->getPlayerInfo().name == "¾ÇÁø")
+				{
+					continue;
+				}
+
+				if (playerVector[i]->getIsSelect() || playerVector[i]->getIsClick())
+				{
+					isMouseMove = false;
+					break;
+				}
+			}
+
+			if (isMouseMove)
+			{
+				if (!playerVector[0]->getIsSkill() && !playerVector[0]->getIsSkillCheck()) mouseMove();
+			}
 		}
 	}
 
@@ -134,6 +141,17 @@ void Agjin::render(HDC hdc)
 			{
 				agjin.blockImg->frameRender(hdc, agjin.rc.left, agjin.rc.top, 0, 5);
 				agjin.skillImg->aniRender(hdc, agjin.rc.left - 8, agjin.rc.top - 8, skillAni);
+
+				if (maxHp - currentHp < 30)
+				{
+					sprintf_s(str, "%d", maxHp - currentHp);
+					TextOut(hdc, agjin.rc.left, agjin.rc.top, str, strlen(str));
+				}
+				else
+				{
+					sprintf_s(str, "%d", 30);
+					TextOut(hdc, agjin.rc.left, agjin.rc.top, str, strlen(str));
+				}
 			}
 			else
 			{
@@ -161,6 +179,17 @@ void Agjin::render(HDC hdc)
 			{
 				agjin.blockImg->frameRender(hdc, agjin.rc.left, agjin.rc.top, 0, 5);
 				agjin.skillImg->aniRender(hdc, agjin.rc.left - 8, agjin.rc.top - 8, skillAni);
+
+				if (maxHp - currentHp < 30)
+				{
+					sprintf_s(str, "%d", maxHp - currentHp);
+					TextOut(hdc, agjin.rc.left, agjin.rc.top, str, strlen(str));
+				}
+				else
+				{
+					sprintf_s(str, "%d", 30);
+					TextOut(hdc, agjin.rc.left, agjin.rc.top, str, strlen(str));
+				}
 			}
 			else
 			{
@@ -211,7 +240,6 @@ void Agjin::mouseMove()
 
 					for (int j = 0; j < TILE_X * TILE_Y; j++)
 					{
-						RECT temp;
 						auto& rc = mainMap->getMap()[j].rc;
 
 						if (mainMap->getMap()[j].flood)
@@ -400,7 +428,6 @@ void Agjin::playerAstar()
 
 void Agjin::playerCollision()
 {
-	RECT temp;
 	frameX = 0;
 
 	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
@@ -552,7 +579,7 @@ void Agjin::playerAnimation()
 				playerAni = ANIMATIONMANAGER->findAnimation("playerHp");
 				ANIMATIONMANAGER->resume("playerHp");
 			}
-			
+
 			if (isHeal)
 			{
 				ANIMATIONMANAGER->addDefAnimation("healImg", "heal", 30, false, false);

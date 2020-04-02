@@ -84,23 +84,30 @@ void Johong::update()
 {
 	if (isTurn)
 	{
-		if (!PLAYERMANAGER->getPlayer()[0]->getIsSkill() &&
-			!PLAYERMANAGER->getPlayer()[0]->getIsSkillCheck() &&
-			!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[1]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[5]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[0]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[1]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[2]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[3]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[5]->getIsClick() &&
-			PLAYERMANAGER->getPturn())
+		if (PLAYERMANAGER->getPturn())
 		{
-			mouseMove();
+			auto& playerVector = PLAYERMANAGER->getPlayer();
+
+			bool isMouseMove = true;
+
+			for (int i = 0; i < playerVector.size(); ++i)
+			{
+				if (playerVector[i]->getPlayerInfo().name == "Á¶È«")
+				{
+					continue;
+				}
+
+				if (playerVector[i]->getIsSelect() || playerVector[i]->getIsClick())
+				{
+					isMouseMove = false;
+					break;
+				}
+			}
+
+			if (isMouseMove)
+			{
+				if (!playerVector[0]->getIsSkill() && !playerVector[0]->getIsSkillCheck()) mouseMove();
+			}
 		}
 	}
 
@@ -134,6 +141,17 @@ void Johong::render(HDC hdc)
 			{
 				johong.blockImg->frameRender(hdc, johong.rc.left, johong.rc.top, 0, 5);
 				johong.skillImg->aniRender(hdc, johong.rc.left - 8, johong.rc.top - 8, skillAni);
+
+				if (maxHp - currentHp < 30)
+				{
+					sprintf_s(str, "%d", maxHp - currentHp);
+					TextOut(hdc, johong.rc.left, johong.rc.top, str, strlen(str));
+				}
+				else
+				{
+					sprintf_s(str, "%d", 30);
+					TextOut(hdc, johong.rc.left, johong.rc.top, str, strlen(str));
+				}
 			}
 			else
 			{
@@ -161,6 +179,17 @@ void Johong::render(HDC hdc)
 			{
 				johong.blockImg->frameRender(hdc, johong.rc.left, johong.rc.top, 0, 5);
 				johong.skillImg->aniRender(hdc, johong.rc.left - 8, johong.rc.top - 8, skillAni);
+
+				if (maxHp - currentHp < 30)
+				{
+					sprintf_s(str, "%d", maxHp - currentHp);
+					TextOut(hdc, johong.rc.left, johong.rc.top, str, strlen(str));
+				}
+				else
+				{
+					sprintf_s(str, "%d", 30);
+					TextOut(hdc, johong.rc.left, johong.rc.top, str, strlen(str));
+				}
 			}
 			else
 			{
@@ -211,7 +240,6 @@ void Johong::mouseMove()
 
 					for (int j = 0; j < TILE_X * TILE_Y; j++)
 					{
-						RECT temp;
 						auto& rc = mainMap->getMap()[j].rc;
 
 						if (mainMap->getMap()[j].flood)
@@ -461,7 +489,6 @@ void Johong::playerMenu()
 
 void Johong::playerCollision()
 {
-	RECT temp;
 	frameX = 0;
 
 	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)

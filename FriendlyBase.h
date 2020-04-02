@@ -61,6 +61,7 @@ protected:
 	progressBar* _Exp;			//EXP Bar
 
 	RECT rcMenu[5];				//메뉴 렉트
+	RECT temp;
 
 protected:	//일반 변수
 	int number;				//다형성 번호

@@ -84,23 +84,30 @@ void Ijeon::update()
 {
 	if (isTurn)
 	{
-		if (!PLAYERMANAGER->getPlayer()[0]->getIsSkill() &&
-			!PLAYERMANAGER->getPlayer()[0]->getIsSkillCheck() &&
-			!PLAYERMANAGER->getPlayer()[0]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[1]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[2]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[3]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[4]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[6]->getIsSelect() &&
-			!PLAYERMANAGER->getPlayer()[0]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[1]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[2]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[3]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[4]->getIsClick() &&
-			!PLAYERMANAGER->getPlayer()[6]->getIsClick() &&
-			PLAYERMANAGER->getPturn())
+		if (PLAYERMANAGER->getPturn())
 		{
-			mouseMove();
+			auto& playerVector = PLAYERMANAGER->getPlayer();
+
+			bool isMouseMove = true;
+
+			for (int i = 0; i < playerVector.size(); ++i)
+			{
+				if (playerVector[i]->getPlayerInfo().name == "ÀÌÀü")
+				{
+					continue;
+				}
+
+				if (playerVector[i]->getIsSelect() || playerVector[i]->getIsClick())
+				{
+					isMouseMove = false;
+					break;
+				}
+			}
+
+			if (isMouseMove)
+			{
+				if (!playerVector[0]->getIsSkill() && !playerVector[0]->getIsSkillCheck()) mouseMove();
+			}
 		}
 	}
 
@@ -135,6 +142,16 @@ void Ijeon::render(HDC hdc)
 				ijeon.blockImg->frameRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, 5);
 				ijeon.skillImg->aniRender(hdc, ijeon.rc.left - 8, ijeon.rc.top - 8, skillAni);
 
+				if (maxHp - currentHp < 30)
+				{
+					sprintf_s(str, "%d", maxHp - currentHp);
+					TextOut(hdc, ijeon.rc.left, ijeon.rc.top, str, strlen(str));
+				}
+				else
+				{
+					sprintf_s(str, "%d", 30);
+					TextOut(hdc, ijeon.rc.left, ijeon.rc.top, str, strlen(str));
+				}
 			}
 			else
 			{
@@ -163,6 +180,16 @@ void Ijeon::render(HDC hdc)
 				ijeon.blockImg->frameRender(hdc, ijeon.rc.left, ijeon.rc.top, 0, 5);
 				ijeon.skillImg->aniRender(hdc, ijeon.rc.left - 8, ijeon.rc.top - 8, skillAni);
 
+				if (maxHp - currentHp < 30)
+				{
+					sprintf_s(str, "%d", maxHp - currentHp);
+					TextOut(hdc, ijeon.rc.left, ijeon.rc.top, str, strlen(str));
+				}
+				else
+				{
+					sprintf_s(str, "%d", 30);
+					TextOut(hdc, ijeon.rc.left, ijeon.rc.top, str, strlen(str));
+				}
 			}
 			else
 			{
@@ -213,7 +240,6 @@ void Ijeon::mouseMove()
 
 					for (int j = 0; j < TILE_X * TILE_Y; j++)
 					{
-						RECT temp;
 						auto& rc = mainMap->getMap()[j].rc;
 
 						if (mainMap->getMap()[j].flood)
@@ -463,7 +489,6 @@ void Ijeon::playerMenu()
 
 void Ijeon::playerCollision()
 {
-	RECT temp;
 	frameX = 0;
 
 	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)

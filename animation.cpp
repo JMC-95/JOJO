@@ -244,11 +244,11 @@ void animation::frameUpdate(float elapsedTime)
 							_nowPlayIndex = 0;
 							_play = false;
 
+							player->setIsMove(true);
 							player->setIsTurn(false);
 							player->setIsSelect(false);
 							player->setIsTarget(false);
 							player->setIsAtk(false);
-							player->setIsMove(true);
 							player->expDamaga(10);
 						}
 						else if (!player->getIsAtk())
@@ -282,11 +282,11 @@ void animation::frameUpdate(float elapsedTime)
 							_nowPlayIndex = 0;
 							_play = false;
 
+							friendly->setIsMove(true);
 							friendly->setIsTurn(false);
 							friendly->setIsSelect(false);
 							friendly->setIsTarget(false);
 							friendly->setIsAtk(false);
-							friendly->setIsMove(true);
 						}
 						else if (!friendly->getIsAtk())
 						{
@@ -307,11 +307,11 @@ void animation::frameUpdate(float elapsedTime)
 							_nowPlayIndex = 0;
 							_play = false;
 
+							enemy->setIsMove(true);
 							enemy->setIsTurn(false);
 							enemy->setIsSelect(false);
 							enemy->setIsTarget(false);
 							enemy->setIsAtk(false);
-							enemy->setIsMove(true);
 						}
 						else if (!enemy->getIsAtk())
 						{

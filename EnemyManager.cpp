@@ -23,26 +23,26 @@ HRESULT EnemyManager::init()
 	vEnemy.push_back(new Jangje);
 	vEnemy[3]->init("eMoveRange", "attackRange", "atkRange", "장제", "장제ATK", "장제BH");
 
-	vEnemy.push_back(new Yeopo);
-	vEnemy[4]->init("eMoveRange", "attackRange", "atkRange", "여포", "여포ATK", "여포BH");
-
-	for (int i = 5; i < 9; i++)
+	for (int i = 4; i < 14; i++)
 	{
-		vEnemy.push_back(new Cavalry(i));
-		vEnemy[i]->init("eMoveRange", "attackRange", "atkRange", "적기병", "적기병ATK", "적기병BH");
+		vEnemy.push_back(new Archer(i));
+		vEnemy[i]->init("eMoveRange", "attackRange", "atkRange", "적궁병", "적궁병ATK", "적궁병BH");
 	}
 
-	for (int i = 9; i < 13; i++)
+	for (int i = 14; i < 18; i++)
 	{
 		vEnemy.push_back(new Infantry(i));
 		vEnemy[i]->init("eMoveRange", "attackRange", "atkRange", "적보병", "적보병ATK", "적보병BH");
 	}
 
-	for (int i = 13; i < 23; i++)
+	for (int i = 18; i < 22; i++)
 	{
-		vEnemy.push_back(new Archer(i));
-		vEnemy[i]->init("eMoveRange", "attackRange", "atkRange", "적궁병", "적궁병ATK", "적궁병BH");
+		vEnemy.push_back(new Cavalry(i));
+		vEnemy[i]->init("eMoveRange", "attackRange", "atkRange", "적기병", "적기병ATK", "적기병BH");
 	}
+
+	vEnemy.push_back(new Yeopo);
+	vEnemy[22]->init("eMoveRange", "attackRange", "atkRange", "여포", "여포ATK", "여포BH");
 
 	isClear = false;
 
@@ -79,7 +79,7 @@ void EnemyManager::enemyTurn()
 	{
 		eTurn = false;
 
-		for (int i = 4; i < 17; i++)
+		for (int i = 9; i < ENEMYMANAGER->getEnemy().size(); i++)
 		{
 			auto& enemy = ENEMYMANAGER->getEnemy()[i];
 

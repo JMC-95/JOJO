@@ -64,6 +64,7 @@ protected:
 	progressBar* _Exp;			//EXP Bar
 
 	RECT rcMenu[5];				//메뉴 렉트
+	RECT temp;
 
 protected:	//일반 변수
 	int levelCount;			//레벨 카운트
