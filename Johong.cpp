@@ -489,6 +489,7 @@ void Johong::playerMenu()
 
 void Johong::playerCollision()
 {
+	isTarget = false;
 	frameX = 0;
 
 	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
@@ -504,15 +505,15 @@ void Johong::playerCollision()
 			{
 				isTarget = true;
 				frameX = 1;
-			}
-		}
 
-		if (enemyHit)
-		{
-			if (playerX > enemyX) pDirection = PLAYER_LEFT;
-			else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
-			else if (playerY > enemyY) pDirection = PLAYER_UP;
-			else if (playerY < enemyY) pDirection = PLAYER_DOWN;
+				if (isAtk && enemyHit)
+				{
+					if (playerX > enemyX) pDirection = PLAYER_LEFT;
+					else if (playerX < enemyX) pDirection = PLAYER_RIGHT;
+					else if (playerY > enemyY) pDirection = PLAYER_UP;
+					else if (playerY < enemyY) pDirection = PLAYER_DOWN;
+				}
+			}
 		}
 	}
 }

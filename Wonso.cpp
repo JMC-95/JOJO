@@ -411,6 +411,7 @@ void Wonso::friendMenu()
 
 void Wonso::friendCollision()
 {
+	isTarget = false;
 	frameX = 0;
 
 	for (int j = 0; j < ENEMYMANAGER->getEnemy().size(); j++)
@@ -426,15 +427,15 @@ void Wonso::friendCollision()
 			{
 				isTarget = true;
 				frameX = 1;
-			}
-		}
 
-		if (enemyHit)
-		{
-			if (friendX > enemyX) fDirection = FRIEND_LEFT;
-			else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
-			else if (friendY > enemyY) fDirection = FRIEND_UP;
-			else if (friendY < enemyY) fDirection = FRIEND_DOWN;
+				if (isAtk && enemyHit)
+				{
+					if (friendX > enemyX) fDirection = FRIEND_LEFT;
+					else if (friendX < enemyX) fDirection = FRIEND_RIGHT;
+					else if (friendY > enemyY) fDirection = FRIEND_UP;
+					else if (friendY < enemyY) fDirection = FRIEND_DOWN;
+				}
+			}
 		}
 	}
 }

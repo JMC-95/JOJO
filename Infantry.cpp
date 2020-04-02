@@ -219,7 +219,7 @@ void Infantry::enemyAi()
 			{
 				if (mainMap->getMap()[i].flood)
 				{
-					SOUNDMANAGER->play("cMove", 1.0f);
+					SOUNDMANAGER->play("move", 1.0f);
 
 					//¼±ÅÃÇÑ ¸ÊÀÇ xÁÂÇ¥¿Í yÁÂÇ¥
 					mapX = mainMap->getMap()[i].rc.left + (mainMap->getMap()[i].rc.right - mainMap->getMap()[i].rc.left) / 2;
@@ -569,6 +569,7 @@ void Infantry::enemyMenu()
 
 void Infantry::enemyCollision()
 {
+	isTarget = false;
 	frameX = 0;
 
 	for (int j = 0; j < PLAYERMANAGER->getPlayer().size(); j++)
@@ -584,15 +585,15 @@ void Infantry::enemyCollision()
 			{
 				isTarget = true;
 				frameX = 1;
-			}
-		}
 
-		if (playerHit)
-		{
-			if (enemyX > playerX) eDirection = ENEMY_LEFT;
-			else if (enemyX < playerX) eDirection = ENEMY_RIGHT;
-			else if (enemyY > playerY) eDirection = ENEMY_UP;
-			else if (enemyY < playerY) eDirection = ENEMY_DOWN;
+				if (isAtk &&playerHit)
+				{
+					if (enemyX > playerX) eDirection = ENEMY_LEFT;
+					else if (enemyX < playerX) eDirection = ENEMY_RIGHT;
+					else if (enemyY > playerY) eDirection = ENEMY_UP;
+					else if (enemyY < playerY) eDirection = ENEMY_DOWN;
+				}
+			}
 		}
 	}
 

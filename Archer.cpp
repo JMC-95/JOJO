@@ -569,6 +569,7 @@ void Archer::enemyMenu()
 
 void Archer::enemyCollision()
 {
+	isTarget = false;
 	frameX = 0;
 
 	for (int j = 0; j < PLAYERMANAGER->getPlayer().size(); j++)
@@ -584,15 +585,15 @@ void Archer::enemyCollision()
 			{
 				isTarget = true;
 				frameX = 1;
-			}
-		}
 
-		if (playerHit)
-		{
-			if (enemyX > playerX) eDirection = ENEMY_LEFT;
-			else if (enemyX < playerX) eDirection = ENEMY_RIGHT;
-			else if (enemyY > playerY) eDirection = ENEMY_UP;
-			else if (enemyY < playerY) eDirection = ENEMY_DOWN;
+				if (isAtk &&playerHit)
+				{
+					if (enemyX > playerX) eDirection = ENEMY_LEFT;
+					else if (enemyX < playerX) eDirection = ENEMY_RIGHT;
+					else if (enemyY > playerY) eDirection = ENEMY_UP;
+					else if (enemyY < playerY) eDirection = ENEMY_DOWN;
+				}
+			}
 		}
 	}
 
