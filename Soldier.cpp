@@ -258,6 +258,18 @@ void Soldier::friendAi()
 		}
 	}
 
+	if (isSelect && PtInRect(&soldier.rc, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		isClick = true;
+		isMove = false;
+		isSelect = false;
+
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+		}
+	}
+
 	friendAstar();
 	friendCollision();
 	friendMenu();
@@ -535,6 +547,11 @@ void Soldier::friendAnimation()
 
 void Soldier::friendState()
 {
+	//우군 위치
+	positionX = soldier.rc.left / TILE_WIDTH;
+	positionY = soldier.rc.top / TILE_HEIGHT;
+	friendTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

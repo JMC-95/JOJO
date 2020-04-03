@@ -253,6 +253,18 @@ void Yubi::friendAi()
 		}
 	}
 
+	if (isSelect && PtInRect(&yubi.rc, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		isClick = true;
+		isMove = false;
+		isSelect = false;
+
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+		}
+	}
+
 	friendAstar();
 	friendCollision();
 	friendMenu();
@@ -526,6 +538,11 @@ void Yubi::friendAnimation()
 
 void Yubi::friendState()
 {
+	//우군 위치
+	positionX = yubi.rc.left / TILE_WIDTH;
+	positionY = yubi.rc.top / TILE_HEIGHT;
+	friendTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

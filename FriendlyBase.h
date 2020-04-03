@@ -142,6 +142,7 @@ public:
 	int getMaxMp() { return maxMp; }
 	int getCurrentExp() { return currentExp; }
 	int getMaxExp() { return maxExp; }
+	int getFrinedTile() { return friendTile; }
 
 	bool getIsTurn() { return isTurn; }
 	bool getIsSelect() { return isSelect; }

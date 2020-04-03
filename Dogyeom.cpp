@@ -87,20 +87,14 @@ void Dogyeom::update()
 {
 	if (isTurn)
 	{
-		//if (FRIENDMANAGER->getFturn()) friendAi();
-		friendAi();
+		if (FRIENDMANAGER->getFturn()) friendAi();
 	}
 
 	friendAnimation();
 	friendState();
 	mouseMove();
 
-	if (KEYMANAGER->isOnceKeyDown('3'))
-	{
-		isTurn = false;
-		//isTurn = true;
-		//isMove = true;
-	}
+	if (KEYMANAGER->isOnceKeyDown('3')) isTurn = false;
 }
 
 void Dogyeom::render(HDC hdc)
@@ -158,10 +152,6 @@ void Dogyeom::friendAi()
 
 		//가장 가까운 적의 위치를 찾는 함수
 		aiAstar();
-
-		positionX = dogyeom.rc.left / TILE_WIDTH;
-		positionY = dogyeom.rc.top / TILE_HEIGHT;
-		friendTile = positionX + (positionY * TILE_Y);
 
 		//선택한 타일 (캐릭터)
 		startTile = friendTile;
@@ -532,6 +522,11 @@ void Dogyeom::friendAnimation()
 
 void Dogyeom::friendState()
 {
+	//우군 위치
+	positionX = dogyeom.rc.left / TILE_WIDTH;
+	positionY = dogyeom.rc.top / TILE_HEIGHT;
+	friendTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

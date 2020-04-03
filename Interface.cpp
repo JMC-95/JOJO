@@ -28,6 +28,12 @@ void Interface::playerMenu(HDC hdc)
 	{
 		IMAGEMANAGER->render("skillMenu", hdc, jojoInfo.rc.left - 210, jojoInfo.rc.top - 50);
 
+		if (jojoInfo.rc.left - 204 < m_ptMouse.x && m_ptMouse.x < jojoInfo.rc.left - 15 &&
+			jojoInfo.rc.top - 9 < m_ptMouse.y && m_ptMouse.y < jojoInfo.rc.top + 9)
+		{
+			IMAGEMANAGER->alphaRender("skillSelect", hdc, jojoInfo.rc.left - 204, jojoInfo.rc.top - 9, 100);
+		}
+
 		HFONT myFont = CreateFont(13, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñÃ¼");
 		HFONT oldFont = (HFONT)SelectObject(hdc, myFont);
 		SetTextColor(hdc, RGB(0, 0, 255));

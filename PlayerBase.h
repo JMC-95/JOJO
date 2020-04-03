@@ -103,6 +103,10 @@ protected:	//A*용 변수
 	bool isFind;			//A* 길을 찾았는지 못 찾았는지 확인하는 변수
 	bool noPath;			//A* 길을 찾았으면 최단 거리가 어디인지 확인하는 변수
 
+protected:	//미니맵용 변수
+	int positionX, positionY;
+	int playerTile;
+
 public:
 	PlayerBase();
 	~PlayerBase();
@@ -144,6 +148,7 @@ public:
 	int getMaxMp() { return maxMp; }
 	int getCurrentExp() { return currentExp; }
 	int getMaxExp() { return maxExp; }
+	int getPlayerTile() { return playerTile; }
 
 	bool getIsTurn() { return isTurn; }
 	bool getIsSelect() { return isSelect; }

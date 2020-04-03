@@ -258,6 +258,18 @@ void Archer::enemyAi()
 		}
 	}
 
+	if (isSelect && PtInRect(&archer.rc, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		isClick = true;
+		isMove = false;
+		isSelect = false;
+
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+		}
+	}
+
 	enemyAstar();
 	enemyMenu();
 	enemyCollision();
@@ -509,6 +521,11 @@ void Archer::enemyAnimation()
 
 void Archer::enemyState()
 {
+	//적군 위치
+	positionX = archer.rc.left / TILE_WIDTH;
+	positionY = archer.rc.top / TILE_HEIGHT;
+	enemyTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

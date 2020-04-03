@@ -255,6 +255,18 @@ void Yeopo::enemyAi()
 		}
 	}
 
+	if (isSelect && PtInRect(&yeopo.rc, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		isClick = true;
+		isMove = false;
+		isSelect = false;
+
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+		}
+	}
+
 	enemyAstar();
 	enemyMenu();
 	enemyCollision();
@@ -498,6 +510,11 @@ void Yeopo::enemyAnimation()
 
 void Yeopo::enemyState()
 {
+	//적군 위치
+	positionX = yeopo.rc.left / TILE_WIDTH;
+	positionY = yeopo.rc.top / TILE_HEIGHT;
+	enemyTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

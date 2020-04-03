@@ -460,6 +460,11 @@ void Dongtak::enemyAnimation()
 
 void Dongtak::enemyState()
 {
+	//적군 위치
+	positionX = dongtak.rc.left / TILE_WIDTH;
+	positionY = dongtak.rc.top / TILE_HEIGHT;
+	enemyTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

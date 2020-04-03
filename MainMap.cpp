@@ -54,6 +54,7 @@ void MainMap::render(HDC hdc)
 	playerDraw(hdc);
 	friendDraw(hdc);
 	enemyDraw(hdc);
+	miniMap(hdc);
 
 	//마우스와 맵의 타일이 충돌하면 그 타일의 속성을 보여준다.
 	for (int i = 0; i < TILE_X * TILE_Y; i++)
@@ -402,5 +403,41 @@ void MainMap::enemyDraw(HDC hdc)
 				enemyInfo.atkRngImg->render(hdc, enemyInfo.rcAtk[7].left, enemyInfo.rcAtk[7].top);
 			}
 		}
+	}
+}
+
+void MainMap::miniMap(HDC hdc)
+{
+	//미니맵
+	IMAGEMANAGER->render("miniMap", hdc, 1000, 700);
+
+	//플레이어
+	for (int i = 0; i < PLAYERMANAGER->getPlayer().size(); i++)
+	{
+		auto playerNum = PLAYERMANAGER->getPlayer()[i]->getPlayerTile();
+
+		BeginSolidColor(hdc, &brush, RGB(0, 0, 255));
+		Rectangle(hdc, tiles[playerNum].rc.left / 6 + 1000, tiles[playerNum].rc.top / 6 + 700, tiles[playerNum].rc.right / 6 + 1000, tiles[playerNum].rc.bottom / 6 + 700);
+		DeleteObject(brush);
+	}
+
+	//우군
+	for (int i = 0; i < FRIENDMANAGER->getFriend().size(); i++)
+	{
+		auto friendNum = FRIENDMANAGER->getFriend()[i]->getFrinedTile();
+
+		BeginSolidColor(hdc, &brush, RGB(0, 255, 0));
+		Rectangle(hdc, tiles[friendNum].rc.left / 6 + 1000, tiles[friendNum].rc.top / 6 + 700, tiles[friendNum].rc.right / 6 + 1000, tiles[friendNum].rc.bottom / 6 + 700);
+		DeleteObject(brush);
+	}
+
+	//적군
+	for (int i = 0; i < ENEMYMANAGER->getEnemy().size(); i++)
+	{
+		auto enemyNum = ENEMYMANAGER->getEnemy()[i]->getEnemyTile();
+
+		BeginSolidColor(hdc, &brush, RGB(255, 0, 0));
+		Rectangle(hdc, tiles[enemyNum].rc.left / 6 + 1000, tiles[enemyNum].rc.top / 6 + 700, tiles[enemyNum].rc.right / 6 + 1000, tiles[enemyNum].rc.bottom / 6 + 700);
+		DeleteObject(brush);
 	}
 }

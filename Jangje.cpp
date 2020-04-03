@@ -460,6 +460,11 @@ void Jangje::enemyAnimation()
 
 void Jangje::enemyState()
 {
+	//적군 위치
+	positionX = jangje.rc.left / TILE_WIDTH;
+	positionY = jangje.rc.top / TILE_HEIGHT;
+	enemyTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

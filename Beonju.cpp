@@ -460,6 +460,11 @@ void Beonju::enemyAnimation()
 
 void Beonju::enemyState()
 {
+	//적군 위치
+	positionX = beonju.rc.left / TILE_WIDTH;
+	positionY = beonju.rc.top / TILE_HEIGHT;
+	enemyTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

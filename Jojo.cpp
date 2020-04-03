@@ -114,6 +114,10 @@ void Jojo::update()
 
 	playerAnimation();
 	playerState();
+
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN)) currentHp = 0;
+
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT)) isTurn = true;
 }
 
 void Jojo::render(HDC hdc)
@@ -276,6 +280,11 @@ void Jojo::mouseMove()
 		isClick = true;
 		isMove = false;
 		isSelect = false;
+
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+		}
 	}
 
 	playerAstar();
@@ -656,6 +665,11 @@ void Jojo::playerAnimation()
 
 void Jojo::playerState()
 {
+	//플레이어 위치
+	positionX = jojo.rc.left / TILE_WIDTH;
+	positionY = jojo.rc.top / TILE_HEIGHT;
+	playerTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

@@ -12,6 +12,9 @@ private:
 	//타일
 	tagTile tiles[TILE_X * TILE_Y];
 
+	//브러쉬
+	HBRUSH brush;
+
 private:
 	image* weatherImg;		//날씨 이미지
 	animation* weatherAni;	//날씨 애니메이션
@@ -32,6 +35,7 @@ public:
 	void playerDraw(HDC hdc);
 	void friendDraw(HDC hdc);
 	void enemyDraw(HDC hdc);
+	void miniMap(HDC hdc);
 
 	DWORD* getAttribute() { return attribute; }
 

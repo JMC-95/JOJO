@@ -49,6 +49,14 @@ void mainGame::update()
 	gameNode::update();
 
 	SCENEMANAGER->update();
+
+	if (KEYMANAGER->isOnceKeyDown(VK_UP))
+	{
+		auto& enemyVector = ENEMYMANAGER->getEnemy();
+
+		//enemyVector.erase(enemyVector.begin() + 9, enemyVector.end() - 1);	//여포만 남기고 삭제
+		enemyVector.clear();													//전체 삭제
+	}
 }
 
 void mainGame::render()
@@ -141,6 +149,7 @@ void mainGame::images()
 
 	//맵툴용 이미지
 	IMAGEMANAGER->addImage("map", "images/MapTool/Map.bmp", 960, 960, true, RGB(255, 0, 255));					//실제 맵의 이미지
+	IMAGEMANAGER->addImage("miniMap", "images/MapTool/Map.bmp", 960 / 6, 960 / 6, true, RGB(255, 0, 255));		//미니 맵의 이미지
 	IMAGEMANAGER->addImage("subMap", "images/MapTool/SubMap.bmp", 240, 960, true, RGB(255, 0, 255));			//맵툴 이미지
 	IMAGEMANAGER->addImage("select", "images/MapTool/Select.bmp", 30, 30, true, RGB(255, 0, 255));				//맵툴 선택 이미지
 
@@ -183,7 +192,8 @@ void mainGame::images()
 	IMAGEMANAGER->addImage("정보창", "images/UI/Info/Status.bmp", 240, 305, true, RGB(247, 0, 255));
 
 	//스킬
-	IMAGEMANAGER->addImage("skillMenu", "images/UI/InGame/Skill.bmp", 203, 158, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("skillMenu", "images/UI/Skill/Skill.bmp", 203, 158, true, RGB(247, 0, 255));
+	IMAGEMANAGER->addImage("skillSelect", "images/UI/Skill/SkillSelect.bmp", 189, 18, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addImage("소보급", "images/UI/Skill/소보급.bmp", 99, 50, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addImage("up", "images/UI/Skill/레벨업.bmp", 99, 50, true, RGB(247, 0, 255));
 	IMAGEMANAGER->addFrameImage("heal", "images/UI/Skill/Heal.bmp", 64, 1280, 1, 20, true, RGB(247, 0, 255));

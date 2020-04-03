@@ -306,6 +306,11 @@ void Hahuyeon::mouseMove()
 		isClick = true;
 		isMove = false;
 		isSelect = false;
+
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+		}
 	}
 
 	playerAstar();
@@ -610,6 +615,11 @@ void Hahuyeon::playerAnimation()
 
 void Hahuyeon::playerState()
 {
+	//플레이어 위치
+	positionX = hahuyeon.rc.left / TILE_WIDTH;
+	positionY = hahuyeon.rc.top / TILE_HEIGHT;
+	playerTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

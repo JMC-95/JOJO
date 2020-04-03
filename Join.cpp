@@ -306,6 +306,11 @@ void Join::mouseMove()
 		isClick = true;
 		isMove = false;
 		isSelect = false;
+
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+		}
 	}
 
 	playerAstar();
@@ -610,6 +615,11 @@ void Join::playerAnimation()
 
 void Join::playerState()
 {
+	//플레이어 위치
+	positionX = join.rc.left / TILE_WIDTH;
+	positionY = join.rc.top / TILE_HEIGHT;
+	playerTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();

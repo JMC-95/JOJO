@@ -189,6 +189,16 @@ void GameScene::render()
 			DeleteObject(myFont2);
 		}
 	}
+
+	HFONT myFont = CreateFont(25, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "³ª´®°íµñ ExtraBold");
+	HFONT oldFont = (HFONT)SelectObject(getMemDC(), myFont);
+	SetTextColor(getMemDC(), RGB(255, 255, 255));
+	sprintf_s(str, "ÅÏ ¼ö");
+	TextOut(getMemDC(), 1135, 90, str, strlen(str));
+	sprintf_s(str, "%d/15", pTurn);
+	TextOut(getMemDC(), 1135, 120, str, strlen(str));
+	SelectObject(getMemDC(), oldFont);
+	DeleteObject(myFont);
 }
 
 void GameScene::gameTurn()

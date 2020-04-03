@@ -258,6 +258,18 @@ void Infantry::enemyAi()
 		}
 	}
 
+	if (isSelect && PtInRect(&infantry.rc, m_ptMouse) && KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	{
+		isClick = true;
+		isMove = false;
+		isSelect = false;
+
+		for (int i = 0; i < TILE_X * TILE_Y; i++)
+		{
+			if (mainMap->getMap()[i].flood) mainMap->getMap()[i].flood = false;
+		}
+	}
+
 	enemyAstar();
 	enemyMenu();
 	enemyCollision();
@@ -509,6 +521,11 @@ void Infantry::enemyAnimation()
 
 void Infantry::enemyState()
 {
+	//적군 위치
+	positionX = infantry.rc.left / TILE_WIDTH;
+	positionY = infantry.rc.top / TILE_HEIGHT;
+	enemyTile = positionX + (positionY * TILE_Y);
+
 	_Hp->update();
 	_Hp->setGauge(currentHp, maxHp);
 	_Mp->update();
