@@ -11,7 +11,7 @@ LobbyScene::~LobbyScene()
 
 HRESULT LobbyScene::init()
 {
-	//PLAYERMANAGER->init(); //로비에서 init을 하고 GameScene으로 넘겨준다.
+	PLAYERMANAGER->init(); //로비에서 init을 하고 GameScene으로 넘겨준다.
 
 	//BGM
 	if (isSound)

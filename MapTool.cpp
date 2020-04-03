@@ -182,7 +182,7 @@ void MapTool::mapToolButton()
 
 		if (GetOpenFileName(&ofn) == FALSE)return;
 
-		//isOfnCheck = true;
+		isOfnCheck = true;
 	}
 	if (PtInRect(&btnSave, m_ptMouse))
 	{

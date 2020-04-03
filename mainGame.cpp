@@ -34,7 +34,7 @@ HRESULT mainGame::init()
 	SCENEMANAGER->addScene("GameOver", new GameOver);
 
 	//ÇöÀç ¾À
-	SCENEMANAGER->changeScene("GameScene");
+	SCENEMANAGER->changeScene("TitleScene");
 
 	return S_OK;
 }

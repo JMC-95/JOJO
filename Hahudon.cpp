@@ -113,6 +113,8 @@ void Hahudon::update()
 
 	playerAnimation();
 	playerState();
+
+	if (KEYMANAGER->isOnceKeyDown('4')) currentHp = 50;
 }
 
 void Hahudon::render(HDC hdc)
